@@ -1,0 +1,116 @@
+import "debugging.dart" show DebugConsume, DebugHandler;
+
+abstract class ParsingOption {
+  /**
+     * To parse only forward dates (the results should be after the reference date).
+     * This effects date/time implication (e.g. weekday or time mentioning)
+     */
+  bool forwardDate;
+  /**
+     * Additional timezone keywords for the parsers to recognize.
+     * Any value provided will override the default handling of that value.
+     */
+  TimezoneAbbrMap timezones;
+  /**
+     * Internal debug event handler.
+     * @internal
+     */
+  dynamic /* DebugHandler | DebugConsume */ debug;
+}
+
+/**
+ * Some timezone abbreviations are ambiguous in that they refer to different offsets
+ * depending on the time of year — daylight savings time (DST), or non-DST. This interface
+ * allows defining such timezones
+ */
+abstract class AmbiguousTimezoneMap {
+  num timezoneOffsetDuringDst;
+  num timezoneOffsetNonDst;
+  /**
+     * Return the start date of DST for the given year.
+     * timezone.ts contains helper methods for common such rules.
+     */
+  dynamic /* (year: number) => Date */ dstStart;
+  /**
+     * Return the end date of DST for the given year.
+     * timezone.ts contains helper methods for common such rules.
+     */
+  dynamic /* (year: number) => Date */ dstEnd;
+}
+
+/**
+ * A map describing how timezone abbreviations should map to time offsets.
+ * Supports both unambigous mappings abbreviation => offset,
+ * and ambiguous mappings, where the offset will depend on whether the
+ * time in question is during daylight savings time or not.
+ */
+abstract class ParsingReference {
+  /**
+     * Reference date. The instant (JavaScript Date object) when the input is written or mention.
+     * This effect date/time implication (e.g. weekday or time mentioning).
+     * (default = now)
+     */
+  Date instant;
+  /**
+     * Reference timezone. The timezone where the input is written or mention.
+     * Date/time implication will account the difference between input timezone and the current system timezone.
+     * (default = current timezone)
+     */
+  dynamic /* String | num */ timezone;
+}
+
+/**
+ * Parsed result or final output.
+ * Each result object represents a date/time (or date/time-range) mentioning in the input.
+ */
+abstract class ParsedResult {
+  Date refDate;
+  num index;
+  String text;
+  ParsedComponents start;
+  ParsedComponents end;
+  /**
+     * Create a javascript date object (from the result.start).
+     */
+  Date date();
+}
+
+/**
+ * A collection of parsed date/time components (e.g. day, hour, minute, ..., etc).
+ *
+ * Each parsed component has three different levels of certainty.
+ * - *Certain* (or *Known*): The component is directly mentioned and parsed.
+ * - *Implied*: The component is not directly mentioned, but implied by other parsed information.
+ * - *Unknown*: Completely no mention of the component.
+ */
+abstract class ParsedComponents {
+  /**
+     * Check the component certainly if the component is *Certain* (or *Known*)
+     */
+  bool isCertain(Component component);
+  /**
+     * Get the component value for either *Certain* or *Implied* value.
+     */
+  dynamic /* num | null */ get(Component component);
+  /**
+     * 
+     */
+  Date date();
+}
+
+enum Meridiem { AM, PM }
+enum Weekday { SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY }
+enum Month {
+  JANUARY,
+  FEBRUARY,
+  MARCH,
+  APRIL,
+  MAY,
+  JUNE,
+  JULY,
+  AUGUST,
+  SEPTEMBER,
+  OCTOBER,
+  NOVEMBER,
+  DECEMBER
+}

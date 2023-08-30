@@ -1,0 +1,188 @@
+
+
+import "results.dart"
+    show ReferenceWithTimezone, ParsingComponents, ParsingResult;
+import "types.dart"
+    show Component, ParsedResult, ParsingOption, ParsingReference;
+import "debugging.dart" show AsyncDebugBlock, DebugHandler;
+
+/**
+ * Chrono configuration.
+ * It is simply an ordered list of parsers and refiners
+ */
+abstract class Configuration {
+  List <Parser> parsers;
+
+  List <Refiner> refiners;
+  Configuration(this.parsers,this.refiners);
+}
+/**
+ * An abstraction for Chrono *Parser*.
+ *
+ * Each parser should recognize and handle a certain date format.
+ * Chrono uses multiple parses (and refiners) together for parsing the input.
+ *
+ * The parser implementation must provide {@Link pattern | pattern()} for the date format.
+ *
+ * The {@Link extract | extract()} method is called with the pattern's *match*.
+ * The matching and extracting is controlled and adjusted to avoid for overlapping results.
+ */
+abstract class Parser {
+  RegExp pattern(ParsingContext context);
+
+  dynamic /* ParsingComponents | ParsingResult | dynamic | null */ extract(
+      ParsingContext context, RegExpMatchArray match);
+}
+/**
+ * A abstraction for Chrono *Refiner*.
+ *
+ * Each refiner takes the list of results (from parsers or other refiners) and returns another list of results.
+ * Chrono applies each refiner in order and return the output from the last refiner.
+ */
+abstract class Refiner {
+  dynamic /* (context: ParsingContext, results: ParsingResult[]) => ParsingResult[] */ refine;
+}
+/**
+ * The Chrono object.
+ */
+class Chrono {
+  List<Parser> parsers;
+
+  List<Refiner> refiners;
+
+  var defaultConfig = new ENDefaultConfiguration ();
+
+  Chrono([ Configuration configuration ]) {
+    configuration =
+        configuration || this.defaultConfig.createCasualConfiguration();
+    parsers = [];
+    refiners = [];
+  }
+
+  /**
+   * Create a shallow copy of the Chrono object with the same configuration (`parsers` and `refiners`)
+   */
+  Chrono clone() {
+    return new Chrono (parsers: [], refiners: []);
+  }
+
+  /**
+   * A shortcut for calling {@Link parse | parse() } then transform the result into Javascript's Date object
+   *
+   */
+  dynamic /* Date | null */ parseDate(String text,
+      [ dynamic /* ParsingReference | Date */ referenceDate, ParsingOption option ]) {
+    final results = this.parse(text, referenceDate, option);
+    return results.length > 0 ? results [ 0 ].start.date() : null;
+  }
+
+  List <ParsedResult> parse(String text,
+      [ dynamic /* ParsingReference | Date */ referenceDate, ParsingOption option ]) {
+    final context = new ParsingContext (text, referenceDate, option);
+    var results = [];
+    this.parsers.forEach((parser) {
+      final parsedResults = Chrono.executeParser(context, parser);
+      results = results.concat(parsedResults);
+    });
+    results.sort((a, b) {
+      return a.index - b.index;
+    });
+    this.refiners.forEach((refiner) {
+      results = refiner.refine(context, results);
+    });
+    return results;
+  }
+
+  static executeParser(ParsingContext context, Parser parser) {
+    final results = [];
+    final pattern = parser.pattern(context);
+    final originalText = context.text;
+    var remainingText = context.text;
+    var match = pattern.exec(remainingText);
+    while (match) {
+      // Calculate match index on the full text;
+      final index = match.index + originalText.length - remainingText.length;
+      match.index = index;
+      final result = parser.extract(context, match);
+      if (!result) {
+        // If fails, move on by 1
+        remainingText = originalText.substring(match.index + 1);
+        match = pattern.exec(remainingText);
+        continue;
+      }
+      ParsingResult parsedResult = null;
+      if (result is ParsingResult) {
+        parsedResult = result;
+      } else if (result is ParsingComponents) {
+        parsedResult = context.createParsingResult(match.index, match [ 0 ]);
+        parsedResult.start = result;
+      } else {
+        parsedResult =
+            context.createParsingResult(match.index, match [ 0 ], result);
+      }
+      final parsedIndex = parsedResult.index;
+      final parsedText = parsedResult.text;
+      context.debug(() =>
+          console.log('''${ parser.constructor
+              .name} extracted (at index=${ parsedIndex}) \'${ parsedText}\''''));
+      results.push(parsedResult);
+      remainingText = originalText.substring(parsedIndex + parsedText.length);
+      match = pattern.exec(remainingText);
+    }
+    return results;
+  }
+}
+
+class ParsingContext implements DebugHandler {
+  String text;
+
+  ParsingOption option;
+
+  ReferenceWithTimezone reference;
+
+  /**
+   * . Use `reference.instant` instead.
+   */
+  Date refDate;
+
+  ParsingContext(String text,
+      [ dynamic /* ParsingReference | Date */ refDate, ParsingOption option ]) {
+    this.text = text;
+    this.reference = new ReferenceWithTimezone (refDate);
+    this.option = option ?? { };
+    this . refDate = this . reference .
+    instant;
+  }
+
+  ParsingComponents createParsingComponents(
+      [ dynamic /* dynamic | ParsingComponents */ components ]) {
+    if (components is ParsingComponents) {
+      return components;
+    }
+    return new ParsingComponents (this.reference, components);
+  }
+
+  ParsingResult createParsingResult(num index,
+      dynamic /* num | String */ textOrEndIndex,
+      [ dynamic /* dynamic | ParsingComponents */ startComponents, dynamic /* dynamic | ParsingComponents */ endComponents ]) {
+    final text = identical(, "string") ? textOrEndIndex : this.text.substring(
+        index.toInt(), textOrEndIndex);
+    final start = startComponents ? this.createParsingComponents(
+        startComponents) : null;
+    final end = endComponents
+        ? this.createParsingComponents(endComponents)
+        : null;
+    return new ParsingResult (this.reference, index, text, start, end);
+  }
+
+  void debug(AsyncDebugBlock block) {
+    if (this.option.debug) {
+      if (this.option.debug is Function) {
+        this.option.debug(block);
+      } else {
+        final DebugHandler handler = (this.option.debug as DebugHandler);
+        handler.debug(block);
+      }
+    }
+  }
+}
