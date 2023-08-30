@@ -131,3 +131,5 @@ enum Month {
     return Month.values[(Month.values.indexOf(this) + amount)%12];
   }
 }
+///value is number | AmbiguousTimezoneMap
+typedef TimezoneAbbrMap = Map<String,dynamic>;
