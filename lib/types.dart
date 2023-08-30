@@ -19,7 +19,7 @@ abstract class ParsingOption {
    * @internal
    */
   dynamic /* DebugHandler | DebugConsume */ debug;
-  ParsingOption(this.forwardDate,this.timezones,this.debug);
+  ParsingOption([this.forwardDate,this.timezones,this.debug]);
 }
 
 /**
@@ -76,7 +76,7 @@ abstract class ParsedResult {
   num get index;
   String get text;
   ParsedComponents get start;
-  ParsedComponents get end;
+  ParsedComponents? get end;
 
   /**
    * Create a javascript date object (from the result.start).
@@ -108,6 +108,19 @@ abstract class ParsedComponents {
    *
    */
   Date date();
+}
+
+enum Component{ //todo мб тут не енум
+  year,
+  month,
+  day,
+  weekday,
+  hour,
+  minute,
+  second,
+  millisecond,
+  meridiem,
+  timezoneOffset,
 }
 
 enum Meridiem { AM, PM }

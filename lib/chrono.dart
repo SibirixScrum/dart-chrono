@@ -1,5 +1,3 @@
-
-
 import "results.dart"
     show ReferenceWithTimezone, ParsingComponents, ParsingResult;
 import "types.dart"
@@ -10,11 +8,12 @@ import "debugging.dart" show AsyncDebugBlock, DebugHandler;
  * Chrono configuration.
  * It is simply an ordered list of parsers and refiners
  */
-abstract class Configuration {
+class Configuration {
   List <Parser> parsers;
 
   List <Refiner> refiners;
-  Configuration(this.parsers,this.refiners);
+
+  Configuration(this.parsers, this.refiners);
 }
 /**
  * An abstraction for Chrono *Parser*.
@@ -40,21 +39,23 @@ abstract class Parser {
  * Chrono applies each refiner in order and return the output from the last refiner.
  */
 abstract class Refiner {
-  dynamic /* (context: ParsingContext, results: ParsingResult[]) => ParsingResult[] */ refine;
+  List<ParsingResult> refine(ParsingContext context,
+      List<ParsingResult> results);
+// dynamic /* (context: ParsingContext, results: ParsingResult[]) => ParsingResult[] */ refine;
 }
 /**
  * The Chrono object.
  */
 class Chrono {
-  List<Parser> parsers;
+  late List<Parser> parsers;
 
-  List<Refiner> refiners;
+  late List<Refiner> refiners;
 
   var defaultConfig = new ENDefaultConfiguration ();
 
-  Chrono([ Configuration configuration ]) {
+  Chrono([ Configuration? configuration ]) {
     configuration =
-        configuration || this.defaultConfig.createCasualConfiguration();
+        configuration ?? this.defaultConfig.createCasualConfiguration();
     parsers = [];
     refiners = [];
   }
@@ -63,7 +64,7 @@ class Chrono {
    * Create a shallow copy of the Chrono object with the same configuration (`parsers` and `refiners`)
    */
   Chrono clone() {
-    return new Chrono (parsers: [], refiners: []);
+    return new Chrono (Configuration(parsers, refiners));
   }
 
   /**
@@ -71,18 +72,18 @@ class Chrono {
    *
    */
   dynamic /* Date | null */ parseDate(String text,
-      [ dynamic /* ParsingReference | Date */ referenceDate, ParsingOption option ]) {
+      [ dynamic /* ParsingReference | Date */ referenceDate, ParsingOption? option ]) {
     final results = this.parse(text, referenceDate, option);
     return results.length > 0 ? results [ 0 ].start.date() : null;
   }
 
   List <ParsedResult> parse(String text,
-      [ dynamic /* ParsingReference | Date */ referenceDate, ParsingOption option ]) {
+      [ dynamic /* ParsingReference | Date */ referenceDate, ParsingOption? option ]) {
     final context = new ParsingContext (text, referenceDate, option);
-    var results = [];
+    List<ParsingResult> results = [];
     this.parsers.forEach((parser) {
       final parsedResults = Chrono.executeParser(context, parser);
-      results = results.concat(parsedResults);
+      results = results + parsedResults;
     });
     results.sort((a, b) {
       return a.index - b.index;
@@ -98,8 +99,8 @@ class Chrono {
     final pattern = parser.pattern(context);
     final originalText = context.text;
     var remainingText = context.text;
-    var match = pattern.exec(remainingText);
-    while (match) {
+    var match = pattern.allMatches(remainingText);
+    while (match.isNotEmpty) { //todo что такое match: странный объект RegExpExecArray, понять, что за индекс такой
       // Calculate match index on the full text;
       final index = match.index + originalText.length - remainingText.length;
       match.index = index;
@@ -107,7 +108,7 @@ class Chrono {
       if (!result) {
         // If fails, move on by 1
         remainingText = originalText.substring(match.index + 1);
-        match = pattern.exec(remainingText);
+        match = pattern.allMatches(remainingText);
         continue;
       }
       ParsingResult parsedResult = null;
@@ -123,22 +124,21 @@ class Chrono {
       final parsedIndex = parsedResult.index;
       final parsedText = parsedResult.text;
       context.debug(() =>
-          console.log('''${ parser.constructor
-              .name} extracted (at index=${ parsedIndex}) \'${ parsedText}\''''));
-      results.push(parsedResult);
+          print('''executeParser extracted (at index=${ parsedIndex}) \'${ parsedText}\''''));
+      results.add(parsedResult);
       remainingText = originalText.substring(parsedIndex + parsedText.length);
-      match = pattern.exec(remainingText);
+      match = pattern.allMatches(remainingText);
     }
     return results;
   }
 }
 
 class ParsingContext implements DebugHandler {
-  String text;
+  late String text;
 
-  ParsingOption option;
+  late ParsingOption? option;
 
-  ReferenceWithTimezone reference;
+  late ReferenceWithTimezone reference;
 
   /**
    * . Use `reference.instant` instead.
@@ -146,11 +146,11 @@ class ParsingContext implements DebugHandler {
   Date refDate;
 
   ParsingContext(String text,
-      [ dynamic /* ParsingReference | Date */ refDate, ParsingOption option ]) {
+      [ dynamic /* ParsingReference | Date */ refDate, ParsingOption? option ]) {
     this.text = text;
     this.reference = new ReferenceWithTimezone (refDate);
-    this.option = option ?? { };
-    this . refDate = this . reference .
+    this.option = option;
+    this.refDate = this.reference.
     instant;
   }
 
@@ -172,17 +172,20 @@ class ParsingContext implements DebugHandler {
     final end = endComponents
         ? this.createParsingComponents(endComponents)
         : null;
-    return new ParsingResult (this.reference, index, text, start, end);
+    return new ParsingResult (this.reference, index.toInt(), text, start, end);
   }
 
-  void debug(AsyncDebugBlock block) {
-    if (this.option.debug) {
-      if (this.option.debug is Function) {
-        this.option.debug(block);
-      } else {
-        final DebugHandler handler = (this.option.debug as DebugHandler);
-        handler.debug(block);
+  @override
+  get debug {
+    return (AsyncDebugBlock block) {
+      if (this.option?.debug != null) {
+        if (this.option!.debug is Function) {
+          this.option!.debug(block);
+        } else {
+          final DebugHandler handler = (this.option!.debug as DebugHandler);
+          handler.debug(block);
+        }
       }
-    }
+    };
   }
 }

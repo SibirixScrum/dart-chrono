@@ -1,7 +1,9 @@
+import "package:chrono/types.dart";
 import "package:dayjs.dart" show OpUnitType, QUnitType;
 
 
 import "../results.dart" show ParsingComponents;
+
 
 /// key is OpUnitType | QUnitType | null
 typedef TimeUnits = Map<dynamic, num>;
@@ -30,16 +32,16 @@ ParsingComponents addImpliedTimeUnits(
       timeUnits.keys.contains("week") ||
       timeUnits.keys.contains("month") ||
       timeUnits.keys.contains("year")) {
-    output.imply("day", date.date());
-    output.imply("month", date.month() + 1);
-    output.imply("year", date.year());
+    output.imply(Component.day, date.date());
+    output.imply(Component.month, date.month() + 1);
+    output.imply(Component.year, date.year());
   }
   if (timeUnits.keys.contains("second") ||
       timeUnits.keys.contains("minute") ||
       timeUnits.keys.contains("hour")) {
-    output.imply("second", date.second());
-    output.imply("minute", date.minute());
-    output.imply("hour", date.hour());
+    output.imply(Component.second, date.second());
+    output.imply(Component.minute, date.minute());
+    output.imply(Component.hour, date.hour());
   }
   return output;
 }
