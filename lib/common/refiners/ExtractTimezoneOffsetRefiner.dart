@@ -1,3 +1,5 @@
+import "package:chrono/types.dart";
+
 import "../../chrono.dart" show ParsingContext, Refiner;
 import "../../results.dart" show ParsingResult;
 
@@ -11,21 +13,20 @@ class ExtractTimezoneOffsetRefiner implements Refiner {
   List<ParsingResult> refine(
       ParsingContext context, List<ParsingResult> results) {
     results.forEach((result) {
-      if (result.start.isCertain("timezoneOffset")) {
+      if (result.start.isCertain(Component.timezoneOffset)) {
         return;
       }
       final suffix = context.text.substring(result.index + result.text.length);
-      final match = TIMEZONE_OFFSET_PATTERN.exec(suffix);
-      if (!match) {
+      final match = TIMEZONE_OFFSET_PATTERN.allMatches(suffix).map((e) => e.toString()).toList();
+      if (match.isEmpty) {
         return;
       }
       context.debug(() {
-        console.log(
-            '''Extracting timezone: \'${ match [ 0 ]}\' into : ${ result}''');
+          print('''Extracting timezone: \'${ match [ 0 ]}\' into : ${ result}''');
       });
-      final hourOffset = parseInt(match[TIMEZONE_OFFSET_HOUR_OFFSET_GROUP]);
-      final minuteOffset =
-          parseInt(match[TIMEZONE_OFFSET_MINUTE_OFFSET_GROUP] || "0");
+      final hourOffset = int.parse(match[TIMEZONE_OFFSET_HOUR_OFFSET_GROUP]); //todo check size?
+      final minuteOffset = match.length >=4 ?
+          int.parse(match[TIMEZONE_OFFSET_MINUTE_OFFSET_GROUP]) : 0;
       var timezoneOffset = hourOffset * 60 + minuteOffset;
       // No timezones have offsets greater than 14 hours, so disregard this match
       if (timezoneOffset > 14 * 60) {
@@ -35,9 +36,9 @@ class ExtractTimezoneOffsetRefiner implements Refiner {
         timezoneOffset = -timezoneOffset;
       }
       if (result.end != null) {
-        result.end.assign("timezoneOffset", timezoneOffset);
+        result.end!.assign(Component.timezoneOffset, timezoneOffset);
       }
-      result.start.assign("timezoneOffset", timezoneOffset);
+      result.start.assign(Component.timezoneOffset, timezoneOffset);
       result.text += match[0];
     });
     return results;
