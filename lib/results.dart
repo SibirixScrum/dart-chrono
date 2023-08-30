@@ -51,9 +51,9 @@ class ReferenceWithTimezone {
 }
 
 class ParsingComponents implements ParsedComponents {
-  Map<Component?,num> knownValues;
+  late Map<Component?,num> knownValues;
 
-  Map<Component?,num> impliedValues;
+  late Map<Component?,num> impliedValues;
 
   ReferenceWithTimezone reference;
 
@@ -66,13 +66,13 @@ class ParsingComponents implements ParsedComponents {
       }
     }
     final refDayJs = dayjs(reference.instant);
-    this.imply("day", refDayJs.date());
-    this.imply("month", refDayJs.month() + 1);
-    this.imply("year", refDayJs.year());
-    this.imply("hour", 12);
-    this.imply("minute", 0);
-    this.imply("second", 0);
-    this.imply("millisecond", 0);
+    this.imply(Component.day, refDayJs.date());
+    this.imply(Component.month, refDayJs.month() + 1);
+    this.imply(Component.year, refDayJs.year());
+    this.imply(Component.hour, 12);
+    this.imply(Component.minute, 0);
+    this.imply(Component.second, 0);
+    this.imply(Component.millisecond, 0);
   }
 
   num? get(Component component) {
@@ -126,32 +126,32 @@ class ParsingComponents implements ParsedComponents {
   }
 
   bool isOnlyDate() {
-    return !this.isCertain("hour") && !this.isCertain("minute") &&
-        !this.isCertain("second");
+    return !this.isCertain(Component.hour) && !this.isCertain(Component.minute) &&
+        !this.isCertain(Component.second);
   }
 
   bool isOnlyTime() {
-    return !this.isCertain("weekday") && !this.isCertain("day") &&
-        !this.isCertain("month");
+    return !this.isCertain(Component.weekday) && !this.isCertain(Component.day) &&
+        !this.isCertain(Component.month);
   }
 
   bool isOnlyWeekdayComponent() {
-    return this.isCertain("weekday") && !this.isCertain("day") &&
-        !this.isCertain("month");
+    return this.isCertain(Component.weekday) && !this.isCertain(Component.day) &&
+        !this.isCertain(Component.month);
   }
 
   bool isDateWithUnknownYear() {
-    return this.isCertain("month") && !this.isCertain("year");
+    return this.isCertain(Component.month) && !this.isCertain(Component.year);
   }
 
   bool isValidDate() {
     final date = this.dateWithoutTimezoneAdjustment();
-    if (!identical(date.getFullYear(), this.get("year"))) return false;
-    if (!identical(date.getMonth(), this.get("month") - 1)) return false;
-    if (!identical(date.getDate(), this.get("day"))) return false;
-    if (this.get("hour") != null && date.getHours() != this.get("hour"))
+    if (!identical(date.getFullYear(), this.get(Component.year))) return false;
+    if (!identical(date.getMonth(), this.get(Component.month)!.toInt() - 1)) return false;
+    if (!identical(date.getDate(), this.get(Component.day))) return false;
+    if (this.get(Component.hour) != null && date.getHours() != this.get(Component.hour))
       return false;
-    if (this.get("minute") != null && date.getMinutes() != this.get("minute"))
+    if (this.get(Component.minute) != null && date.getMinutes() != this.get(Component.minute))
       return false;
     return true;
   }
@@ -167,28 +167,28 @@ class ParsingComponents implements ParsedComponents {
   Date date() {
     final date = this.dateWithoutTimezoneAdjustment();
     final timezoneAdjustment = this.reference.getSystemTimezoneAdjustmentMinute(
-        date, this.get("timezoneOffset"));
+        date, this.get(Component.timezoneOffset));
     return new Date (date.getTime() + timezoneAdjustment * 60000);
   }
 
   dateWithoutTimezoneAdjustment() {
     final date = new Date (
-        this.get("year"),
-        this.get("month")! - 1,
-        this.get("day"),
-        this.get("hour"),
-        this.get("minute"),
-        this.get("second"),
-        this.get("millisecond"));
-    date.setFullYear(this.get("year"));
+        this.get(Component.year),
+        this.get(Component.month)! - 1,
+        this.get(Component.day),
+        this.get(Component.hour),
+        this.get(Component.minute),
+        this.get(Component.second),
+        this.get(Component.millisecond));
+    date.setFullYear(this.get(Component.year));
     return date;
   }
 
   static ParsingComponents createRelativeFromReference(
-      ReferenceWithTimezone reference, dynamic fragments) {
+      ReferenceWithTimezone reference, Map<QUnitType,num> fragments) {
     var date = dayjs(reference.instant);
-    for (final key in fragments) {
-      date = date.add(fragments [],);
+    for (final key in fragments.keys) {
+      date = date.add(fragments [key],key);
     }
     final components = new ParsingComponents (reference);
     if (fragments [ "hour" ] || fragments [ "minute" ] ||
@@ -197,32 +197,32 @@ class ParsingComponents implements ParsedComponents {
       assignSimilarDate(components, date);
       if (!identical(reference.timezoneOffset, null)) {
         components.assign(
-            "timezoneOffset", -reference.instant.getTimezoneOffset());
+            Component.timezoneOffset, -reference.instant.getTimezoneOffset());
       }
     } else {
       implySimilarTime(components, date);
       if (!identical(reference.timezoneOffset, null)) {
         components.imply(
-            "timezoneOffset", -reference.instant.getTimezoneOffset());
+            Component.timezoneOffset, -reference.instant.getTimezoneOffset());
       }
       if (fragments [ "d" ]) {
-        components.assign("day", date.date());
-        components.assign("month", date.month() + 1);
-        components.assign("year", date.year());
+        components.assign(Component.day, date.date());
+        components.assign(Component.month, date.month() + 1);
+        components.assign(Component.year, date.year());
       } else {
         if (fragments [ "week" ]) {
-          components.imply("weekday", date.day());
+          components.imply(Component.weekday, date.day());
         }
-        components.imply("day", date.date());
+        components.imply(Component.day, date.date());
         if (fragments [ "month" ]) {
-          components.assign("month", date.month() + 1);
-          components.assign("year", date.year());
+          components.assign(Component.month, date.month() + 1);
+          components.assign(Component.year, date.year());
         } else {
-          components.imply("month", date.month() + 1);
+          components.imply(Component.month, date.month() + 1);
           if (fragments [ "year" ]) {
-            components.assign("year", date.year());
+            components.assign(Component.year, date.year());
           } else {
-            components.imply("year", date.year());
+            components.imply(Component.year, date.year());
           }
         }
       }

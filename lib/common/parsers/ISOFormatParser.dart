@@ -29,7 +29,7 @@ final PATTERN = new RegExp(
         ")?" +
         ")?" +
         "(?=\\W|\$)",
-    "i");
+    caseSensitive: false);
 const YEAR_NUMBER_GROUP = 1;
 const MONTH_NUMBER_GROUP = 2;
 const DATE_NUMBER_GROUP = 3;
@@ -49,7 +49,7 @@ class ISOFormatParser extends AbstractParserWithWordBoundaryChecking {
   //   return PATTERN;
   // }
 
-  innerExtract(ParsingContext context, RegExpMatchArray match) {
+  innerExtract(ParsingContext context, RegExpMathArray match) {
     final dynamic components = {};
     components["year"] = int.parse(match[YEAR_NUMBER_GROUP]);
     components["month"] = int.parse(match[MONTH_NUMBER_GROUP]);

@@ -27,8 +27,11 @@ abstract class AbstractParserWithWordBoundaryChecking implements Parser {
     }
     this.cachedPattern = new RegExp(
         '''${this.patternLeftBoundary()}${innerPattern.pattern}''',
-        innerPattern
-            .flahs); //todo флаги встроенного в дарт RegExp не совпадают с флагами в ts
+        multiLine: innerPattern.isMultiLine,
+        caseSensitive: innerPattern.isCaseSensitive,
+        dotAll: innerPattern.isDotAll,
+        unicode: innerPattern
+            .isUnicode); //todo флаги встроенного в дарт RegExp не совпадают с флагами в ts
     this.cachedInnerPattern = innerPattern;
     return this.cachedPattern!;
   }

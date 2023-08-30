@@ -38,7 +38,7 @@ followingTimePatten(String followingPhase, String followingSuffix) {
           ''')?''' +
           '''(?:\\s*(a\\.m\\.|p\\.m\\.|am?|pm?))?''' +
           '''${ followingSuffix}''',
-      "i");
+      caseSensitive: false);
 }
 
 const HOUR_GROUP = 2;

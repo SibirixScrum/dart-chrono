@@ -5,7 +5,7 @@ import "../../timezone.dart" show toTimezoneOffset;
 import "../../types.dart" show Component, TimezoneAbbrMap;
 
 final TIMEZONE_NAME_PATTERN =
-    new RegExp("^\\s*,?\\s*\\(?([A-Z]{2,4})\\)?(?=\\W|\$)", "i");
+    new RegExp("^\\s*,?\\s*\\(?([A-Z]{2,4})\\)?(?=\\W|\$)", caseSensitive: false);
 
 class ExtractTimezoneAbbrRefiner implements Refiner {
   late TimezoneAbbrMap timezoneOverrides;
