@@ -2,20 +2,24 @@ import "debugging.dart" show DebugConsume, DebugHandler;
 
 abstract class ParsingOption {
   /**
-     * To parse only forward dates (the results should be after the reference date).
-     * This effects date/time implication (e.g. weekday or time mentioning)
-     */
-  bool forwardDate;
+   * To parse only forward dates (the results should be after the reference date).
+   * This effects date/time implication (e.g. weekday or time mentioning)
+   */
+  bool? forwardDate;
+
   /**
-     * Additional timezone keywords for the parsers to recognize.
-     * Any value provided will override the default handling of that value.
-     */
-  TimezoneAbbrMap timezones;
+   * Additional timezone keywords for the parsers to recognize.
+   * Any value provided will override the default handling of that value.
+   */
+  TimezoneAbbrMap? timezones;
+
   /**
-     * Internal debug event handler.
-     * @internal
-     */
+   * Internal debug event handler.
+   * DebugHandler | DebugConsume
+   * @internal
+   */
   dynamic /* DebugHandler | DebugConsume */ debug;
+  ParsingOption(this.forwardDate,this.timezones,this.debug);
 }
 
 /**
@@ -26,16 +30,19 @@ abstract class ParsingOption {
 abstract class AmbiguousTimezoneMap {
   num timezoneOffsetDuringDst;
   num timezoneOffsetNonDst;
+
   /**
-     * Return the start date of DST for the given year.
-     * timezone.ts contains helper methods for common such rules.
-     */
-  dynamic /* (year: number) => Date */ dstStart;
+   * Return the start date of DST for the given year.
+   * timezone.ts contains helper methods for common such rules.
+   */
+  Date dstStart(num year);
+
   /**
-     * Return the end date of DST for the given year.
-     * timezone.ts contains helper methods for common such rules.
-     */
-  dynamic /* (year: number) => Date */ dstEnd;
+   * Return the end date of DST for the given year.
+   * timezone.ts contains helper methods for common such rules.
+   */
+  Date dstEnd(num year);
+  AmbiguousTimezoneMap(this.timezoneOffsetDuringDst,this.timezoneOffsetNonDst);
 }
 
 /**
@@ -46,16 +53,17 @@ abstract class AmbiguousTimezoneMap {
  */
 abstract class ParsingReference {
   /**
-     * Reference date. The instant (JavaScript Date object) when the input is written or mention.
-     * This effect date/time implication (e.g. weekday or time mentioning).
-     * (default = now)
-     */
+   * Reference date. The instant (JavaScript Date object) when the input is written or mention.
+   * This effect date/time implication (e.g. weekday or time mentioning).
+   * (default = now)
+   */
   Date instant;
+
   /**
-     * Reference timezone. The timezone where the input is written or mention.
-     * Date/time implication will account the difference between input timezone and the current system timezone.
-     * (default = current timezone)
-     */
+   * Reference timezone. The timezone where the input is written or mention.
+   * Date/time implication will account the difference between input timezone and the current system timezone.
+   * (default = current timezone)
+   */
   dynamic /* String | num */ timezone;
 }
 
@@ -64,15 +72,17 @@ abstract class ParsingReference {
  * Each result object represents a date/time (or date/time-range) mentioning in the input.
  */
 abstract class ParsedResult {
-  Date refDate;
-  num index;
-  String text;
-  ParsedComponents start;
-  ParsedComponents end;
+  Date get refDate;
+  num get index;
+  String get text;
+  ParsedComponents get start;
+  ParsedComponents get end;
+
   /**
-     * Create a javascript date object (from the result.start).
-     */
+   * Create a javascript date object (from the result.start).
+   */
   Date date();
+
 }
 
 /**
@@ -85,21 +95,25 @@ abstract class ParsedResult {
  */
 abstract class ParsedComponents {
   /**
-     * Check the component certainly if the component is *Certain* (or *Known*)
-     */
+   * Check the component certainly if the component is *Certain* (or *Known*)
+   */
   bool isCertain(Component component);
+
   /**
-     * Get the component value for either *Certain* or *Implied* value.
-     */
+   * Get the component value for either *Certain* or *Implied* value.
+   */
   dynamic /* num | null */ get(Component component);
+
   /**
-     * 
-     */
+   *
+   */
   Date date();
 }
 
 enum Meridiem { AM, PM }
+
 enum Weekday { SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY }
+
 enum Month {
   JANUARY,
   FEBRUARY,
@@ -112,5 +126,8 @@ enum Month {
   SEPTEMBER,
   OCTOBER,
   NOVEMBER,
-  DECEMBER
+  DECEMBER;
+  Month plus(int amount){
+    return Month.values[(Month.values.indexOf(this) + amount)%12];
+  }
 }

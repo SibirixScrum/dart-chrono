@@ -5,11 +5,11 @@ import "results.dart"
 import "types.dart"
     show Component, ParsedResult, ParsingOption, ParsingReference, Meridiem, Weekday;
 
-export show
-en , Chrono , Parser , Refiner , ParsingResult , ParsingComponents , ReferenceWithTimezone ;
-
-export show
-Component , ParsedResult , ParsingOption , ParsingReference , Meridiem , Weekday ;
+// export show
+// en , Chrono , Parser , Refiner , ParsingResult , ParsingComponents , ReferenceWithTimezone ;
+//
+// export show
+// Component , ParsedResult , ParsingOption , ParsingReference , Meridiem , Weekday ;
 // Export all locales
 import "locales/de.dart" as de;
 import "locales/fr.dart" as fr;
@@ -21,8 +21,8 @@ import "locales/ru.dart" as ru;
 import "locales/es.dart" as es;
 import "locales/uk.dart" as uk;
 
-export show
-de , fr , ja , pt , nl , zh , ru , es , uk ;
+// export show
+// de , fr , ja , pt , nl , zh , ru , es , uk ;
 /**
  * A shortcut for [en | chrono.en.strict]
  */

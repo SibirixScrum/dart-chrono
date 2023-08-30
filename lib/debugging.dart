@@ -1,19 +1,24 @@
+typedef AsyncDebugBlock = dynamic Function();
+typedef DebugConsume = void Function(AsyncDebugBlock debugLog);
+
 abstract class DebugHandler {
-  DebugConsume debug;
+  DebugConsume get debug;
 }
 
 class BufferedDebugHandler implements DebugHandler {
-  Array<AsyncDebugBlock> buffer;
-  BufferedDebugHandler() {
-    this.buffer = [];
-  }
-  void debug(AsyncDebugBlock debugMsg) {
-    this.buffer.push(debugMsg);
-  }
+  List<AsyncDebugBlock> buffer = [];
 
-  Array<unknown> executeBufferedBlocks() {
+
+  List<dynamic> executeBufferedBlocks() {
     final logs = this.buffer.map((block) => block());
     this.buffer = [];
-    return logs;
+    return logs.toList();
+  }
+
+  @override
+  get debug {
+    return (AsyncDebugBlock debugLog) {
+      this.buffer.add(debugLog);
+    };
   }
 }

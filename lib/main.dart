@@ -1,7 +1,9 @@
 
+import 'package:chrono/types.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
+  // print(Weekday.FRIDAY.index);
   runApp(const MyApp());
 }
 
@@ -18,7 +20,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   void initState() {
-    print(res.result);
     WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
