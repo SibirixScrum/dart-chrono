@@ -1,4 +1,4 @@
-import "locales/en.dart" as en;
+
 import "chrono.dart" show Chrono, Parser, Refiner;
 import "results.dart"
     show ParsingResult, ParsingComponents, ReferenceWithTimezone;
@@ -11,26 +11,26 @@ import "types.dart"
 // export show
 // Component , ParsedResult , ParsingOption , ParsingReference , Meridiem , Weekday ;
 // Export all locales
-import "locales/de.dart" as de;
-import "locales/fr.dart" as fr;
-import "locales/ja.dart" as ja;
-import "locales/pt.dart" as pt;
-import "locales/nl.dart" as nl;
-import "locales/zh.dart" as zh;
+// import "locales/de.dart" as de;
+// import "locales/fr.dart" as fr;
+// import "locales/ja.dart" as ja;
+// import "locales/pt.dart" as pt;
+// import "locales/nl.dart" as nl;
+// import "locales/zh.dart" as zh;
 import "locales/ru.dart" as ru;
-import "locales/es.dart" as es;
-import "locales/uk.dart" as uk;
+// import "locales/es.dart" as es;
+// import "locales/uk.dart" as uk;
 
 // export show
 // de , fr , ja , pt , nl , zh , ru , es , uk ;
 /**
  * A shortcut for [en | chrono.en.strict]
  */
-final strict = en.strict;
+final strict = ru.strict;
 /**
  * A shortcut for [en | chrono.en.casual]
  */
-final casual = en.casual;
+final casual = ru.casual;
 /**
  * A shortcut for [en | chrono.en.casual.parse()]
  */
