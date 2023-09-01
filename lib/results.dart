@@ -184,19 +184,19 @@ class ParsingComponents implements ParsedComponents {
   }
 
   static ParsingComponents createRelativeFromReference(
-      ReferenceWithTimezone reference, Map<Component,int> fragments) {
+      ReferenceWithTimezone reference, Map<String,int> fragments) {
     var date = reference.instant;
     // for (final key in fragments.keys) { //todo recheck this part: add fragment with my method instead of dayjs
     date = date.copyWith(
-      year: date.year + ( fragments[Component.year] ?? 0),
-      month: date.month + ( fragments[Component.month] ?? 0),
+      year: date.year + ( fragments["year"] ?? 0),
+      month: date.month + ( fragments["month"] ?? 0),
     );
     date = date.add( Duration(
-      days: ( fragments[Component.day] ?? 0),
-      hours: ( fragments[Component.hour] ?? 0),
-      minutes: ( fragments[Component.minute] ?? 0),
-      seconds: ( fragments[Component.second] ?? 0),
-       milliseconds: ( fragments[Component.millisecond] ?? 0),
+      days: ( fragments["day"] ?? 0),
+      hours: ( fragments["hour"] ?? 0),
+      minutes: ( fragments["minute"] ?? 0),
+      seconds: ( fragments["second"] ?? 0),
+       milliseconds: ( fragments["millisecond"] ?? 0),
     ));
       // date = date.add(fragments[key].toInt(),key);
     // }

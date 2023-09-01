@@ -1,16 +1,19 @@
+import "package:chrono/ported/RegExpMatchArray.dart";
+
 import "../../../chrono.dart" show ParsingContext;
-import "../../../results.dart" show ParsingComponents;
-import "../../../types.dart" show Meridiem;
 import "../../../common/parsers/AbstractTimeExpressionParser.dart"
     show AbstractTimeExpressionParser;
+import "../../../results.dart" show ParsingComponents;
+import "../../../types.dart" show Meridiem;
 import "../constants.dart" show REGEX_PARTS;
 
 class RUTimeExpressionParser extends AbstractTimeExpressionParser {
   RUTimeExpressionParser(strictMode) : super(strictMode) {
     /* super call moved to initializer */;
   }
+
   String patternFlags() {
-    return REGEX_PARTS.flags;
+    return REGEX_PARTS["flags"]!;
   }
 
   String primaryPatternLeftBoundary() {
@@ -26,10 +29,10 @@ class RUTimeExpressionParser extends AbstractTimeExpressionParser {
   }
 
   String primarySuffix() {
-    return '''(?:\\s*(?:утра|вечера|после полудня))?(?!\\/)${ REGEX_PARTS . rightBoundary}''';
+    return '''(?:\\s*(?:утра|вечера|после полудня))?(?!\\/)${REGEX_PARTS["rightBoundary"]}''';
   }
 
-  dynamic /* null | ParsingComponents */ extractPrimaryTimeComponents(
+  ParsingComponents? extractPrimaryTimeComponents(
       ParsingContext context, RegExpMatchArray match) {
     final components = super.extractPrimaryTimeComponents(context, match);
     if (components) {

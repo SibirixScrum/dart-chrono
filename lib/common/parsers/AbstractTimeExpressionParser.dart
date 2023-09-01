@@ -1,15 +1,16 @@
 import "package:chrono/ported/RegExpMatchArray.dart";
 
 import "../../chrono.dart" show Parser, ParsingContext;
-import "../../results.dart" show ParsingComponents, ParsingResult, ReferenceWithTimezone;
+import "../../results.dart"
+    show ParsingComponents, ParsingResult, ReferenceWithTimezone;
 import "../../types.dart" show Component, Meridiem;
 
 // prettier-ignore
 primaryTimePattern(String leftBoundary, String primaryPrefix,
     String primarySuffix, String flags) {
   return new RegExp(
-      '''${ leftBoundary}''' +
-          '''${ primaryPrefix}''' +
+      '''${leftBoundary}''' +
+          '''${primaryPrefix}''' +
           '''(\\d{1,4})''' +
           '''(?:''' +
           '''(?:\\.|:|：)''' +
@@ -21,17 +22,17 @@ primaryTimePattern(String leftBoundary, String primaryPrefix,
           ''')?''' +
           ''')?''' +
           '''(?:\\s*(a\\.m\\.|p\\.m\\.|am?|pm?))?''' +
-          '''${ primarySuffix}''',
+          '''${primarySuffix}''',
       caseSensitive: flags.contains("i"),
-    unicode: flags.contains('u'),
-    dotAll: flags.contains('d'),multiLine: flags.contains('m')
-      );
+      unicode: flags.contains('u'),
+      dotAll: flags.contains('d'),
+      multiLine: flags.contains('m'));
 }
 
 // prettier-ignore
 followingTimePatten(String followingPhase, String followingSuffix) {
   return new RegExp(
-      '''^(${ followingPhase})''' +
+      '''^(${followingPhase})''' +
           '''(\\d{1,4})''' +
           '''(?:''' +
           '''(?:\\.|\\:|\\：)''' +
@@ -42,7 +43,7 @@ followingTimePatten(String followingPhase, String followingSuffix) {
           ''')?''' +
           ''')?''' +
           '''(?:\\s*(a\\.m\\.|p\\.m\\.|am?|pm?))?''' +
-          '''${ followingSuffix}''',
+          '''${followingSuffix}''',
       caseSensitive: false);
 }
 
@@ -54,11 +55,15 @@ const AM_PM_HOUR_GROUP = 6;
 
 abstract class AbstractTimeExpressionParser implements Parser {
   String primaryPrefix();
+
   String followingPhase();
+
   late bool strictMode;
+
   AbstractTimeExpressionParser([strictMode = false]) {
     this.strictMode = strictMode;
   }
+
   String patternFlags() {
     return "i";
   }
@@ -81,9 +86,10 @@ abstract class AbstractTimeExpressionParser implements Parser {
 
   ParsingResult? extract(ParsingContext context, RegExpMatchArray match) {
     final startComponents = this.extractPrimaryTimeComponents(context, match);
-    if (!startComponents) {
+    if (startComponents == null) {
       match.index += match[0].length;
-      return ParsingResult(ReferenceWithTimezone(""), 0, ""); //todo dummy ParsingResult instead of null
+      return ParsingResult(ReferenceWithTimezone(""), 0,
+          ""); //todo dummy ParsingResult instead of null
     }
     final index = match.index + match[1].length;
     final text = match[0].substring(match[1].length);
@@ -111,7 +117,7 @@ abstract class AbstractTimeExpressionParser implements Parser {
     return this.checkAndReturnWithFollowingPattern(result);
   }
 
-  dynamic /* null | ParsingComponents */ extractPrimaryTimeComponents(
+  ParsingComponents? extractPrimaryTimeComponents(
       ParsingContext context, RegExpMatchArray match,
       [strict = false]) {
     final components = context.createParsingComponents();
@@ -131,7 +137,9 @@ abstract class AbstractTimeExpressionParser implements Parser {
     }
     // ----- Minutes
     if (match[MINUTE_GROUP] != null) {
-      if (match[MINUTE_GROUP].length == 1 && match.matches.length > AM_PM_HOUR_GROUP && match.matches[AM_PM_HOUR_GROUP] != null) {
+      if (match[MINUTE_GROUP].length == 1 &&
+          match.matches.length > AM_PM_HOUR_GROUP &&
+          match.matches[AM_PM_HOUR_GROUP] != null) {
         // Skip single digit minute e.g. "at 1.1 xx"
         return null;
       }
@@ -228,7 +236,8 @@ abstract class AbstractTimeExpressionParser implements Parser {
         if (hour == 12) {
           hour = 0;
           if (!components.isCertain(Component.day)) {
-            components.imply(Component.day, components.get(Component.day)!.toInt() + 1);
+            components.imply(
+                Component.day, components.get(Component.day)!.toInt() + 1);
           }
         }
       }
@@ -245,7 +254,8 @@ abstract class AbstractTimeExpressionParser implements Parser {
         } else {
           result.start.imply(Component.meridiem, Meridiem.PM.index);
           if (result.start.get(Component.hour) != 12) {
-            result.start.assign(Component.hour, result.start.get(Component.hour)! + 12);//todo added !
+            result.start.assign(Component.hour,
+                result.start.get(Component.hour)! + 12); //todo added !
           }
         }
       }
@@ -255,10 +265,12 @@ abstract class AbstractTimeExpressionParser implements Parser {
     if (meridiem >= 0) {
       components.assign(Component.meridiem, meridiem);
     } else {
-      final startAtPM =
-          result.start.isCertain(Component.meridiem) && result.start.get(Component.hour)!=null && result.start.get(Component.hour)! > 12;//toDO NULL check
+      final startAtPM = result.start.isCertain(Component.meridiem) &&
+          result.start.get(Component.hour) != null &&
+          result.start.get(Component.hour)! > 12; //toDO NULL check
       if (startAtPM) {
-        if (result.start.get(Component.hour)! - 12 > hour) { //todo added !
+        if (result.start.get(Component.hour)! - 12 > hour) {
+          //todo added !
           // 10pm - 1 (am)
           components.imply(Component.meridiem, Meridiem.AM.index);
         } else if (hour <= 12) {
@@ -271,8 +283,10 @@ abstract class AbstractTimeExpressionParser implements Parser {
         components.imply(Component.meridiem, Meridiem.AM.index);
       }
     }
-    if (components.date().millisecondsSinceEpoch < result.start.date().millisecondsSinceEpoch) {
-      components.imply(Component.day, components.get(Component.day)!.toInt() + 1);
+    if (components.date().millisecondsSinceEpoch <
+        result.start.date().millisecondsSinceEpoch) {
+      components.imply(
+          Component.day, components.get(Component.day)!.toInt() + 1);
     }
     return components;
   }
@@ -301,8 +315,9 @@ abstract class AbstractTimeExpressionParser implements Parser {
       }
       // If it ends only with dot single digit, e.g. "at 1.2"
       if (endingNumbers.contains(".") &&
-          (new RegExp(r'\d(\.\d{2})+$').exec(endingNumbers)?.matches.isEmpty ?? true)
-         ) { //todo added isEmpty instead of !
+          (new RegExp(r'\d(\.\d{2})+$').exec(endingNumbers)?.matches.isEmpty ??
+              true)) {
+        //todo added isEmpty instead of !
         return null;
       }
       // If it ends only with numbers above 24, e.g. "at 25"
@@ -330,8 +345,8 @@ abstract class AbstractTimeExpressionParser implements Parser {
       final String endingNumbers = endingWithNumbers[2];
       // If it ends only with dot single digit, e.g. "at 1.2"
       if (endingNumbers.contains(".") &&
-          (new RegExp(r'\d(\.\d{2})+$').exec(endingNumbers)?.matches .isEmpty ?? true)
-          ) {
+          (new RegExp(r'\d(\.\d{2})+$').exec(endingNumbers)?.matches.isEmpty ??
+              true)) {
         return null;
       }
       // If it ends only with numbers above 24, e.g. "at 25"
@@ -347,6 +362,7 @@ abstract class AbstractTimeExpressionParser implements Parser {
   var cachedPrimaryPrefix = null;
   var cachedPrimarySuffix = null;
   var cachedPrimaryTimePattern = null;
+
   getPrimaryTimePatternThroughCache() {
     final primaryPrefix = this.primaryPrefix();
     final primarySuffix = this.primarySuffix();
@@ -367,6 +383,7 @@ abstract class AbstractTimeExpressionParser implements Parser {
   var cachedFollowingPhase = null;
   var cachedFollowingSuffix = null;
   var cachedFollowingTimePatten = null;
+
   getFollowingTimePatternThroughCache() {
     final followingPhase = this.followingPhase();
     final followingSuffix = this.followingSuffix();
