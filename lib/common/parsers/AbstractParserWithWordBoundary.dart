@@ -1,7 +1,6 @@
-import "../../chrono.dart" show Parser, ParsingContext;
-import "../../results.dart" show ParsingComponents, ParsingResult;
-import "../../types.dart" show Component;
 import "package:chrono/ported/RegExpMatchArray.dart";
+
+import "../../chrono.dart" show Parser, ParsingContext;
 
 /**
  *
@@ -31,8 +30,7 @@ abstract class AbstractParserWithWordBoundaryChecking implements Parser {
         multiLine: innerPattern.isMultiLine,
         caseSensitive: innerPattern.isCaseSensitive,
         dotAll: innerPattern.isDotAll,
-        unicode: innerPattern
-            .isUnicode);
+        unicode: innerPattern.isUnicode);
     this.cachedInnerPattern = innerPattern;
     return this.cachedPattern!;
   }

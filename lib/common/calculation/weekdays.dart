@@ -1,5 +1,5 @@
-import "../../types.dart" show Component, Weekday;
 import "../../results.dart" show ParsingComponents, ReferenceWithTimezone;
+import "../../types.dart" show Component, Weekday;
 import "../../utils/timeunits.dart" show addImpliedTimeUnits;
 
 /**
@@ -11,14 +11,15 @@ import "../../utils/timeunits.dart" show addImpliedTimeUnits;
  */
 ParsingComponents createParsingComponentsAtWeekday(
     ReferenceWithTimezone reference, Weekday weekday,
-    [ dynamic /* | | */ modifier ]) {
+    [dynamic /* | | */ modifier]) {
   final refDate = reference.getDateWithAdjustedTimezone();
   final daysToWeekday = getDaysToWeekday(refDate, weekday, modifier);
-  var components = new ParsingComponents (reference,null);
-  components = addImpliedTimeUnits(components, { "day": daysToWeekday.toInt()});
+  var components = new ParsingComponents(reference, null);
+  components = addImpliedTimeUnits(components, {"day": daysToWeekday.toInt()});
   components.assign(Component.weekday, weekday.index);
   return components;
 }
+
 /**
  * Returns number of days from refDate to the weekday. The refDate date and timezone information is used.
  *
@@ -26,17 +27,17 @@ ParsingComponents createParsingComponentsAtWeekday(
  *
  */
 num getDaysToWeekday(DateTime refDate, Weekday weekday,
-    [ dynamic /* | | */ modifier ]) {
-  final refWeekday =refDate.weekday;
+    [dynamic /* | | */ modifier]) {
+  final refWeekday = refDate.weekday;
   switch (modifier) {
-    case "this" :
+    case "this":
       return getDaysForwardToWeekday(refDate, weekday);
-    case "last" :
+    case "last":
       return getBackwardDaysToWeekday(refDate, weekday);
-    case "next" :
-    // From Sunday, the next Sunday is 7 days later.
+    case "next":
+      // From Sunday, the next Sunday is 7 days later.
 
-    // Otherwise, next Mon is 1 days later, next Tues is 2 days later, and so on..., (return enum value)
+      // Otherwise, next Mon is 1 days later, next Tues is 2 days later, and so on..., (return enum value)
       if (refWeekday == Weekday.SUNDAY) {
         return weekday == Weekday.SUNDAY ? 7 : weekday.index;
       }
@@ -55,7 +56,7 @@ num getDaysToWeekday(DateTime refDate, Weekday weekday,
       // If the week's weekday already passed (weekday < refWeekday), we simply count forward to next week
 
       // (similar to 'this'). Otherwise, count forward to this week, then add another 7 days.
-      if (weekday.index+1 < refWeekday && weekday != Weekday.SUNDAY) {
+      if (weekday.index + 1 < refWeekday && weekday != Weekday.SUNDAY) {
         return getDaysForwardToWeekday(refDate, weekday);
       } else {
         return getDaysForwardToWeekday(refDate, weekday) + 7;
@@ -72,7 +73,7 @@ num getDaysToWeekdayClosest(DateTime refDate, Weekday weekday) {
 
 num getDaysForwardToWeekday(DateTime refDate, Weekday weekday) {
   final refWeekday = refDate.weekday;
-  var forwardCount = weekday.index+1 - refWeekday;
+  var forwardCount = weekday.index + 1 - refWeekday;
   if (forwardCount < 0) {
     forwardCount += 7;
   }
@@ -81,7 +82,7 @@ num getDaysForwardToWeekday(DateTime refDate, Weekday weekday) {
 
 num getBackwardDaysToWeekday(DateTime refDate, Weekday weekday) {
   final refWeekday = refDate.weekday;
-  var backwardCount = weekday.index+1 - refWeekday;
+  var backwardCount = weekday.index + 1 - refWeekday;
   if (backwardCount >= 0) {
     backwardCount -= 7;
   }

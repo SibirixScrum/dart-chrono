@@ -1,8 +1,8 @@
+import "package:chrono/ported/RegExpMatchArray.dart";
+
 import "../../chrono.dart" show ParsingContext;
-import "../../types.dart" show Component;
 import "AbstractParserWithWordBoundary.dart"
     show AbstractParserWithWordBoundaryChecking;
-import "package:chrono/ported/RegExpMatchArray.dart";
 // ISO 8601
 
 // http://www.w3.org/TR/NOTE-datetime
@@ -46,6 +46,7 @@ class ISOFormatParser extends AbstractParserWithWordBoundaryChecking {
   RegExp innerPattern(ParsingContext context) {
     return PATTERN;
   }
+
   // RegExp innerPattern() {
   //   return PATTERN;
   // }
@@ -83,6 +84,4 @@ class ISOFormatParser extends AbstractParserWithWordBoundaryChecking {
     }
     return components;
   }
-
-
 }

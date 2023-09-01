@@ -19,16 +19,22 @@ num findYearClosestToRef(DateTime refDate, num day, num month) {
   //Find the most appropriated year
   final refMoment = refDate;
   var dateMoment = refMoment;
-  dateMoment = dateMoment.copyWith(month: dateMoment.month-1);
-  dateMoment = dateMoment.copyWith(day:day.toInt());
-  dateMoment = dateMoment.copyWith(year:refMoment.year);// dateMoment.year(refMoment.year());
-  final nextYear = dateMoment.copyWith(year:dateMoment.year + 1);
-  final lastYear = dateMoment.copyWith(year:dateMoment.year + 1);
-  if ((nextYear.millisecondsSinceEpoch - refMoment.millisecondsSinceEpoch).abs() <
-      (dateMoment.millisecondsSinceEpoch - refMoment.millisecondsSinceEpoch).abs()) {
+  dateMoment = dateMoment.copyWith(month: dateMoment.month - 1);
+  dateMoment = dateMoment.copyWith(day: day.toInt());
+  dateMoment = dateMoment.copyWith(
+      year: refMoment.year); // dateMoment.year(refMoment.year());
+  final nextYear = dateMoment.copyWith(year: dateMoment.year + 1);
+  final lastYear = dateMoment.copyWith(year: dateMoment.year + 1);
+  if ((nextYear.millisecondsSinceEpoch - refMoment.millisecondsSinceEpoch)
+          .abs() <
+      (dateMoment.millisecondsSinceEpoch - refMoment.millisecondsSinceEpoch)
+          .abs()) {
     dateMoment = nextYear;
-  } else if ((lastYear.millisecondsSinceEpoch - refMoment.millisecondsSinceEpoch).abs() <
-      (dateMoment.millisecondsSinceEpoch - refMoment.millisecondsSinceEpoch).abs()) {
+  } else if ((lastYear.millisecondsSinceEpoch -
+              refMoment.millisecondsSinceEpoch)
+          .abs() <
+      (dateMoment.millisecondsSinceEpoch - refMoment.millisecondsSinceEpoch)
+          .abs()) {
     dateMoment = lastYear;
   }
   return dateMoment.year;

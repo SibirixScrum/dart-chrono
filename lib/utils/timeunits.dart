@@ -1,8 +1,5 @@
 import "package:chrono/types.dart";
-
-
 import "../results.dart" show ParsingComponents;
-
 
 /// key is OpUnitType | QUnitType | null
 typedef TimeUnits = Map<String, int>;
@@ -21,15 +18,15 @@ ParsingComponents addImpliedTimeUnits(
   final output = components.clone();
   var date = components.date();
   date = date.copyWith(
-    year: date.year + ( timeUnits["year"] ?? 0),
-    month: date.month + ( timeUnits["month"] ?? 0),
+    year: date.year + (timeUnits["year"] ?? 0),
+    month: date.month + (timeUnits["month"] ?? 0),
   );
-  date = date.add( Duration(
-    days: ( timeUnits["day"] ?? 0),
-    hours: ( timeUnits["hour"] ?? 0),
-    minutes: ( timeUnits["minute"] ?? 0),
-    seconds: ( timeUnits["second"] ?? 0),
-    milliseconds: ( timeUnits["millisecond"] ?? 0),
+  date = date.add(Duration(
+    days: (timeUnits["day"] ?? 0),
+    hours: (timeUnits["hour"] ?? 0),
+    minutes: (timeUnits["minute"] ?? 0),
+    seconds: (timeUnits["second"] ?? 0),
+    milliseconds: (timeUnits["millisecond"] ?? 0),
   ));
   // for (final key in timeUnits.keys) {
   //   // noinspection JSUnfilteredForInLoop,TypeScriptValidateTypes

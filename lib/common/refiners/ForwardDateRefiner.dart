@@ -17,8 +17,7 @@ class ForwardDateRefiner implements Refiner {
     }
     results.forEach((result) {
       var refMoment = context.refDate;
-      if (result.start.isOnlyTime() &&
-          refMoment.isAfter(result.start.date())) {
+      if (result.start.isOnlyTime() && refMoment.isAfter(result.start.date())) {
         refMoment = refMoment.add(Duration(days: 1));
         implySimilarDate(result.start, refMoment);
         if (result.end != null && result.end!.isOnlyTime()) {
@@ -31,31 +30,38 @@ class ForwardDateRefiner implements Refiner {
       }
       if (result.start.isOnlyWeekdayComponent() &&
           refMoment.isAfter(result.start.date())) {
-        if (refMoment.weekday >= result.start.get(Component.weekday)!.toInt()) { //todo хрен знает, что за refMoment.day(), думаю, что copywith
-          refMoment = refMoment.copyWith(day: result.start.get(Component.weekday)!.toInt() + 7); // day(result.start.get(Component.weekday)!.toInt() + 7);
+        if (refMoment.weekday >= result.start.get(Component.weekday)!.toInt()) {
+          //todo хрен знает, что за refMoment.day(), думаю, что copywith
+          refMoment = refMoment.copyWith(
+              day: result.start.get(Component.weekday)!.toInt() +
+                  7); // day(result.start.get(Component.weekday)!.toInt() + 7);
         } else {
-          refMoment = refMoment.copyWith(day:(result.start.get(Component.weekday) as num).toInt());  //refMoment.day((result.start.get(Component.weekday) as num));
+          refMoment = refMoment.copyWith(
+              day: (result.start.get(Component.weekday) as num)
+                  .toInt()); //refMoment.day((result.start.get(Component.weekday) as num));
         }
         result.start.imply(Component.day, refMoment.day);
         result.start.imply(Component.month, refMoment.month + 1);
         result.start.imply(Component.year, refMoment.year);
         context.debug(() {
-          print(
-              '''Forward weekly adjusted for ${ result} (${ result . start})''');
+          print('''Forward weekly adjusted for ${result} (${result.start})''');
         });
         if (result.end != null && result.end!.isOnlyWeekdayComponent()) {
           // Adjust date to the coming week
           if (refMoment.weekday > result.end!.get(Component.weekday)!.toInt()) {
-            refMoment = refMoment.copyWith(day:result.end!.get(Component.weekday)!.toInt() + 7); // refMoment.day(result.end!.get(Component.weekday)!.toInt() + 7); //todo added (Component.weekday)!
+            refMoment = refMoment.copyWith(
+                day: result.end!.get(Component.weekday)!.toInt() +
+                    7); // refMoment.day(result.end!.get(Component.weekday)!.toInt() + 7); //todo added (Component.weekday)!
           } else {
-            refMoment =  refMoment.copyWith(day:(result.end!.get(Component.weekday) as num).toInt());//refMoment.day((result.end!.get(Component.weekday) as num));
+            refMoment = refMoment.copyWith(
+                day: (result.end!.get(Component.weekday) as num)
+                    .toInt()); //refMoment.day((result.end!.get(Component.weekday) as num));
           }
           result.end!.imply(Component.day, refMoment.day);
           result.end!.imply(Component.month, refMoment.month + 1);
           result.end!.imply(Component.year, refMoment.year);
           context.debug(() {
-            print(
-                '''Forward weekly adjusted for ${ result} (${ result . end})''');
+            print('''Forward weekly adjusted for ${result} (${result.end})''');
           });
         }
       }
@@ -65,16 +71,18 @@ class ForwardDateRefiner implements Refiner {
       if (result.start.isDateWithUnknownYear() &&
           refMoment.isAfter(result.start.date())) {
         for (var i = 0; i < 3 && refMoment.isAfter(result.start.date()); i++) {
-          result.start.imply(Component.year, result.start.get(Component.year)!.toInt() + 1);
+          result.start.imply(
+              Component.year, result.start.get(Component.year)!.toInt() + 1);
           context.debug(() {
             print(
-                '''Forward yearly adjusted for ${ result} (${ result . start})''');
+                '''Forward yearly adjusted for ${result} (${result.start})''');
           });
           if (result.end != null && !result.end!.isCertain(Component.year)) {
-            result.end!.imply(Component.year, result.end!.get(Component.year)!.toInt() + 1);
+            result.end!.imply(
+                Component.year, result.end!.get(Component.year)!.toInt() + 1);
             context.debug(() {
               print(
-                  '''Forward yearly adjusted for ${ result} (${ result . end})''');
+                  '''Forward yearly adjusted for ${result} (${result.end})''');
             });
           }
         }

@@ -8,7 +8,6 @@ abstract class DebugHandler {
 class BufferedDebugHandler implements DebugHandler {
   List<AsyncDebugBlock> buffer = [];
 
-
   List<dynamic> executeBufferedBlocks() {
     final logs = this.buffer.map((block) => block());
     this.buffer = [];

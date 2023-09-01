@@ -1,27 +1,31 @@
-class RegExpMatchArray{
+class RegExpMatchArray {
   final List<String?> matches;
   var index = 0;
   final String input;
-  RegExpMatchArray(this.matches,this.input,this.index);
-  String operator [](int index){
+
+  RegExpMatchArray(this.matches, this.input, this.index);
+
+  String operator [](int index) {
     return matches[index].toString();
   }
 }
 
-extension RegExpUtil on RegExp{
-  RegExpMatchArray? exec(String str){
+extension RegExpUtil on RegExp {
+  RegExpMatchArray? exec(String str) {
     final firstMatch = this.firstMatch(str);
-    if(firstMatch == null){
+    if (firstMatch == null) {
       return null;
-    }else{
+    } else {
       final index = firstMatch.start;
       final matches = allMatches(str);
-      return RegExpMatchArray(matches.toList().expand(
-              (element) => element.groups(
-              List.generate(element.groupCount, (index) => index)
-          )
-      ).toList(),str,index);
+      return RegExpMatchArray(
+          matches
+              .toList()
+              .expand((element) => element
+                  .groups(List.generate(element.groupCount, (index) => index)))
+              .toList(),
+          str,
+          index);
     }
   }
 }
-

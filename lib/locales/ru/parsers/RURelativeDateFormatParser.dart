@@ -33,13 +33,13 @@ class RURelativeDateFormatParser
     final unitWord = match.matches[RELATIVE_WORD_GROUP]!.toLowerCase();
     final timeunit = TIME_UNIT_DICTIONARY[unitWord];
     if (modifier == "на следующей" || modifier == "в следующем") {
-      final Map<String,int> timeUnits = {};
+      final Map<String, int> timeUnits = {};
       timeUnits[timeunit] = 1;
       return ParsingComponents.createRelativeFromReference(
           context.reference, timeUnits);
     }
     if (modifier == "в прошлом" || modifier == "на прошлой") {
-      final Map<String,int> timeUnits = {};
+      final Map<String, int> timeUnits = {};
       timeUnits[timeunit] = -1;
       return ParsingComponents.createRelativeFromReference(
           context.reference, timeUnits);
@@ -48,17 +48,20 @@ class RURelativeDateFormatParser
     var date = context.reference.instant;
     // This week
     if (timeunit.match(new RegExp(r'week', caseSensitive: false))) {
-      date = date.subtract(Duration(days: date.day)); //  date = date.add(-date.get("d"), "d");
+      date = date.subtract(
+          Duration(days: date.day)); //  date = date.add(-date.get("d"), "d");
       components.imply(Component.day, date.day);
       components.imply(Component.month, date.month + 1);
       components.imply(Component.year, date.year);
     } else if (timeunit.match(new RegExp(r'month', caseSensitive: false))) {
-      date = date.subtract(Duration(days: date.day - 1)); //  date = date.add(-date.date() + 1, "d");
+      date = date.subtract(Duration(
+          days: date.day - 1)); //  date = date.add(-date.date() + 1, "d");
       components.imply(Component.day, date.day);
       components.assign(Component.year, date.year);
       components.assign(Component.month, date.month + 1);
     } else if (timeunit.match(new RegExp(r'year', caseSensitive: false))) {
-      date = date.subtract(Duration(days: date.day - 1)); //  date = date.add(-date.date() + 1, "d");
+      date = date.subtract(Duration(
+          days: date.day - 1)); //  date = date.add(-date.date() + 1, "d");
       date = date.copyWith(month: 0);
       components.imply(Component.day, date.day);
       components.imply(Component.month, date.month + 1);

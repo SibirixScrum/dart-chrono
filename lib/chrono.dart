@@ -1,23 +1,24 @@
 import "package:chrono/ported/RegExpMatchArray.dart";
 
+import "debugging.dart" show AsyncDebugBlock, DebugHandler;
+import 'locales/ru/index.dart' as ru;
 import "results.dart"
     show ReferenceWithTimezone, ParsingComponents, ParsingResult;
 import "types.dart"
     show Component, ParsedResult, ParsingOption, ParsingReference;
-import "debugging.dart" show AsyncDebugBlock, DebugHandler;
-import 'locales/ru/index.dart' as ru;
 
 /**
  * Chrono configuration.
  * It is simply an ordered list of parsers and refiners
  */
 class Configuration {
-  List <Parser> parsers;
+  List<Parser> parsers;
 
-  List <Refiner> refiners;
+  List<Refiner> refiners;
 
   Configuration(this.parsers, this.refiners);
 }
+
 /**
  * An abstraction for Chrono *Parser*.
  *
@@ -35,6 +36,7 @@ abstract class Parser {
   dynamic /* ParsingComponents | ParsingResult | dynamic | null */ extract(
       ParsingContext context, RegExpMatchArray match);
 }
+
 /**
  * A abstraction for Chrono *Refiner*.
  *
@@ -42,10 +44,11 @@ abstract class Parser {
  * Chrono applies each refiner in order and return the output from the last refiner.
  */
 abstract class Refiner {
-  List<ParsingResult> refine(ParsingContext context,
-      List<ParsingResult> results);
+  List<ParsingResult> refine(
+      ParsingContext context, List<ParsingResult> results);
 // dynamic /* (context: ParsingContext, results: ParsingResult[]) => ParsingResult[] */ refine;
 }
+
 /**
  * The Chrono object.
  */
@@ -56,9 +59,8 @@ class Chrono {
 
   // var defaultConfig = ;
 
-  Chrono([ Configuration? configuration ]) {
-    configuration =
-        configuration ?? ru.createCasualConfiguration();
+  Chrono([Configuration? configuration]) {
+    configuration = configuration ?? ru.createCasualConfiguration();
     parsers = [];
     refiners = [];
   }
@@ -67,7 +69,7 @@ class Chrono {
    * Create a shallow copy of the Chrono object with the same configuration (`parsers` and `refiners`)
    */
   Chrono clone() {
-    return new Chrono (Configuration(parsers, refiners));
+    return new Chrono(Configuration(parsers, refiners));
   }
 
   /**
@@ -75,14 +77,16 @@ class Chrono {
    *
    */
   dynamic /* Date | null */ parseDate(String text,
-      [ dynamic /* ParsingReference | Date */ referenceDate, ParsingOption? option ]) {
+      [dynamic /* ParsingReference | Date */ referenceDate,
+      ParsingOption? option]) {
     final results = this.parse(text, referenceDate, option);
-    return results.length > 0 ? results [ 0 ].start.date() : null;
+    return results.length > 0 ? results[0].start.date() : null;
   }
 
-  List <ParsedResult> parse(String text,
-      [ dynamic /* ParsingReference | Date */ referenceDate, ParsingOption? option ]) {
-    final context = new ParsingContext (text, referenceDate, option);
+  List<ParsedResult> parse(String text,
+      [dynamic /* ParsingReference | Date */ referenceDate,
+      ParsingOption? option]) {
+    final context = new ParsingContext(text, referenceDate, option);
     List<ParsingResult> results = [];
     this.parsers.forEach((parser) {
       final parsedResults = Chrono.executeParser(context, parser);
@@ -103,7 +107,8 @@ class Chrono {
     final originalText = context.text;
     var remainingText = context.text;
     var match = pattern.exec(remainingText);
-    while (match!=null && match.matches.isNotEmpty) { //todo что такое match: странный объект RegExpExecArray, понять, что за индекс такой
+    while (match != null && match.matches.isNotEmpty) {
+      //todo что такое match: странный объект RegExpExecArray, понять, что за индекс такой
       // Calculate match index on the full text;
       final index = match.index + originalText.length - remainingText.length;
       match.index = index;
@@ -118,16 +123,16 @@ class Chrono {
       if (result is ParsingResult) {
         parsedResult = result;
       } else if (result is ParsingComponents) {
-        parsedResult = context.createParsingResult(match.index, match [ 0 ]);
+        parsedResult = context.createParsingResult(match.index, match[0]);
         parsedResult.start = result;
       } else {
         parsedResult =
-            context.createParsingResult(match.index, match [ 0 ], result);
+            context.createParsingResult(match.index, match[0], result);
       }
       final parsedIndex = parsedResult.index;
       final parsedText = parsedResult.text;
-      context.debug(() =>
-          print('''executeParser extracted (at index=${ parsedIndex}) \'${ parsedText}\''''));
+      context.debug(() => print(
+          '''executeParser extracted (at index=${parsedIndex}) \'${parsedText}\''''));
       results.add(parsedResult);
       remainingText = originalText.substring(parsedIndex + parsedText.length);
       match = pattern.exec(remainingText);
@@ -149,33 +154,33 @@ class ParsingContext implements DebugHandler {
   late DateTime refDate;
 
   ParsingContext(String text,
-      [ dynamic /* ParsingReference | Date */ refDate, ParsingOption? option ]) {
+      [dynamic /* ParsingReference | Date */ refDate, ParsingOption? option]) {
     this.text = text;
-    this.reference = new ReferenceWithTimezone (refDate);
+    this.reference = new ReferenceWithTimezone(refDate);
     this.option = option;
-    this.refDate = this.reference.
-    instant;
+    this.refDate = this.reference.instant;
   }
 
   ParsingComponents createParsingComponents(
-      [ dynamic /* dynamic | ParsingComponents */ components ]) {
+      [dynamic /* dynamic | ParsingComponents */ components]) {
     if (components is ParsingComponents) {
       return components;
     }
-    return new ParsingComponents (this.reference, components);
+    return new ParsingComponents(this.reference, components);
   }
 
-  ParsingResult createParsingResult(num index,
-      dynamic /* num | String */ textOrEndIndex,
-      [ dynamic /* dynamic | ParsingComponents */ startComponents, dynamic /* dynamic | ParsingComponents */ endComponents ]) {
-    final text = textOrEndIndex is String ? textOrEndIndex : this.text.substring(
-        index.toInt(), textOrEndIndex);
-    final start = startComponents ? this.createParsingComponents(
-        startComponents) : null;
-    final end = endComponents
-        ? this.createParsingComponents(endComponents)
-        : null;
-    return new ParsingResult (this.reference, index.toInt(), text, start, end);
+  ParsingResult createParsingResult(
+      num index, dynamic /* num | String */ textOrEndIndex,
+      [dynamic /* dynamic | ParsingComponents */ startComponents,
+      dynamic /* dynamic | ParsingComponents */ endComponents]) {
+    final text = textOrEndIndex is String
+        ? textOrEndIndex
+        : this.text.substring(index.toInt(), textOrEndIndex);
+    final start =
+        startComponents ? this.createParsingComponents(startComponents) : null;
+    final end =
+        endComponents ? this.createParsingComponents(endComponents) : null;
+    return new ParsingResult(this.reference, index.toInt(), text, start, end);
   }
 
   @override

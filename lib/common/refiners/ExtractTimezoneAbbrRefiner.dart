@@ -6,8 +6,9 @@ import "../../results.dart" show ParsingResult;
 import "../../timezone.dart" show toTimezoneOffset;
 import "../../types.dart" show Component, TimezoneAbbrMap;
 
-final TIMEZONE_NAME_PATTERN =
-    new RegExp("^\\s*,?\\s*\\(?([A-Z]{2,4})\\)?(?=\\W|\$)", caseSensitive: false);
+final TIMEZONE_NAME_PATTERN = new RegExp(
+    "^\\s*,?\\s*\\(?([A-Z]{2,4})\\)?(?=\\W|\$)",
+    caseSensitive: false);
 
 class ExtractTimezoneAbbrRefiner implements Refiner {
   late TimezoneAbbrMap timezoneOverrides;
@@ -28,7 +29,9 @@ class ExtractTimezoneAbbrRefiner implements Refiner {
         return;
       }
       final timezoneAbbr = match.matches[1]?.toUpperCase();
-      final refDate = result.start.date() ?? result.refDate ?? new DateTime(1990); //todo откуда нулл может быть?
+      final refDate = result.start.date() ??
+          result.refDate ??
+          new DateTime(1990); //todo откуда нулл может быть?
       final Map<String, dynamic> tzOverrides = {};
       tzOverrides.addAll(timezoneOverrides);
       tzOverrides.addAll(this.timezoneOverrides);

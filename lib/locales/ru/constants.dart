@@ -305,11 +305,11 @@ num parseNumberPattern(String match) {
   if (INTEGER_WORD_DICTIONARY.containsKey(num)) {
     return INTEGER_WORD_DICTIONARY[num]!;
   }
-  if (RegExp(r'несколько').firstMatch(num)!=null) {
+  if (RegExp(r'несколько').firstMatch(num) != null) {
     return 3;
-  } else if (RegExp(r'пол').firstMatch(num)!=null) {
+  } else if (RegExp(r'пол').firstMatch(num) != null) {
     return 0.5;
-  } else if (RegExp(r'пар').firstMatch(num)!=null) {
+  } else if (RegExp(r'пар').firstMatch(num) != null) {
     return 2;
   } else if (identical(num, "")) {
     return 1;
@@ -336,17 +336,21 @@ final YEAR_PATTERN =
     '''(?:[1-9][0-9]{0,3}${year}\\s*(?:н.э.|до н.э.|н. э.|до н. э.)|[1-2][0-9]{3}${year}|[5-9][0-9]${year})''';
 
 num parseYear(String match) {
-  if (new RegExp(r'(год|года|г|г.)', caseSensitive: false).firstMatch(match)!=null) {
-    match =
-        match.replaceAll(new RegExp(r'(год|года|г|г.)', caseSensitive: false), "");
+  if (new RegExp(r'(год|года|г|г.)', caseSensitive: false).firstMatch(match) !=
+      null) {
+    match = match.replaceAll(
+        new RegExp(r'(год|года|г|г.)', caseSensitive: false), "");
   }
-  if (new RegExp(r'(до н.э.|до н. э.)', caseSensitive: false).firstMatch(match)!=null) {
+  if (new RegExp(r'(до н.э.|до н. э.)', caseSensitive: false)
+          .firstMatch(match) !=
+      null) {
     //Before Common Era
     match = match.replaceAll(
         new RegExp(r'(до н.э.|до н. э.)', caseSensitive: false), "");
-    return - int.parse(match);
+    return -int.parse(match);
   }
-  if (new RegExp(r'(н. э.|н.э.)', caseSensitive: false).firstMatch(match)!=null) {
+  if (new RegExp(r'(н. э.|н.э.)', caseSensitive: false).firstMatch(match) !=
+      null) {
     //Common Era
     match =
         match.replaceAll(new RegExp(r'(н. э.|н.э.)', caseSensitive: false), "");
@@ -360,7 +364,8 @@ num parseYear(String match) {
 final SINGLE_TIME_UNIT_PATTERN =
     '''(${NUMBER_PATTERN})\\s{0,3}(${matchAnyPattern(TIME_UNIT_DICTIONARY)})''';
 
-final SINGLE_TIME_UNIT_REGEX = new RegExp(SINGLE_TIME_UNIT_PATTERN, caseSensitive: false);
+final SINGLE_TIME_UNIT_REGEX =
+    new RegExp(SINGLE_TIME_UNIT_PATTERN, caseSensitive: false);
 
 final TIME_UNITS_PATTERN = repeatedTimeunitPattern(
     '''(?:(?:около|примерно)\\s{0,3})?''', SINGLE_TIME_UNIT_PATTERN);

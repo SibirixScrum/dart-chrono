@@ -1,8 +1,8 @@
+import "timezone.dart" show toTimezoneOffset;
 import "types.dart"
     show Component, ParsedComponents, ParsedResult, ParsingReference;
 import "utils/dayjs.dart"
     show assignSimilarDate, assignSimilarTime, implySimilarTime;
-import "timezone.dart" show toTimezoneOffset;
 
 // dayjs.extend //todo не знаю, че это
 // (quarterOfYear );
@@ -11,7 +11,7 @@ class ReferenceWithTimezone {
 
   num? timezoneOffset;
 
-  ReferenceWithTimezone([ dynamic /* ParsingReference | Date */ input ]) {
+  ReferenceWithTimezone([dynamic /* ParsingReference | Date */ input]) {
     input = input ?? new DateTime(1990);
     if (input is DateTime) {
       this.instant = input;
@@ -26,7 +26,7 @@ class ReferenceWithTimezone {
    * The output's instant is NOT the reference's instant when the reference's and system's timezone are different.
    */
   getDateWithAdjustedTimezone() {
-    return DateTime (this.instant.millisecondsSinceEpoch +
+    return DateTime(this.instant.millisecondsSinceEpoch +
         getSystemTimezoneAdjustmentMinute(this.instant) * 60000);
   }
 
@@ -36,27 +36,28 @@ class ReferenceWithTimezone {
    *
    */
   int getSystemTimezoneAdjustmentMinute(
-      [ DateTime? date, num? overrideTimezoneOffset ]) {
-    if (date==null || date.millisecondsSinceEpoch < 0) {
+      [DateTime? date, num? overrideTimezoneOffset]) {
+    if (date == null || date.millisecondsSinceEpoch < 0) {
 // Javascript date timezone calculation got effect when the time epoch < 0
 
 // e.g. new Date('Tue Feb 02 1300 00:00:00 GMT+0900 (JST)') => Tue Feb 02 1300 00:18:59 GMT+0918 (JST)
-      date = DateTime (1990);
+      date = DateTime(1990);
     }
     final currentTimezoneOffset = -date.timeZoneOffset.inMinutes;
-    final targetTimezoneOffset = overrideTimezoneOffset ?? this . timezoneOffset ?? currentTimezoneOffset;
+    final targetTimezoneOffset =
+        overrideTimezoneOffset ?? this.timezoneOffset ?? currentTimezoneOffset;
     return (currentTimezoneOffset - targetTimezoneOffset).toInt();
   }
 }
 
 class ParsingComponents implements ParsedComponents {
-  late Map<Component,num> knownValues;
+  late Map<Component, num> knownValues;
 
-  late Map<Component,num> impliedValues;
+  late Map<Component, num> impliedValues;
 
   ReferenceWithTimezone reference;
 
-  ParsingComponents(this.reference, Map<Component,num>? knownComponents ) {
+  ParsingComponents(this.reference, Map<Component, num>? knownComponents) {
     this.knownValues = {};
     this.impliedValues = {};
     if (knownComponents != null) {
@@ -76,10 +77,10 @@ class ParsingComponents implements ParsedComponents {
 
   num? get(Component component) {
     if (knownValues.keys.contains(component)) {
-      return this.knownValues [ component ];
+      return this.knownValues[component];
     }
     if (impliedValues.keys.contains(component)) {
-      return this.impliedValues [ component ];
+      return this.impliedValues[component];
     }
     return null;
   }
@@ -96,46 +97,51 @@ class ParsingComponents implements ParsedComponents {
     if (knownValues.keys.contains(component)) {
       return this;
     }
-    this.impliedValues [ component ] = value;
+    this.impliedValues[component] = value;
     return this;
   }
 
   ParsingComponents assign(Component component, num value) {
-    this.knownValues [ component ] = value;
+    this.knownValues[component] = value;
     this.knownValues.remove(component);
     return this;
   }
 
   delete(Component component) {
-    this.knownValues.remove(component);;
-    this.impliedValues.remove(component);;
+    this.knownValues.remove(component);
+    ;
+    this.impliedValues.remove(component);
+    ;
   }
 
   ParsingComponents clone() {
-    final component = new ParsingComponents (this.reference,null);
+    final component = new ParsingComponents(this.reference, null);
     component.knownValues = {};
     component.impliedValues = {};
     for (final key in this.knownValues.keys) {
-      component.knownValues [key] = this.knownValues [key]!;
+      component.knownValues[key] = this.knownValues[key]!;
     }
     for (final key in this.impliedValues.keys) {
-      component.impliedValues [key] = this.impliedValues [key]!;
+      component.impliedValues[key] = this.impliedValues[key]!;
     }
     return component;
   }
 
   bool isOnlyDate() {
-    return !this.isCertain(Component.hour) && !this.isCertain(Component.minute) &&
+    return !this.isCertain(Component.hour) &&
+        !this.isCertain(Component.minute) &&
         !this.isCertain(Component.second);
   }
 
   bool isOnlyTime() {
-    return !this.isCertain(Component.weekday) && !this.isCertain(Component.day) &&
+    return !this.isCertain(Component.weekday) &&
+        !this.isCertain(Component.day) &&
         !this.isCertain(Component.month);
   }
 
   bool isOnlyWeekdayComponent() {
-    return this.isCertain(Component.weekday) && !this.isCertain(Component.day) &&
+    return this.isCertain(Component.weekday) &&
+        !this.isCertain(Component.day) &&
         !this.isCertain(Component.month);
   }
 
@@ -146,12 +152,13 @@ class ParsingComponents implements ParsedComponents {
   bool isValidDate() {
     final date = this.dateWithoutTimezoneAdjustment();
     if (!identical(date.getFullYear(), this.get(Component.year))) return false;
-    if (!identical(date.getMonth(), this.get(Component.month)!.toInt() - 1)) return false;
+    if (!identical(date.getMonth(), this.get(Component.month)!.toInt() - 1))
+      return false;
     if (!identical(date.getDate(), this.get(Component.day))) return false;
-    if (this.get(Component.hour) != null && date.getHours() != this.get(Component.hour))
-      return false;
-    if (this.get(Component.minute) != null && date.getMinutes() != this.get(Component.minute))
-      return false;
+    if (this.get(Component.hour) != null &&
+        date.getHours() != this.get(Component.hour)) return false;
+    if (this.get(Component.minute) != null &&
+        date.getMinutes() != this.get(Component.minute)) return false;
     return true;
   }
 
@@ -167,13 +174,15 @@ class ParsingComponents implements ParsedComponents {
     final date = this.dateWithoutTimezoneAdjustment();
     final timezoneAdjustment = this.reference.getSystemTimezoneAdjustmentMinute(
         date, this.get(Component.timezoneOffset));
-    return new DateTime (date.getTime() + timezoneAdjustment * 60000);
+    return new DateTime(date.getTime() + timezoneAdjustment * 60000);
   }
 
   dateWithoutTimezoneAdjustment() {
-    final date = new DateTime (
+    final date = new DateTime(
         this.get(Component.year)?.toInt() ?? 1990,
-        this.get(Component.month) != null ? this.get(Component.month)!.toInt() - 1 : 1,
+        this.get(Component.month) != null
+            ? this.get(Component.month)!.toInt() - 1
+            : 1,
         this.get(Component.day)?.toInt() ?? 1,
         this.get(Component.hour)?.toInt() ?? 0,
         this.get(Component.minute)?.toInt() ?? 0,
@@ -184,52 +193,53 @@ class ParsingComponents implements ParsedComponents {
   }
 
   static ParsingComponents createRelativeFromReference(
-      ReferenceWithTimezone reference, Map<String,int> fragments) {
+      ReferenceWithTimezone reference, Map<String, int> fragments) {
     var date = reference.instant;
     // for (final key in fragments.keys) { //todo recheck this part: add fragment with my method instead of dayjs
     date = date.copyWith(
-      year: date.year + ( fragments["year"] ?? 0),
-      month: date.month + ( fragments["month"] ?? 0),
+      year: date.year + (fragments["year"] ?? 0),
+      month: date.month + (fragments["month"] ?? 0),
     );
-    date = date.add( Duration(
-      days: ( fragments["day"] ?? 0),
-      hours: ( fragments["hour"] ?? 0),
-      minutes: ( fragments["minute"] ?? 0),
-      seconds: ( fragments["second"] ?? 0),
-       milliseconds: ( fragments["millisecond"] ?? 0),
+    date = date.add(Duration(
+      days: (fragments["day"] ?? 0),
+      hours: (fragments["hour"] ?? 0),
+      minutes: (fragments["minute"] ?? 0),
+      seconds: (fragments["second"] ?? 0),
+      milliseconds: (fragments["millisecond"] ?? 0),
     ));
-      // date = date.add(fragments[key].toInt(),key);
+    // date = date.add(fragments[key].toInt(),key);
     // }
-    final components = new ParsingComponents (reference,null);
-    if (fragments [ "hour" ]!=null || fragments [ "minute" ] !=null ||
-        fragments [ "second" ]!=null) {
+    final components = new ParsingComponents(reference, null);
+    if (fragments["hour"] != null ||
+        fragments["minute"] != null ||
+        fragments["second"] != null) {
       assignSimilarTime(components, date);
       assignSimilarDate(components, date);
       if (!identical(reference.timezoneOffset, null)) {
-        components.assign(
-            Component.timezoneOffset, -reference.instant.timeZoneOffset.inMinutes);
+        components.assign(Component.timezoneOffset,
+            -reference.instant.timeZoneOffset.inMinutes);
       }
     } else {
       implySimilarTime(components, date);
       if (!identical(reference.timezoneOffset, null)) {
-        components.imply(
-            Component.timezoneOffset, -reference.instant.timeZoneOffset.inMinutes);
+        components.imply(Component.timezoneOffset,
+            -reference.instant.timeZoneOffset.inMinutes);
       }
-      if (fragments [ "d" ]!=null) {
+      if (fragments["d"] != null) {
         components.assign(Component.day, date.day);
         components.assign(Component.month, date.month + 1);
         components.assign(Component.year, date.year);
       } else {
-        if (fragments [ "week" ]!=null) {
+        if (fragments["week"] != null) {
           components.imply(Component.weekday, date.weekday);
         }
         components.imply(Component.day, date.day);
-        if (fragments [ "month" ]!=null) {
+        if (fragments["month"] != null) {
           components.assign(Component.month, date.month + 1);
           components.assign(Component.year, date.year);
         } else {
           components.imply(Component.month, date.month + 1);
-          if (fragments [ "year" ]!=null) {
+          if (fragments["year"] != null) {
             components.assign(Component.year, date.year);
           } else {
             components.imply(Component.year, date.year);
@@ -255,17 +265,17 @@ class ParsingResult implements ParsedResult {
   ParsingComponents? end;
 
   ParsingResult(this.reference, this.index, this.text,
-      [ ParsingComponents? start, ParsingComponents? end ]) {
+      [ParsingComponents? start, ParsingComponents? end]) {
     this.reference = reference;
     this.refDate = reference.instant;
     this.index = index;
     this.text = text;
-    this.start = start ?? new ParsingComponents (reference,null);
+    this.start = start ?? new ParsingComponents(reference, null);
     this.end = end;
   }
 
   clone() {
-    final result = new ParsingResult (this.reference, this.index, this.text);
+    final result = new ParsingResult(this.reference, this.index, this.text);
     result.start = this.start.clone();
     result.end = this.end != null ? this.end!.clone() : null;
     return result;
@@ -276,7 +286,6 @@ class ParsingResult implements ParsedResult {
   }
 
   toString() {
-    return '''[ParsingResult {index: ${ this.index}, text: \'${ this
-        .text}\', ...}]''';
+    return '''[ParsingResult {index: ${this.index}, text: \'${this.text}\', ...}]''';
   }
 }

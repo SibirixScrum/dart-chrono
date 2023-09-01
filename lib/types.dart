@@ -1,4 +1,4 @@
-import "debugging.dart" show DebugConsume, DebugHandler;
+
 
 abstract class ParsingOption {
   /**
@@ -19,7 +19,8 @@ abstract class ParsingOption {
    * @internal
    */
   dynamic /* DebugHandler | DebugConsume */ debug;
-  ParsingOption([this.forwardDate,this.timezones,this.debug]);
+
+  ParsingOption([this.forwardDate, this.timezones, this.debug]);
 }
 
 /**
@@ -42,7 +43,8 @@ abstract class AmbiguousTimezoneMap {
    * timezone.ts contains helper methods for common such rules.
    */
   DateTime dstEnd(num year);
-  AmbiguousTimezoneMap(this.timezoneOffsetDuringDst,this.timezoneOffsetNonDst);
+
+  AmbiguousTimezoneMap(this.timezoneOffsetDuringDst, this.timezoneOffsetNonDst);
 }
 
 /**
@@ -58,6 +60,7 @@ abstract class ParsingReference {
    * (default = now)
    */
   DateTime instant;
+
   ParsingReference(this.instant);
 
   /**
@@ -74,16 +77,19 @@ abstract class ParsingReference {
  */
 abstract class ParsedResult {
   DateTime get refDate;
+
   num get index;
+
   String get text;
+
   ParsedComponents get start;
+
   ParsedComponents? get end;
 
   /**
    * Create a javascript date object (from the result.start).
    */
   DateTime date();
-
 }
 
 /**
@@ -111,7 +117,8 @@ abstract class ParsedComponents {
   DateTime date();
 }
 
-enum Component{ //todo мб тут не енум
+enum Component {
+  //todo мб тут не енум
   year,
   month,
   // week,
@@ -142,9 +149,11 @@ enum Month {
   OCTOBER,
   NOVEMBER,
   DECEMBER;
-  Month plus(int amount){
-    return Month.values[(Month.values.indexOf(this) + amount)%12];
+
+  Month plus(int amount) {
+    return Month.values[(Month.values.indexOf(this) + amount) % 12];
   }
 }
+
 ///value is number | AmbiguousTimezoneMap
-typedef TimezoneAbbrMap = Map<String,dynamic>;
+typedef TimezoneAbbrMap = Map<String, dynamic>;

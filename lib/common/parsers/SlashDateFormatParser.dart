@@ -68,14 +68,16 @@ class SlashDateFormatParser implements Parser {
             match[OPENING_GROUP].length -
             match[ENDING_GROUP].length);
     // '1.12', '1.12.12' is more like a version numbers
-    if (RegExp(r'^\d\.\d$').firstMatch(text)!=null  ||
-        RegExp(r'^\d\.\d{1,2}\.\d{1,2}\s*$').firstMatch(text)!=null) {
+    if (RegExp(r'^\d\.\d$').firstMatch(text) != null ||
+        RegExp(r'^\d\.\d{1,2}\.\d{1,2}\s*$').firstMatch(text) != null) {
       return null;
     }
     // MM/dd -> OK
 
     // MM.dd -> NG
-    if ( match.matches.length <= YEAR_GROUP && match.matches[0]!=null && !match.matches[0]!.contains("/")) {
+    if (match.matches.length <= YEAR_GROUP &&
+        match.matches[0] != null &&
+        !match.matches[0]!.contains("/")) {
       return null;
     }
     final result = context.createParsingResult(index, text);
@@ -97,7 +99,8 @@ class SlashDateFormatParser implements Parser {
     }
     result.start.assign(Component.day, day);
     result.start.assign(Component.month, month);
-    if (match.matches.length > YEAR_GROUP && match.matches[YEAR_GROUP]!=null) {
+    if (match.matches.length > YEAR_GROUP &&
+        match.matches[YEAR_GROUP] != null) {
       final rawYearNumber = int.parse(match[YEAR_GROUP]);
       final year = findMostLikelyADYear(rawYearNumber);
       result.start.assign(Component.year, year);

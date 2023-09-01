@@ -6,6 +6,7 @@ import "../results.dart" show ParsingResult;
  */
 abstract class Filter implements Refiner {
   bool isValid(ParsingContext context, ParsingResult result);
+
   List<ParsingResult> refine(
       ParsingContext context, List<ParsingResult> results) {
     return results.where((r) => isValid(context, r)).toList();
@@ -18,8 +19,10 @@ abstract class Filter implements Refiner {
 abstract class MergingRefiner implements Refiner {
   bool shouldMergeResults(String textBetween, ParsingResult currentResult,
       ParsingResult nextResult, ParsingContext context);
+
   ParsingResult mergeResults(String textBetween, ParsingResult currentResult,
       ParsingResult nextResult, ParsingContext context);
+
   List<ParsingResult> refine(
       ParsingContext context, List<ParsingResult> results) {
     if (results.length < 2) {
@@ -43,7 +46,7 @@ abstract class MergingRefiner implements Refiner {
             this.mergeResults(textBetween, left, right, context);
         context.debug(() {
           print(
-              '''MergingRefiner merged ${ left} and ${ right} into ${ mergedResult}''');
+              '''MergingRefiner merged ${left} and ${right} into ${mergedResult}''');
         });
         curResult = mergedResult;
       }
