@@ -1,6 +1,5 @@
 import "types.dart"
     show Component, ParsedComponents, ParsedResult, ParsingReference;
-import "package:dayjs.dart" show QUnitType;
 import "utils/dayjs.dart"
     show assignSimilarDate, assignSimilarTime, implySimilarTime;
 import "timezone.dart" show toTimezoneOffset;
@@ -65,10 +64,10 @@ class ParsingComponents implements ParsedComponents {
         this.knownValues[key] = knownComponents[key]!;
       }
     }
-    final refDayJs = dayjs(reference.instant);
-    this.imply(Component.day, refDayJs.date());
-    this.imply(Component.month, refDayJs.month() + 1);
-    this.imply(Component.year, refDayJs.year());
+    final refDayJs = reference.instant;
+    this.imply(Component.day, refDayJs.day);
+    this.imply(Component.month, refDayJs.month + 1);
+    this.imply(Component.year, refDayJs.year);
     this.imply(Component.hour, 12);
     this.imply(Component.minute, 0);
     this.imply(Component.second, 0);
@@ -113,7 +112,7 @@ class ParsingComponents implements ParsedComponents {
   }
 
   ParsingComponents clone() {
-    final component = new ParsingComponents (this.reference);
+    final component = new ParsingComponents (this.reference,null);
     component.knownValues = {};
     component.impliedValues = {};
     for (final key in this.knownValues.keys) {
@@ -160,9 +159,9 @@ class ParsingComponents implements ParsedComponents {
     return '''[ParsingComponents {knownValues: ${this.knownValues}, impliedValues: ${this.impliedValues}}, reference: ${this.reference}]''';
   }
 
-  dayjs() {
-    return dayjs(this.date());
-  }
+  // dayjs() {
+  //   return dayjs(this.date());
+  // }
 
   DateTime date() {
     final date = this.dateWithoutTimezoneAdjustment();
@@ -185,12 +184,23 @@ class ParsingComponents implements ParsedComponents {
   }
 
   static ParsingComponents createRelativeFromReference(
-      ReferenceWithTimezone reference, Map<QUnitType,num> fragments) {
-    var date = dayjs(reference.instant);
-    for (final key in fragments.keys) {
-      date = date.add(fragments [key],key);
-    }
-    final components = new ParsingComponents (reference);
+      ReferenceWithTimezone reference, Map<Component,int> fragments) {
+    var date = reference.instant;
+    // for (final key in fragments.keys) { //todo recheck this part: add fragment with my method instead of dayjs
+    date = date.copyWith(
+      year: date.year + ( fragments[Component.year] ?? 0),
+      month: date.month + ( fragments[Component.month] ?? 0),
+    );
+    date = date.add( Duration(
+      days: ( fragments[Component.day] ?? 0),
+      hours: ( fragments[Component.hour] ?? 0),
+      minutes: ( fragments[Component.minute] ?? 0),
+      seconds: ( fragments[Component.second] ?? 0),
+       milliseconds: ( fragments[Component.millisecond] ?? 0),
+    ));
+      // date = date.add(fragments[key].toInt(),key);
+    // }
+    final components = new ParsingComponents (reference,null);
     if (fragments [ "hour" ]!=null || fragments [ "minute" ] !=null ||
         fragments [ "second" ]!=null) {
       assignSimilarTime(components, date);
@@ -206,23 +216,23 @@ class ParsingComponents implements ParsedComponents {
             Component.timezoneOffset, -reference.instant.timeZoneOffset.inMinutes);
       }
       if (fragments [ "d" ]!=null) {
-        components.assign(Component.day, date.date());
-        components.assign(Component.month, date.month() + 1);
-        components.assign(Component.year, date.year());
+        components.assign(Component.day, date.day);
+        components.assign(Component.month, date.month + 1);
+        components.assign(Component.year, date.year);
       } else {
         if (fragments [ "week" ]!=null) {
-          components.imply(Component.weekday, date.day());
+          components.imply(Component.weekday, date.weekday);
         }
-        components.imply(Component.day, date.date());
+        components.imply(Component.day, date.day);
         if (fragments [ "month" ]!=null) {
-          components.assign(Component.month, date.month() + 1);
-          components.assign(Component.year, date.year());
+          components.assign(Component.month, date.month + 1);
+          components.assign(Component.year, date.year);
         } else {
-          components.imply(Component.month, date.month() + 1);
+          components.imply(Component.month, date.month + 1);
           if (fragments [ "year" ]!=null) {
-            components.assign(Component.year, date.year());
+            components.assign(Component.year, date.year);
           } else {
-            components.imply(Component.year, date.year());
+            components.imply(Component.year, date.year);
           }
         }
       }
@@ -250,7 +260,7 @@ class ParsingResult implements ParsedResult {
     this.refDate = reference.instant;
     this.index = index;
     this.text = text;
-    this.start = start ?? new ParsingComponents (reference);
+    this.start = start ?? new ParsingComponents (reference,null);
     this.end = end;
   }
 

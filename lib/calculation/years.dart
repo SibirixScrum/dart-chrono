@@ -17,19 +17,19 @@ num findMostLikelyADYear(num yearNumber) {
 
 num findYearClosestToRef(DateTime refDate, num day, num month) {
   //Find the most appropriated year
-  final refMoment = dayjs(refDate);
+  final refMoment = refDate;
   var dateMoment = refMoment;
-  dateMoment = dateMoment.month(month - 1);
-  dateMoment = dateMoment.date(day);
-  dateMoment = dateMoment.year(refMoment.year());
-  final nextYear = dateMoment.add(1, "y");
-  final lastYear = dateMoment.add(-1, "y");
-  if (nextYear.diff(refMoment).abs() <
-      dateMoment.diff(refMoment).abs()) {
+  dateMoment = dateMoment.copyWith(month: dateMoment.month-1);
+  dateMoment = dateMoment.copyWith(day:day.toInt());
+  dateMoment = dateMoment.copyWith(year:refMoment.year);// dateMoment.year(refMoment.year());
+  final nextYear = dateMoment.copyWith(year:dateMoment.year + 1);
+  final lastYear = dateMoment.copyWith(year:dateMoment.year + 1);
+  if ((nextYear.millisecondsSinceEpoch - refMoment.millisecondsSinceEpoch).abs() <
+      (dateMoment.millisecondsSinceEpoch - refMoment.millisecondsSinceEpoch).abs()) {
     dateMoment = nextYear;
-  } else if (lastYear.diff(refMoment).abs() <
-      dateMoment.diff(refMoment).abs()) {
+  } else if ((lastYear.millisecondsSinceEpoch - refMoment.millisecondsSinceEpoch).abs() <
+      (dateMoment.millisecondsSinceEpoch - refMoment.millisecondsSinceEpoch).abs()) {
     dateMoment = lastYear;
   }
-  return dateMoment.year();
+  return dateMoment.year;
 }

@@ -323,8 +323,8 @@ dynamic /* num | null */ toTimezoneOffset(
       return null;
     }
     // Return DST offset if the refDate is during daylight savings
-    if (dayjs(date).isAfter(matchedTimezone.dstStart(date.year)) &&
-        !dayjs(date).isAfter(matchedTimezone.dstEnd(date.year))) {
+    if (date.isAfter(matchedTimezone.dstStart(date.year)) &&
+        date.isAfter(matchedTimezone.dstEnd(date.year))) {
       return matchedTimezone.timezoneOffsetDuringDst;
     }
     // refDate is not during DST => return non-DST offset

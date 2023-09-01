@@ -27,28 +27,28 @@ abstract class AbstractMergeDateRangeRefiner extends MergingRefiner {
        });
      }
      if (currentResult.start.date().millisecondsSinceEpoch > nextResult.start.date().millisecondsSinceEpoch) {
-       var fromMoment = currentResult.start.dayjs();
-       var toMoment = nextResult.start.dayjs();
+       var fromMoment = currentResult.start.date();
+       var toMoment = nextResult.start.date();
        if (nextResult.start.isOnlyWeekdayComponent() &&
-           toMoment.add(7, "days").isAfter(fromMoment)) {
-         toMoment = toMoment.add(7, "days");
-         nextResult.start.imply(Component.day, toMoment.date());
-         nextResult.start.imply(Component.month, toMoment.month() + 1);
-         nextResult.start.imply(Component.year, toMoment.year());
+           toMoment.add(Duration(days: 7)).isAfter(fromMoment)) {
+         toMoment = toMoment.add(Duration(days: 7));
+         nextResult.start.imply(Component.day, toMoment.day);
+         nextResult.start.imply(Component.month, toMoment.month + 1);
+         nextResult.start.imply(Component.year, toMoment.year);
        } else if (currentResult.start.isOnlyWeekdayComponent() &&
-           fromMoment.add(-7, "days").isBefore(toMoment)) {
-         fromMoment = fromMoment.add(-7, "days");
-         currentResult.start.imply(Component.day, fromMoment.date());
-         currentResult.start.imply(Component.month, fromMoment.month() + 1);
-         currentResult.start.imply(Component.year, fromMoment.year());
+           fromMoment.subtract(Duration(days: 7)).isBefore(toMoment)) {
+         fromMoment = fromMoment.subtract(Duration(days: 7));
+         currentResult.start.imply(Component.day, fromMoment.day);
+         currentResult.start.imply(Component.month, fromMoment.month + 1);
+         currentResult.start.imply(Component.year, fromMoment.year);
        } else if (nextResult.start.isDateWithUnknownYear() &&
-           toMoment.add(1, "years").isAfter(fromMoment)) {
-         toMoment = toMoment.add(1, "years");
-         nextResult.start.imply(Component.year, toMoment.year());
+           toMoment.copyWith(year: toMoment.year+1).isAfter(fromMoment)) {
+         toMoment = toMoment.copyWith(year: toMoment.year+1);
+         nextResult.start.imply(Component.year, toMoment.year);
        } else if (currentResult.start.isDateWithUnknownYear() &&
-           fromMoment.add(-1, "years").isBefore(toMoment)) {
-         fromMoment = fromMoment.add(-1, "years");
-         currentResult.start.imply(Component.year, fromMoment.year());
+           toMoment.copyWith(year: toMoment.year-1).isBefore(toMoment)) {
+         fromMoment = toMoment.copyWith(year: toMoment.year-1);
+         currentResult.start.imply(Component.year, fromMoment.year);
        } else {
         final temp = nextResult;
         nextResult = currentResult;
