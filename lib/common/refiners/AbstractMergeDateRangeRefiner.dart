@@ -26,7 +26,7 @@ abstract class AbstractMergeDateRangeRefiner extends MergingRefiner {
          }
        });
      }
-     if (currentResult.start.date().getTime() > nextResult.start.date().getTime()) {
+     if (currentResult.start.date().millisecondsSinceEpoch > nextResult.start.date().millisecondsSinceEpoch) {
        var fromMoment = currentResult.start.dayjs();
        var toMoment = nextResult.start.dayjs();
        if (nextResult.start.isOnlyWeekdayComponent() &&

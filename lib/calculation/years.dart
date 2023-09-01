@@ -15,7 +15,7 @@ num findMostLikelyADYear(num yearNumber) {
   return yearNumber;
 }
 
-num findYearClosestToRef(Date refDate, num day, num month) {
+num findYearClosestToRef(DateTime refDate, num day, num month) {
   //Find the most appropriated year
   final refMoment = dayjs(refDate);
   var dateMoment = refMoment;

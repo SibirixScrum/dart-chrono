@@ -244,16 +244,16 @@ final TimezoneAbbrMap TIMEZONE_ABBR_MAP = {
  *
  *         month and year, at the given hour of day
  */
-Date getNthWeekdayOfMonth(num year, Month month, Weekday weekday,
+DateTime getNthWeekdayOfMonth(num year, Month month, Weekday weekday,
     [n = ((1 | 2 as int) | 3 as int) | 4, hour = 0]) {
   var dayOfMonth = 0;
   var i = 0;
   while (i < n) {
     dayOfMonth++;
-    final date = new Date(year, month.plus(-1), dayOfMonth);
-    if (identical(date.getDay(), weekday)) i++;
+    final date = new DateTime(year.toInt(), month.plus(-1).index+1, dayOfMonth);
+    if (identical(date.weekday, weekday)) i++;
   }
-  return new Date(year, month.plus(-1), dayOfMonth, hour);
+  return new DateTime(year.toInt(), month.plus(-1).index+1, dayOfMonth, hour);
 }
 
 /**
@@ -266,14 +266,14 @@ Date getNthWeekdayOfMonth(num year, Month month, Weekday weekday,
  *
  *         month and year, at the given hour of day
  */
-Date getLastWeekdayOfMonth(num year, Month month, Weekday weekday, [hour = 0]) {
+DateTime getLastWeekdayOfMonth(num year, Month month, Weekday weekday, [hour = 0]) {
   // Procedure: Find the first weekday of the next month, compare with the given weekday,
 
   // and use the difference to determine how many days to subtract from the first of the next month.
   final oneIndexedWeekday = identical(weekday.index, 0) ? 7 : weekday.index;
   final date =
-      new Date(year, month.plus(-1).plus(1), 1, 12); //todo -1 +1 со смыслом?
-  final firstWeekdayNextMonth = identical(date.getDay(), 0) ? 7 : date.getDay();
+      new DateTime(year.toInt(), month.plus(-1).plus(1).index+1, 1, 12); //todo -1 +1 со смыслом?
+  final firstWeekdayNextMonth = identical(date.weekday, 0) ? 7 : date.weekday;
   var dayDiff;
   if (identical(firstWeekdayNextMonth, oneIndexedWeekday))
     dayDiff = 7;
@@ -281,8 +281,8 @@ Date getLastWeekdayOfMonth(num year, Month month, Weekday weekday, [hour = 0]) {
     dayDiff = 7 + firstWeekdayNextMonth - oneIndexedWeekday;
   else
     dayDiff = firstWeekdayNextMonth - oneIndexedWeekday;
-  date.setDate(date.getDate() - dayDiff);
-  return new Date(year, month.plus(-1), date.getDate(), hour);
+  date.subtract(dayDiff);
+  return new DateTime(year.toInt(), month.plus(-1).index+1, date.day, hour);
 }
 
 /**
@@ -296,7 +296,7 @@ Date getLastWeekdayOfMonth(num year, Month month, Weekday weekday, [hour = 0]) {
  */
 dynamic /* num | null */ toTimezoneOffset(
     [dynamic /* String | num */ timezoneInput,
-    Date? date,
+    DateTime? date,
     TimezoneAbbrMap timezoneOverrides = const {}]) {
   if (timezoneInput == null) {
     return null;
@@ -323,8 +323,8 @@ dynamic /* num | null */ toTimezoneOffset(
       return null;
     }
     // Return DST offset if the refDate is during daylight savings
-    if (dayjs(date).isAfter(matchedTimezone.dstStart(date.getFullYear())) &&
-        !dayjs(date).isAfter(matchedTimezone.dstEnd(date.getFullYear()))) {
+    if (dayjs(date).isAfter(matchedTimezone.dstStart(date.year)) &&
+        !dayjs(date).isAfter(matchedTimezone.dstEnd(date.year))) {
       return matchedTimezone.timezoneOffsetDuringDst;
     }
     // refDate is not during DST => return non-DST offset

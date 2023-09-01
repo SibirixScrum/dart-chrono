@@ -145,7 +145,7 @@ class ParsingContext implements DebugHandler {
   /**
    * . Use `reference.instant` instead.
    */
-  Date refDate;
+  late DateTime refDate;
 
   ParsingContext(String text,
       [ dynamic /* ParsingReference | Date */ refDate, ParsingOption? option ]) {

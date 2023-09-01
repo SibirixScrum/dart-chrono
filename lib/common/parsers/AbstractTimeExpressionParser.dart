@@ -271,7 +271,7 @@ abstract class AbstractTimeExpressionParser implements Parser {
         components.imply(Component.meridiem, Meridiem.AM.index);
       }
     }
-    if (components.date().getTime() < result.start.date().getTime()) {
+    if (components.date().millisecondsSinceEpoch < result.start.date().millisecondsSinceEpoch) {
       components.imply(Component.day, components.get(Component.day)!.toInt() + 1);
     }
     return components;

@@ -8,16 +8,16 @@ import "timezone.dart" show toTimezoneOffset;
 // dayjs.extend //todo не знаю, че это
 // (quarterOfYear );
 class ReferenceWithTimezone {
-  Date instant;
+  late DateTime instant;
 
   num? timezoneOffset;
 
   ReferenceWithTimezone([ dynamic /* ParsingReference | Date */ input ]) {
-    input = input ?? new Date ();
-    if (input is Date) {
+    input = input ?? new DateTime(1990);
+    if (input is DateTime) {
       this.instant = input;
     } else {
-      this.instant = input.instant ?? new Date ();
+      this.instant = input.instant ?? new DateTime(1990);
       this.timezoneOffset = toTimezoneOffset(input.timezone, this.instant);
     }
   }
@@ -27,7 +27,7 @@ class ReferenceWithTimezone {
    * The output's instant is NOT the reference's instant when the reference's and system's timezone are different.
    */
   getDateWithAdjustedTimezone() {
-    return Date (this.instant.getTime() +
+    return DateTime (this.instant.millisecondsSinceEpoch +
         getSystemTimezoneAdjustmentMinute(this.instant) * 60000);
   }
 
@@ -36,17 +36,17 @@ class ReferenceWithTimezone {
    *
    *
    */
-  num getSystemTimezoneAdjustmentMinute(
-      [ Date? date, num? overrideTimezoneOffset ]) {
-    if (!date || date.getTime() < 0) {
+  int getSystemTimezoneAdjustmentMinute(
+      [ DateTime? date, num? overrideTimezoneOffset ]) {
+    if (date==null || date.millisecondsSinceEpoch < 0) {
 // Javascript date timezone calculation got effect when the time epoch < 0
 
 // e.g. new Date('Tue Feb 02 1300 00:00:00 GMT+0900 (JST)') => Tue Feb 02 1300 00:18:59 GMT+0918 (JST)
-      date = Date ();
+      date = DateTime (1990);
     }
-    final currentTimezoneOffset = -date.getTimezoneOffset();
+    final currentTimezoneOffset = -date.timeZoneOffset.inMinutes;
     final targetTimezoneOffset = overrideTimezoneOffset ?? this . timezoneOffset ?? currentTimezoneOffset;
-    return currentTimezoneOffset - targetTimezoneOffset;
+    return (currentTimezoneOffset - targetTimezoneOffset).toInt();
   }
 }
 
@@ -164,23 +164,23 @@ class ParsingComponents implements ParsedComponents {
     return dayjs(this.date());
   }
 
-  Date date() {
+  DateTime date() {
     final date = this.dateWithoutTimezoneAdjustment();
     final timezoneAdjustment = this.reference.getSystemTimezoneAdjustmentMinute(
         date, this.get(Component.timezoneOffset));
-    return new Date (date.getTime() + timezoneAdjustment * 60000);
+    return new DateTime (date.getTime() + timezoneAdjustment * 60000);
   }
 
   dateWithoutTimezoneAdjustment() {
-    final date = new Date (
-        this.get(Component.year),
-        this.get(Component.month)! - 1,
-        this.get(Component.day),
-        this.get(Component.hour),
-        this.get(Component.minute),
-        this.get(Component.second),
-        this.get(Component.millisecond));
-    date.setFullYear(this.get(Component.year));
+    final date = new DateTime (
+        this.get(Component.year)?.toInt() ?? 1990,
+        this.get(Component.month) != null ? this.get(Component.month)!.toInt() - 1 : 1,
+        this.get(Component.day)?.toInt() ?? 1,
+        this.get(Component.hour)?.toInt() ?? 0,
+        this.get(Component.minute)?.toInt() ?? 0,
+        this.get(Component.second)?.toInt() ?? 0,
+        this.get(Component.millisecond)?.toInt() ?? 0);
+    // date.setFullYear(this.get(Component.year));
     return date;
   }
 
@@ -197,13 +197,13 @@ class ParsingComponents implements ParsedComponents {
       assignSimilarDate(components, date);
       if (!identical(reference.timezoneOffset, null)) {
         components.assign(
-            Component.timezoneOffset, -reference.instant.getTimezoneOffset());
+            Component.timezoneOffset, -reference.instant.timeZoneOffset.inMinutes);
       }
     } else {
       implySimilarTime(components, date);
       if (!identical(reference.timezoneOffset, null)) {
         components.imply(
-            Component.timezoneOffset, -reference.instant.getTimezoneOffset());
+            Component.timezoneOffset, -reference.instant.timeZoneOffset.inMinutes);
       }
       if (fragments [ "d" ]!=null) {
         components.assign(Component.day, date.date());
@@ -232,7 +232,7 @@ class ParsingComponents implements ParsedComponents {
 }
 
 class ParsingResult implements ParsedResult {
-  Date refDate;
+  late DateTime refDate;
 
   int index;
 
@@ -261,7 +261,7 @@ class ParsingResult implements ParsedResult {
     return result;
   }
 
-  Date date() {
+  DateTime date() {
     return this.start.date();
   }
 

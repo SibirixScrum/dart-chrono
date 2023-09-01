@@ -35,13 +35,13 @@ abstract class AmbiguousTimezoneMap {
    * Return the start date of DST for the given year.
    * timezone.ts contains helper methods for common such rules.
    */
-  Date dstStart(num year);
+  DateTime dstStart(num year);
 
   /**
    * Return the end date of DST for the given year.
    * timezone.ts contains helper methods for common such rules.
    */
-  Date dstEnd(num year);
+  DateTime dstEnd(num year);
   AmbiguousTimezoneMap(this.timezoneOffsetDuringDst,this.timezoneOffsetNonDst);
 }
 
@@ -57,7 +57,8 @@ abstract class ParsingReference {
    * This effect date/time implication (e.g. weekday or time mentioning).
    * (default = now)
    */
-  Date instant;
+  DateTime instant;
+  ParsingReference(this.instant);
 
   /**
    * Reference timezone. The timezone where the input is written or mention.
@@ -72,7 +73,7 @@ abstract class ParsingReference {
  * Each result object represents a date/time (or date/time-range) mentioning in the input.
  */
 abstract class ParsedResult {
-  Date get refDate;
+  DateTime get refDate;
   num get index;
   String get text;
   ParsedComponents get start;
@@ -81,7 +82,7 @@ abstract class ParsedResult {
   /**
    * Create a javascript date object (from the result.start).
    */
-  Date date();
+  DateTime date();
 
 }
 
@@ -107,7 +108,7 @@ abstract class ParsedComponents {
   /**
    *
    */
-  Date date();
+  DateTime date();
 }
 
 enum Component{ //todo мб тут не енум

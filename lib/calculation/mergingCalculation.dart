@@ -13,7 +13,7 @@ ParsingResult mergeDateTimeResult(
     final endTime = timeResult.end == null ? timeResult.start : timeResult.end;
     final endDateTime = mergeDateTimeComponent(endDate!, endTime!);
     if (dateResult.end == null &&
-        endDateTime.date().getTime() < result.start.date().getTime()) {
+        endDateTime.date().millisecondsSinceEpoch < result.start.date().getTime()) {
       // For example,  "Tuesday 9pm - 1am" the ending should actually be 1am on the next day.
 
       // We need to add to ending by another day.

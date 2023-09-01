@@ -14,7 +14,7 @@ ParsingComponents createParsingComponentsAtWeekday(
     [ dynamic /* | | */ modifier ]) {
   final refDate = reference.getDateWithAdjustedTimezone();
   final daysToWeekday = getDaysToWeekday(refDate, weekday, modifier);
-  var components = new ParsingComponents (reference);
+  var components = new ParsingComponents (reference,null);
   components = addImpliedTimeUnits(components, { "day": daysToWeekday});
   components.assign(Component.weekday, weekday.index);
   return components;
@@ -25,9 +25,9 @@ ParsingComponents createParsingComponentsAtWeekday(
  *
  *
  */
-num getDaysToWeekday(Date refDate, Weekday weekday,
+num getDaysToWeekday(DateTime refDate, Weekday weekday,
     [ dynamic /* | | */ modifier ]) {
-  final refWeekday =;
+  final refWeekday =refDate.weekday;
   switch (modifier) {
     case "this" :
       return getDaysForwardToWeekday(refDate, weekday);
@@ -55,7 +55,7 @@ num getDaysToWeekday(Date refDate, Weekday weekday,
       // If the week's weekday already passed (weekday < refWeekday), we simply count forward to next week
 
       // (similar to 'this'). Otherwise, count forward to this week, then add another 7 days.
-      if (weekday < refWeekday && weekday != Weekday.SUNDAY) {
+      if (weekday.index+1 < refWeekday && weekday != Weekday.SUNDAY) {
         return getDaysForwardToWeekday(refDate, weekday);
       } else {
         return getDaysForwardToWeekday(refDate, weekday) + 7;
@@ -64,24 +64,24 @@ num getDaysToWeekday(Date refDate, Weekday weekday,
   return getDaysToWeekdayClosest(refDate, weekday);
 }
 
-num getDaysToWeekdayClosest(Date refDate, Weekday weekday) {
+num getDaysToWeekdayClosest(DateTime refDate, Weekday weekday) {
   final backward = getBackwardDaysToWeekday(refDate, weekday);
   final forward = getDaysForwardToWeekday(refDate, weekday);
   return forward < -backward ? forward : backward;
 }
 
-num getDaysForwardToWeekday(Date refDate, Weekday weekday) {
-  final refWeekday = refDate.getDay();
-  var forwardCount = weekday - refWeekday;
+num getDaysForwardToWeekday(DateTime refDate, Weekday weekday) {
+  final refWeekday = refDate.weekday;
+  var forwardCount = weekday.index+1 - refWeekday;
   if (forwardCount < 0) {
     forwardCount += 7;
   }
   return forwardCount;
 }
 
-num getBackwardDaysToWeekday(Date refDate, Weekday weekday) {
-  final refWeekday = refDate.getDay();
-  var backwardCount = weekday.index - refWeekday;
+num getBackwardDaysToWeekday(DateTime refDate, Weekday weekday) {
+  final refWeekday = refDate.weekday;
+  var backwardCount = weekday.index+1 - refWeekday;
   if (backwardCount >= 0) {
     backwardCount -= 7;
   }

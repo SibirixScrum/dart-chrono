@@ -26,7 +26,7 @@ class ExtractTimezoneOffsetRefiner implements Refiner {
           print('''Extracting timezone: \'${ match [ 0 ]}\' into : ${ result}''');
       });
       final hourOffset = int.parse(match[TIMEZONE_OFFSET_HOUR_OFFSET_GROUP]); //todo check size?
-      final minuteOffset = match.length >=4 ?
+      final minuteOffset = match.matches.length >=4 ?
           int.parse(match[TIMEZONE_OFFSET_MINUTE_OFFSET_GROUP]) : 0;
       var timezoneOffset = hourOffset * 60 + minuteOffset;
       // No timezones have offsets greater than 14 hours, so disregard this match

@@ -35,13 +35,13 @@ final casual = en.casual;
  * A shortcut for [en | chrono.en.casual.parse()]
  */
 List <ParsedResult> parse(String text,
-    [ dynamic /* ParsingReference | Date */ ref, ParsingOption option ]) {
+    [ dynamic /* ParsingReference | Date */ ref, ParsingOption? option ]) {
   return casual.parse(text, ref, option);
 }
 /**
  * A shortcut for [en | chrono.en.casual.parseDate()]
  */
-Date parseDate(String text,
-    [ dynamic /* ParsingReference | Date */ ref, ParsingOption option ]) {
+DateTime parseDate(String text,
+    [ dynamic /* ParsingReference | Date */ ref, ParsingOption? option ]) {
   return casual.parseDate(text, ref, option);
 }
