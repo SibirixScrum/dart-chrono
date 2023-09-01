@@ -1,6 +1,7 @@
 import "../../chrono.dart" show Parser, ParsingContext;
 import "../../results.dart" show ParsingComponents, ParsingResult;
 import "../../types.dart" show Component;
+import "package:chrono/ported/RegExpMatchArray.dart";
 
 /**
  *
@@ -31,7 +32,7 @@ abstract class AbstractParserWithWordBoundaryChecking implements Parser {
         caseSensitive: innerPattern.isCaseSensitive,
         dotAll: innerPattern.isDotAll,
         unicode: innerPattern
-            .isUnicode); //todo флаги встроенного в дарт RegExp не совпадают с флагами в ts
+            .isUnicode);
     this.cachedInnerPattern = innerPattern;
     return this.cachedPattern!;
   }
@@ -39,9 +40,9 @@ abstract class AbstractParserWithWordBoundaryChecking implements Parser {
   extract(ParsingContext context, RegExpMatchArray match) {
     final header = match[1] ?? "";
     match.index = match.index + header.length;
-    match[0] = match[0].substring(header.length);
-    for (var i = 2; i < match.length; i++) {
-      match[i - 1] = match[i];
+    match.matches[0] = match.matches[0]!.substring(header.length);
+    for (var i = 2; i < match.matches.length; i++) {
+      match.matches[i - 1] = match.matches[i];
     }
     return this.innerExtract(context, match);
   }

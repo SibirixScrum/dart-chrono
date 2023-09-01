@@ -2,6 +2,7 @@ import "../../chrono.dart" show ParsingContext;
 import "../../types.dart" show Component;
 import "AbstractParserWithWordBoundary.dart"
     show AbstractParserWithWordBoundaryChecking;
+import "package:chrono/ported/RegExpMatchArray.dart";
 // ISO 8601
 
 // http://www.w3.org/TR/NOTE-datetime
@@ -49,7 +50,7 @@ class ISOFormatParser extends AbstractParserWithWordBoundaryChecking {
   //   return PATTERN;
   // }
 
-  innerExtract(ParsingContext context, RegExpMathArray match) {
+  innerExtract(ParsingContext context, RegExpMatchArray match) {
     final dynamic components = {};
     components["year"] = int.parse(match[YEAR_NUMBER_GROUP]);
     components["month"] = int.parse(match[MONTH_NUMBER_GROUP]);

@@ -1,3 +1,5 @@
+import "package:chrono/ported/RegExpMatchArray.dart";
+
 import "results.dart"
     show ReferenceWithTimezone, ParsingComponents, ParsingResult;
 import "types.dart"
@@ -99,8 +101,8 @@ class Chrono {
     final pattern = parser.pattern(context);
     final originalText = context.text;
     var remainingText = context.text;
-    var match = pattern.allMatches(remainingText);
-    while (match.isNotEmpty) { //todo что такое match: странный объект RegExpExecArray, понять, что за индекс такой
+    var match = pattern.exec(remainingText);
+    while (match!=null && match.matches.isNotEmpty) { //todo что такое match: странный объект RegExpExecArray, понять, что за индекс такой
       // Calculate match index on the full text;
       final index = match.index + originalText.length - remainingText.length;
       match.index = index;
@@ -108,10 +110,10 @@ class Chrono {
       if (!result) {
         // If fails, move on by 1
         remainingText = originalText.substring(match.index + 1);
-        match = pattern.allMatches(remainingText);
+        match = pattern.exec(remainingText);
         continue;
       }
-      ParsingResult parsedResult = null;
+      late ParsingResult parsedResult;
       if (result is ParsingResult) {
         parsedResult = result;
       } else if (result is ParsingComponents) {
@@ -127,7 +129,7 @@ class Chrono {
           print('''executeParser extracted (at index=${ parsedIndex}) \'${ parsedText}\''''));
       results.add(parsedResult);
       remainingText = originalText.substring(parsedIndex + parsedText.length);
-      match = pattern.allMatches(remainingText);
+      match = pattern.exec(remainingText);
     }
     return results;
   }
@@ -165,7 +167,7 @@ class ParsingContext implements DebugHandler {
   ParsingResult createParsingResult(num index,
       dynamic /* num | String */ textOrEndIndex,
       [ dynamic /* dynamic | ParsingComponents */ startComponents, dynamic /* dynamic | ParsingComponents */ endComponents ]) {
-    final text = identical(, "string") ? textOrEndIndex : this.text.substring(
+    final text = textOrEndIndex is String ? textOrEndIndex : this.text.substring(
         index.toInt(), textOrEndIndex);
     final start = startComponents ? this.createParsingComponents(
         startComponents) : null;

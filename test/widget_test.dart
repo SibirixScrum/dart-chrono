@@ -5,26 +5,29 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+import 'package:chrono/ported/RegExpMatchArray.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:chrono/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  final a = RegExp(
+      '(\\d{1,4})' +
+          '(?:' +
+          '(?:\\.|:|：)' +
+          '(\\d{1,2})' +
+          '(?:' +
+          '(?::|：)' +
+          '(\\d{2})' +
+          '(?:\\.(\\d{1,6}))?' +
+          ')?' +
+          ')?' +
+          '(?:\\s*(a\\.m\\.|p\\.m\\.|am?|pm?))?',
+      caseSensitive: false
+  );
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  var b = "adf 18:25 asf asdf".matchTs(a);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
-  });
+  print(b);
 }

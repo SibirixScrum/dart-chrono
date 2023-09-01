@@ -1,3 +1,5 @@
+import "package:chrono/ported/RegExpMatchArray.dart";
+
 import "../../chrono.dart" show Parser, ParsingContext;
 import "../../results.dart" show ParsingComponents, ParsingResult, ReferenceWithTimezone;
 import "../../types.dart" show Component, Meridiem;
@@ -20,7 +22,10 @@ primaryTimePattern(String leftBoundary, String primaryPrefix,
           ''')?''' +
           '''(?:\\s*(a\\.m\\.|p\\.m\\.|am?|pm?))?''' +
           '''${ primarySuffix}''',
-      flags);
+      caseSensitive: flags.contains("i"),
+    unicode: flags.contains('u'),
+    dotAll: flags.contains('d'),multiLine: flags.contains('m')
+      );
 }
 
 // prettier-ignore
@@ -74,7 +79,7 @@ abstract class AbstractTimeExpressionParser implements Parser {
     return this.getPrimaryTimePatternThroughCache();
   }
 
-  ParsingResult extract(ParsingContext context, RegExpMatchArray match) {
+  ParsingResult? extract(ParsingContext context, RegExpMatchArray match) {
     final startComponents = this.extractPrimaryTimeComponents(context, match);
     if (!startComponents) {
       match.index += match[0].length;
@@ -88,7 +93,7 @@ abstract class AbstractTimeExpressionParser implements Parser {
     final followingPattern = this.getFollowingTimePatternThroughCache();
     final followingMatch = followingPattern.exec(remainingText);
     // Pattern "456-12", "2022-12" should not be time without proper context
-    if (text.match(new RegExp(r'^\d{3,4}')) &&
+    if (RegExp(r'^\d{3,4}').firstMatch(text) != null &&
         followingMatch &&
         followingMatch[0].match(new RegExp(r'^\s*([+-])\s*\d{2,4}$'))) {
       return null;
@@ -126,7 +131,7 @@ abstract class AbstractTimeExpressionParser implements Parser {
     }
     // ----- Minutes
     if (match[MINUTE_GROUP] != null) {
-      if (match[MINUTE_GROUP].length == 1 && !match[AM_PM_HOUR_GROUP]) {
+      if (match[MINUTE_GROUP].length == 1 && match.matches.length > AM_PM_HOUR_GROUP && match.matches[AM_PM_HOUR_GROUP] != null) {
         // Skip single digit minute e.g. "at 1.1 xx"
         return null;
       }
@@ -223,7 +228,7 @@ abstract class AbstractTimeExpressionParser implements Parser {
         if (hour == 12) {
           hour = 0;
           if (!components.isCertain(Component.day)) {
-            components.imply(Component.day, components.get(Component.day) + 1);
+            components.imply(Component.day, components.get(Component.day)!.toInt() + 1);
           }
         }
       }
@@ -267,7 +272,7 @@ abstract class AbstractTimeExpressionParser implements Parser {
       }
     }
     if (components.date().getTime() < result.start.date().getTime()) {
-      components.imply(Component.day, components.get(Component.day) + 1);
+      components.imply(Component.day, components.get(Component.day)!.toInt() + 1);
     }
     return components;
   }
