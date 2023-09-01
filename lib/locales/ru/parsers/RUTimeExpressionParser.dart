@@ -4,7 +4,7 @@ import "../../../chrono.dart" show ParsingContext;
 import "../../../common/parsers/AbstractTimeExpressionParser.dart"
     show AbstractTimeExpressionParser;
 import "../../../results.dart" show ParsingComponents;
-import "../../../types.dart" show Meridiem;
+import "../../../types.dart" show Component, Meridiem;
 import "../constants.dart" show REGEX_PARTS;
 
 class RUTimeExpressionParser extends AbstractTimeExpressionParser {
@@ -32,31 +32,36 @@ class RUTimeExpressionParser extends AbstractTimeExpressionParser {
     return '''(?:\\s*(?:утра|вечера|после полудня))?(?!\\/)${REGEX_PARTS["rightBoundary"]}''';
   }
 
+  @override
   ParsingComponents? extractPrimaryTimeComponents(
-      ParsingContext context, RegExpMatchArray match) {
+      ParsingContext context, RegExpMatchArray match,
+      [strict = false]) {
     final components = super.extractPrimaryTimeComponents(context, match);
-    if (components) {
+    if (components != null) {
       if (match[0].endsWith("вечера")) {
-        final hour = components.get("hour");
+        final hour = components.get(Component.hour)!.toInt();
         if (hour >= 6 && hour < 12) {
-          components.assign("hour", components.get("hour") + 12);
-          components.assign("meridiem", Meridiem.PM);
+          components.assign(
+              Component.hour, components.get(Component.hour)!.toInt() + 12);
+          components.assign(Component.meridiem, Meridiem.PM.index);
         } else if (hour < 6) {
-          components.assign("meridiem", Meridiem.AM);
+          components.assign(Component.meridiem, Meridiem.AM.index);
         }
       }
       if (match[0].endsWith("после полудня")) {
-        components.assign("meridiem", Meridiem.PM);
-        final hour = components.get("hour");
+        components.assign(Component.meridiem, Meridiem.PM.index);
+        final hour = components.get(Component.hour)!.toInt();
         if (hour >= 0 && hour <= 6) {
-          components.assign("hour", components.get("hour") + 12);
+          components.assign(
+              Component.hour, components.get(Component.hour)!.toInt() + 12);
         }
       }
       if (match[0].endsWith("утра")) {
-        components.assign("meridiem", Meridiem.AM);
-        final hour = components.get("hour");
+        components.assign(Component.meridiem, Meridiem.AM.index);
+        final hour = components.get(Component.hour)!.toInt();
         if (hour < 12) {
-          components.assign("hour", components.get("hour"));
+          components.assign(
+              Component.hour, components.get(Component.hour)!.toInt());
         }
       }
     }

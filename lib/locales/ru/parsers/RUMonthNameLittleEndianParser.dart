@@ -1,29 +1,35 @@
-import "../../../chrono.dart" show ParsingContext;
-import "../../../results.dart" show ParsingResult;
+import "package:chrono/ported/RegExpMatchArray.dart";
+
 import "../../../calculation/years.dart" show findYearClosestToRef;
-import "../constants.dart" show MONTH_DICTIONARY, REGEX_PARTS;
+import "../../../chrono.dart" show ParsingContext;
+import "../../../common/parsers/AbstractParserWithWordBoundary.dart"
+    show AbstractParserWithWordBoundaryChecking;
+import "../../../results.dart" show ParsingResult;
+import "../../../utils/pattern.dart" show matchAnyPattern;
+import "../constants.dart"
+    show MONTH_DICTIONARY, MONTH_NAME_DICTIONARY, REGEX_PARTS;
 import "../constants.dart" show YEAR_PATTERN, parseYear;
 import "../constants.dart"
     show ORDINAL_NUMBER_PATTERN, parseOrdinalNumberPattern;
-import "../../../utils/pattern.dart" show matchAnyPattern;
-import "../../../common/parsers/AbstractParserWithWordBoundary.dart"
-    show AbstractParserWithWordBoundaryChecking;
 
 // prettier-ignore
 final PATTERN = new RegExp(
-    '''(?:с)?\\s*(${ ORDINAL_NUMBER_PATTERN})''' +
+    '''(?:с)?\\s*(${ORDINAL_NUMBER_PATTERN})''' +
         '''(?:''' +
         '''\\s{0,3}(?:по|-|–|до)?\\s{0,3}''' +
-        '''(${ ORDINAL_NUMBER_PATTERN})''' +
+        '''(${ORDINAL_NUMBER_PATTERN})''' +
         ''')?''' +
         '''(?:-|\\/|\\s{0,3}(?:of)?\\s{0,3})''' +
-        '''(${ matchAnyPattern ( MONTH_DICTIONARY )})''' +
+        '''(${matchAnyPattern(MONTH_NAME_DICTIONARY)})''' +
         '''(?:''' +
         '''(?:-|\\/|,?\\s{0,3})''' +
-        '''(${ YEAR_PATTERN}(?![^\\s]\\d))''' +
+        '''(${YEAR_PATTERN}(?![^\\s]\\d))''' +
         ''')?''' +
-        '''${ REGEX_PARTS . rightBoundary}''',
-    REGEX_PARTS.flags);
+        '''${REGEX_PARTS["rightBoundary"]}''',
+    caseSensitive: REGEX_PARTS["flags"]!.contains("i"),
+    dotAll: REGEX_PARTS["flags"]!.contains("d"),
+    multiLine: REGEX_PARTS["flags"]!.contains("m"),
+    unicode: REGEX_PARTS["flags"]!.contains("u"));
 const DATE_GROUP = 1;
 const DATE_TO_GROUP = 2;
 const MONTH_NAME_GROUP = 3;
@@ -32,10 +38,10 @@ const YEAR_GROUP = 4;
 class RUMonthNameLittleEndianParser
     extends AbstractParserWithWordBoundaryChecking {
   String patternLeftBoundary() {
-    return REGEX_PARTS.leftBoundary;
+    return REGEX_PARTS["leftBoundary"]!;
   }
 
-  RegExp innerPattern() {
+  RegExp innerPattern(ParsingContext context) {
     return PATTERN;
   }
 
