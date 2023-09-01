@@ -5,6 +5,7 @@ import "results.dart"
 import "types.dart"
     show Component, ParsedResult, ParsingOption, ParsingReference;
 import "debugging.dart" show AsyncDebugBlock, DebugHandler;
+import 'locales/ru/index.dart' as ru;
 
 /**
  * Chrono configuration.
@@ -53,11 +54,11 @@ class Chrono {
 
   late List<Refiner> refiners;
 
-  var defaultConfig = new ENDefaultConfiguration ();
+  // var defaultConfig = ;
 
   Chrono([ Configuration? configuration ]) {
     configuration =
-        configuration ?? this.defaultConfig.createCasualConfiguration();
+        configuration ?? ru.createCasualConfiguration();
     parsers = [];
     refiners = [];
   }

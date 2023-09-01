@@ -1,26 +1,32 @@
+import "package:chrono/ported/RegExpMatchArray.dart";
+import "package:chrono/types.dart";
+
 import "../../../chrono.dart" show ParsingContext;
+import "../../../common/casualReferences.dart" as references;
 import "../../../common/parsers/AbstractParserWithWordBoundary.dart"
     show AbstractParserWithWordBoundaryChecking;
-import "../../../common/casualReferences.dart" as references;
 import "../../../utils/dayjs.dart" show assignSimilarDate;
 import "../constants.dart" show REGEX_PARTS;
 
 final PATTERN = new RegExp(
     '''(сейчас|прошлым\\s*вечером|прошлой\\s*ночью|следующей\\s*ночью|сегодня\\s*ночью|этой\\s*ночью|ночью|этим утром|утром|утра|в\\s*полдень|вечером|вечера|в\\s*полночь)''' +
-        '''${ REGEX_PARTS . rightBoundary}''',
-    REGEX_PARTS.flags);
+        '''${REGEX_PARTS["rightBoundary"]}''',
+    caseSensitive: REGEX_PARTS["flags"]!.contains("i"),
+    dotAll: REGEX_PARTS["flags"]!.contains("d"),
+    multiLine: REGEX_PARTS["flags"]!.contains("m"),
+    unicode: REGEX_PARTS["flags"]!.contains("u"));
 
 class RUCasualTimeParser extends AbstractParserWithWordBoundaryChecking {
   String patternLeftBoundary() {
-    return REGEX_PARTS.leftBoundary;
+    return REGEX_PARTS["leftBoundary"]!;
   }
 
-  innerPattern() {
+  RegExp innerPattern(ParsingContext context) {
     return PATTERN;
   }
 
   innerExtract(ParsingContext context, RegExpMatchArray match) {
-    var targetDate = dayjs(context.refDate);
+    var targetDate = context.refDate;
     final lowerText = match[0].toLowerCase();
     final component = context.createParsingComponents();
     if (identical(lowerText, "сейчас")) {
@@ -32,22 +38,22 @@ class RUCasualTimeParser extends AbstractParserWithWordBoundaryChecking {
     if (lowerText.endsWith("утром") || lowerText.endsWith("утра")) {
       return references.morning(context.reference);
     }
-    if (lowerText.match(new RegExp(r'в\s*полдень'))) {
+    if (RegExp(r'в\s*полдень').firstMatch(lowerText) != null) {
       return references.noon(context.reference);
     }
-    if (lowerText.match(new RegExp(r'прошлой\s*ночью'))) {
+    if (RegExp(r'прошлой\s*ночью').firstMatch(lowerText) != null) {
       return references.lastNight(context.reference);
     }
-    if (lowerText.match(new RegExp(r'прошлым\s*вечером'))) {
+    if (RegExp(r'прошлым\s*вечером').firstMatch(lowerText) != null) {
       return references.yesterdayEvening(context.reference);
     }
-    if (lowerText.match(new RegExp(r'следующей\s*ночью'))) {
-      final daysToAdd = targetDate.hour() < 22 ? 1 : 2;
-      targetDate = targetDate.add(daysToAdd, "day");
+    if (RegExp(r'следующей\s*ночью').firstMatch(lowerText) != null) {
+      final daysToAdd = targetDate.hour < 22 ? 1 : 2;
+      targetDate = targetDate.add(Duration(days: daysToAdd));
       assignSimilarDate(component, targetDate);
-      component.imply("hour", 0);
+      component.imply(Component.hour, 0);
     }
-    if (lowerText.match(new RegExp(r'в\s*полночь')) ||
+    if (RegExp(r'в\s*полночь').firstMatch(lowerText) != null ||
         lowerText.endsWith("ночью")) {
       return references.midnight(context.reference);
     }

@@ -1,17 +1,21 @@
+import "package:chrono/ported/RegExpMatchArray.dart";
+
 import "../../../chrono.dart" show ParsingContext;
-import "../../../results.dart" show ParsingComponents, ParsingResult;
+import "../../../common/casualReferences.dart" as references;
 import "../../../common/parsers/AbstractParserWithWordBoundary.dart"
     show AbstractParserWithWordBoundaryChecking;
-import "../../../common/casualReferences.dart" as references;
 import "../constants.dart" show REGEX_PARTS;
 
 final PATTERN = new RegExp(
-    '''(?:с|со)?\\s*(сегодня|вчера|завтра|послезавтра|послепослезавтра|позапозавчера|позавчера)${ REGEX_PARTS . rightBoundary}''',
-    REGEX_PARTS.flags);
+    '''(?:с|со)?\\s*(сегодня|вчера|завтра|послезавтра|послепослезавтра|позапозавчера|позавчера)${REGEX_PARTS["rightBoundary"]}''',
+    caseSensitive: REGEX_PARTS["flags"]!.contains("i"),
+    dotAll: REGEX_PARTS["flags"]!.contains("d"),
+    multiLine: REGEX_PARTS["flags"]!.contains("m"),
+    unicode: REGEX_PARTS["flags"]!.contains("u"));
 
 class RUCasualDateParser extends AbstractParserWithWordBoundaryChecking {
   String patternLeftBoundary() {
-    return REGEX_PARTS.leftBoundary;
+    return REGEX_PARTS["leftBoundary"]!;
   }
 
   RegExp innerPattern(ParsingContext context) {

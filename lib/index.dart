@@ -17,9 +17,10 @@ import "types.dart"
 // import "locales/pt.dart" as pt;
 // import "locales/nl.dart" as nl;
 // import "locales/zh.dart" as zh;
-import "locales/ru.dart" as ru;
+
 // import "locales/es.dart" as es;
 // import "locales/uk.dart" as uk;
+import 'locales/ru/index.dart' as ru;
 
 // export show
 // de , fr , ja , pt , nl , zh , ru , es , uk ;

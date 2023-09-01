@@ -1,4 +1,5 @@
 import "package:chrono/ported/RegExpMatchArray.dart";
+import "package:chrono/types.dart";
 
 import "../../../calculation/years.dart" show findYearClosestToRef;
 import "../../../chrono.dart" show ParsingContext;
@@ -45,28 +46,29 @@ class RUMonthNameLittleEndianParser
     return PATTERN;
   }
 
-  ParsingResult innerExtract(ParsingContext context, RegExpMatchArray match) {
+  ParsingResult? innerExtract(ParsingContext context, RegExpMatchArray match) {
     final result = context.createParsingResult(match.index, match[0]);
-    final month = MONTH_DICTIONARY[match[MONTH_NAME_GROUP].toLowerCase()];
-    final day = parseOrdinalNumberPattern(match[DATE_GROUP]);
+    final month =
+        MONTH_NAME_DICTIONARY[match.matches[MONTH_NAME_GROUP]!.toLowerCase()];
+    final day = parseOrdinalNumberPattern(match.matches[DATE_GROUP]!);
     if (day > 31) {
       // e.g. "[96 Aug]" => "9[6 Aug]", we need to shift away from the next number
       match.index = match.index + match[DATE_GROUP].length;
       return null;
     }
-    result.start.assign("month", month);
-    result.start.assign("day", day);
-    if (match[YEAR_GROUP]) {
+    result.start.assign(Component.month, month!);
+    result.start.assign(Component.day, day);
+    if (match.matches.length > YEAR_GROUP) {
       final yearNumber = parseYear(match[YEAR_GROUP]);
-      result.start.assign("year", yearNumber);
+      result.start.assign(Component.year, yearNumber);
     } else {
       final year = findYearClosestToRef(context.refDate, day, month);
-      result.start.imply("year", year);
+      result.start.imply(Component.year, year);
     }
-    if (match[DATE_TO_GROUP]) {
+    if (match.matches.length > DATE_TO_GROUP) {
       final endDate = parseOrdinalNumberPattern(match[DATE_TO_GROUP]);
       result.end = result.start.clone();
-      result.end.assign("day", endDate);
+      result.end!.assign(Component.day, endDate);
     }
     return result;
   }
