@@ -2,6 +2,7 @@
 
 */
 import "package:chrono/chrono.dart";
+import "package:chrono/ported/RegExpMatchArray.dart";
 
 import "../../calculation/mergingCalculation.dart" show mergeDateTimeResult;
 import "../../results.dart" show ParsingResult;
@@ -28,7 +29,7 @@ abstract class AbstractMergeDateTimeRefiner extends MergingRefiner {
                 nextResult.start.isOnlyTime()) ||
             (nextResult.start.isOnlyDate() &&
                 currentResult.start.isOnlyTime())) &&
-        this.patternBetween().allMatches(textBetween).isNotEmpty);
+        (patternBetween().exec(textBetween)?.matches.isNotEmpty ?? false));
   }
 
 // bool shouldMergeResults(String textBetween, ParsingResult currentResult,

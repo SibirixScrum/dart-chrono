@@ -51,9 +51,9 @@ class ReferenceWithTimezone {
 }
 
 class ParsingComponents implements ParsedComponents {
-  late Map<Component?,num> knownValues;
+  late Map<Component,num> knownValues;
 
-  late Map<Component?,num> impliedValues;
+  late Map<Component,num> impliedValues;
 
   ReferenceWithTimezone reference;
 
@@ -191,8 +191,8 @@ class ParsingComponents implements ParsedComponents {
       date = date.add(fragments [key],key);
     }
     final components = new ParsingComponents (reference);
-    if (fragments [ "hour" ] || fragments [ "minute" ] ||
-        fragments [ "second" ]) {
+    if (fragments [ "hour" ]!=null || fragments [ "minute" ] !=null ||
+        fragments [ "second" ]!=null) {
       assignSimilarTime(components, date);
       assignSimilarDate(components, date);
       if (!identical(reference.timezoneOffset, null)) {
@@ -205,21 +205,21 @@ class ParsingComponents implements ParsedComponents {
         components.imply(
             Component.timezoneOffset, -reference.instant.getTimezoneOffset());
       }
-      if (fragments [ "d" ]) {
+      if (fragments [ "d" ]!=null) {
         components.assign(Component.day, date.date());
         components.assign(Component.month, date.month() + 1);
         components.assign(Component.year, date.year());
       } else {
-        if (fragments [ "week" ]) {
+        if (fragments [ "week" ]!=null) {
           components.imply(Component.weekday, date.day());
         }
         components.imply(Component.day, date.date());
-        if (fragments [ "month" ]) {
+        if (fragments [ "month" ]!=null) {
           components.assign(Component.month, date.month() + 1);
           components.assign(Component.year, date.year());
         } else {
           components.imply(Component.month, date.month() + 1);
-          if (fragments [ "year" ]) {
+          if (fragments [ "year" ]!=null) {
             components.assign(Component.year, date.year());
           } else {
             components.imply(Component.year, date.year());

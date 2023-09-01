@@ -1,3 +1,4 @@
+import "package:chrono/ported/RegExpMatchArray.dart";
 import "package:chrono/types.dart";
 
 import "../abstractRefiners.dart" show Filter;
@@ -9,7 +10,7 @@ class UnlikelyFormatFilter extends Filter {
     /* super call moved to initializer */;
   }
   bool isValid(context, ParsingResult result) {
-    if (new RegExp(r'^\d*(\.\d*)?$').allMatches(result.text.replaceAll(" ", "")).isNotEmpty) {
+    if (new RegExp(r'^\d*(\.\d*)?$').exec(result.text.replaceAll(" ", ""))?.matches .isNotEmpty ?? false) {
       context.debug(() {
         print('''Removing unlikely result \'${ result . text}\'''');
       });

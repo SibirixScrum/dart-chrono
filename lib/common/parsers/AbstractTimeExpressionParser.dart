@@ -301,7 +301,7 @@ abstract class AbstractTimeExpressionParser implements Parser {
       }
       // If it ends only with dot single digit, e.g. "at 1.2"
       if (endingNumbers.contains(".") &&
-          new RegExp(r'\d(\.\d{2})+$').allMatches(endingNumbers).isEmpty
+          (new RegExp(r'\d(\.\d{2})+$').exec(endingNumbers)?.matches.isEmpty ?? true)
          ) { //todo added isEmpty instead of !
         return null;
       }
@@ -330,7 +330,7 @@ abstract class AbstractTimeExpressionParser implements Parser {
       final String endingNumbers = endingWithNumbers[2];
       // If it ends only with dot single digit, e.g. "at 1.2"
       if (endingNumbers.contains(".") &&
-          new RegExp(r'\d(\.\d{2})+$').allMatches(endingNumbers).isEmpty
+          (new RegExp(r'\d(\.\d{2})+$').exec(endingNumbers)?.matches .isEmpty ?? true)
           ) {
         return null;
       }

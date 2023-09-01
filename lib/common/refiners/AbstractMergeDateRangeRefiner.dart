@@ -2,6 +2,7 @@
   
 */
 import "package:chrono/chrono.dart";
+import "package:chrono/ported/RegExpMatchArray.dart";
 import "package:chrono/types.dart";
 
 import "../../results.dart" show ParsingResult;
@@ -69,7 +70,7 @@ abstract class AbstractMergeDateRangeRefiner extends MergingRefiner {
   @override
   bool shouldMergeResults(String textBetween, ParsingResult currentResult, ParsingResult nextResult, ParsingContext context) {
      return currentResult.end == null && nextResult.end == null &&
-         this.patternBetween().allMatches(textBetween).isNotEmpty;
+         (this.patternBetween().exec(textBetween)?.matches .isNotEmpty ?? false);
   }
 
   // bool shouldMergeResults(textBetween, currentResult, nextResult) {

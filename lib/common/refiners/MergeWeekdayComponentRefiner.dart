@@ -2,6 +2,7 @@
   
 */
 import "package:chrono/chrono.dart";
+import "package:chrono/ported/RegExpMatchArray.dart";
 import "package:chrono/types.dart";
 
 import "../abstractRefiners.dart" show MergingRefiner;
@@ -32,7 +33,7 @@ class MergeWeekdayComponentRefiner extends MergingRefiner {
               !currentResult.start.isCertain(Component.hour) &&
               nextResult.start.isCertain(Component.day);
       return weekdayThenNormalDate &&
-          new RegExp(r'^,?\s*$').allMatches(textBetween).isNotEmpty;
+          (new RegExp(r'^,?\s*$').exec(textBetween)?.matches.isNotEmpty ?? false);
   }
   // ParsingResult mergeResults(String textBetween, ParsingResult currentResult,
   //     ParsingResult nextResult) {

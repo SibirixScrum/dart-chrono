@@ -1,4 +1,6 @@
 // Map ABBR -> Offset in minute
+import "package:chrono/ported/RegExpMatchArray.dart";
+
 import "../../chrono.dart" show ParsingContext, Refiner;
 import "../../results.dart" show ParsingResult;
 import "../../timezone.dart" show toTimezoneOffset;
@@ -21,11 +23,11 @@ class ExtractTimezoneAbbrRefiner implements Refiner {
     results.forEach((result) {
       final suffix = context.text.substring(result.index + result.text.length);
 
-      final match = TIMEZONE_NAME_PATTERN.allMatches(suffix).map((e) => e.toString()).toList(); //todo exec?
-      if (match.isEmpty) {
+      final match = TIMEZONE_NAME_PATTERN.exec(suffix);
+      if (match == null || match.matches.isEmpty) {
         return;
       }
-      final timezoneAbbr = match[1].toUpperCase();
+      final timezoneAbbr = match.matches[1]?.toUpperCase();
       final refDate = result.start.date() ?? result.refDate ?? new Date();
       final Map<String, dynamic> tzOverrides = {};
       tzOverrides.addAll(timezoneOverrides);
@@ -55,7 +57,7 @@ class ExtractTimezoneAbbrRefiner implements Refiner {
       if (result.start.isOnlyDate()) {
         // If the time is not explicitly mentioned,
         // Then, we also want to double-check the abbr case (e.g. "GET" not "get")
-        if (timezoneAbbr != match[1]) {
+        if (timezoneAbbr != match.matches[1]) {
           return;
         }
       }
