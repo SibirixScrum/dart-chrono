@@ -1,53 +1,54 @@
 import 'package:chrono/locales/ru/index.dart' as ru;
+import 'package:flutter_test/flutter_test.dart';
 import "../test_util.dart" show testSingleCase, testUnexpectedResult;
 
 void main() {
   test("Test - Time expression", () {
-    testSingleCase(ru.casual, "20:32:13", new Date(2016, 10 - 1, 1, 8),
+    testSingleCase(ru.casual, "20:32:13", new DateTime(2016, 10 - 1, 1, 8),
         (result, text) {
       expect(result.index).toBe(0);
       expect(result.text).toBe(text);
-      expect(result.start).toBeDate(new Date(2016, 10 - 1, 1, 20, 32, 13));
+      expect(result.start).toBeDate(new DateTime(2016, 10 - 1, 1, 20, 32, 13));
     });
   });
   test("Test - Time range expression", () {
     testSingleCase(
-        ru.casual, "10:00:00 - 21:45:01", new Date(2016, 10 - 1, 1, 8),
+        ru.casual, "10:00:00 - 21:45:01", new DateTime(2016, 10 - 1, 1, 8),
         (result, text) {
       expect(result.index).toBe(0);
       expect(result.text).toBe(text);
-      expect(result.start).toBeDate(new Date(2016, 10 - 1, 1, 10));
-      expect(result.end).toBeDate(new Date(2016, 10 - 1, 1, 21, 45, 1));
+      expect(result.start).toBeDate(new DateTime(2016, 10 - 1, 1, 10));
+      expect(result.end).toBeDate(new DateTime(2016, 10 - 1, 1, 21, 45, 1));
     });
   });
   test("Test - Casual time number expression", () {
-    testSingleCase(ru.casual, "в 11 утра", new Date(2016, 10 - 1, 1, 8),
+    testSingleCase(ru.casual, "в 11 утра", new DateTime(2016, 10 - 1, 1, 8),
         (result, text) {
       expect(result.index).toBe(0);
       expect(result.text).toBe(text);
-      expect(result.start).toBeDate(new Date(2016, 10 - 1, 1, 11));
+      expect(result.start).toBeDate(new DateTime(2016, 10 - 1, 1, 11));
     });
-    testSingleCase(ru.casual, "в 11 вечера", new Date(2016, 10 - 1, 1, 8),
+    testSingleCase(ru.casual, "в 11 вечера", new DateTime(2016, 10 - 1, 1, 8),
         (result, text) {
       expect(result.index).toBe(0);
       expect(result.text).toBe(text);
-      expect(result.start).toBeDate(new Date(2016, 10 - 1, 1, 23));
+      expect(result.start).toBeDate(new DateTime(2016, 10 - 1, 1, 23));
     });
   });
   test("Test - Time range's meridiem handling", () {
-    testSingleCase(ru.casual, "с 10 до 11 утра", new Date(2016, 10 - 1, 1, 8),
+    testSingleCase(ru.casual, "с 10 до 11 утра", new DateTime(2016, 10 - 1, 1, 8),
         (result, text) {
       expect(result.index).toBe(0);
       expect(result.text).toBe(text);
-      expect(result.start).toBeDate(new Date(2016, 10 - 1, 1, 10));
-      expect(result.end).toBeDate(new Date(2016, 10 - 1, 1, 11));
+      expect(result.start).toBeDate(new DateTime(2016, 10 - 1, 1, 10));
+      expect(result.end).toBeDate(new DateTime(2016, 10 - 1, 1, 11));
     });
-    testSingleCase(ru.casual, "с 10 до 11 вечера", new Date(2016, 10 - 1, 1, 8),
+    testSingleCase(ru.casual, "с 10 до 11 вечера", new DateTime(2016, 10 - 1, 1, 8),
         (result, text) {
       expect(result.index).toBe(0);
       expect(result.text).toBe(text);
-      expect(result.start).toBeDate(new Date(2016, 10 - 1, 1, 22));
-      expect(result.end).toBeDate(new Date(2016, 10 - 1, 1, 23));
+      expect(result.start).toBeDate(new DateTime(2016, 10 - 1, 1, 22));
+      expect(result.end).toBeDate(new DateTime(2016, 10 - 1, 1, 23));
     });
   });
   test("Test - Parsing causal positive cases", () {
