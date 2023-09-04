@@ -43,7 +43,7 @@ testSingleCase(Chrono chrono, String text,
   try {
     final results = chrono.parse(
         text, refDateOrCheckResult as DateTime, optionOrCheckResult);
-    toBeSingleOnText(results, text);
+    expectToBeSingleOnText(results, text);
     if (checkResult != null) {
       checkResult(results[0], text);
     }
@@ -56,11 +56,11 @@ testSingleCase(Chrono chrono, String text,
 
 testWithExpectedDate(Chrono chrono, String text, DateTime expectedDate) {
   testSingleCase(chrono, text, (ParsedResult result) {
-    toBeDate(result.start, expectedDate);
+    expectToBeDate(result.start, expectedDate);
   });
 }
 
-testUnexpectedResult(ChronoLike chrono, String text,
+testUnexpectedResult(Chrono chrono, String text,
     [DateTime? refDate, ParsingOption? options]) {
   final debugHandler = new BufferedDebugHandler();
   options?.debug = debugHandler;
@@ -84,7 +84,7 @@ num measureMilliSec(void block()) {
 
 // noinspection JSUnusedGlobalSymbols
 
-toBeDate(resultOrComponent, DateTime date) {
+expectToBeDate(resultOrComponent, DateTime date) {
   expect(resultOrComponent is DateTime, isTrue,
       reason: 'resultOrComponent must be datetime');
   final actualDate = resultOrComponent.date();
@@ -95,7 +95,7 @@ toBeDate(resultOrComponent, DateTime date) {
           "expected date must be $date, received: $actualDate $resultOrComponent");
 }
 
-toBeSingleOnText(List<ParsedResult> results, text) {
+expectToBeSingleOnText(List<ParsedResult> results, text) {
   expect(results.length, 1,
       reason:
           "result must have length 1, result from $text = ${results.map((result) => JsonEncoder().convert(result))}");
