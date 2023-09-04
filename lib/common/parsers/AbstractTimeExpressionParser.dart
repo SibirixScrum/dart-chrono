@@ -85,10 +85,13 @@ abstract class AbstractTimeExpressionParser implements Parser {
   }
 
   ParsingResult? extract(ParsingContext context, RegExpMatchArray match) {
+    if(!match[AM_PM_HOUR_GROUP].toLowerCase().contains("m")){
+      match.matches[AM_PM_HOUR_GROUP] = null;
+    }
     final startComponents = this.extractPrimaryTimeComponents(context, match);
     if (startComponents == null) {
       match.index += match[0].length;
-      return ParsingResult(ReferenceWithTimezone(""), 0,
+      return ParsingResult(ReferenceWithTimezone(null), 0,
           ""); //todo dummy ParsingResult instead of null
     }
     final index = match.index + match[1].length;
@@ -100,13 +103,14 @@ abstract class AbstractTimeExpressionParser implements Parser {
     final followingMatch = followingPattern.exec(remainingText);
     // Pattern "456-12", "2022-12" should not be time without proper context
     if (RegExp(r'^\d{3,4}').firstMatch(text) != null &&
-        followingMatch &&
-        followingMatch[0].match(new RegExp(r'^\s*([+-])\s*\d{2,4}$'))) {
+        followingMatch != null &&
+        RegExp(r'^\s*([+-])\s*\d{2,4}$').firstMatch(followingMatch[0]) !=null) {
       return null;
     }
-    if (!followingMatch ||
+    if (followingMatch == null ||
         // Pattern "YY.YY -XXXX" is more like timezone offset
-        followingMatch[0].match(new RegExp(r'^\s*([+-])\s*\d{3,4}$'))) {
+        RegExp(r'^\s*([+-])\s*\d{3,4}$').firstMatch(followingMatch[0]) != null
+    ) {
       return this.checkAndReturnWithoutFollowingPattern(result);
     }
     result.end =
@@ -122,11 +126,14 @@ abstract class AbstractTimeExpressionParser implements Parser {
       [strict = false]) {
     final components = context.createParsingComponents();
     var minute = 0;
-    var meridiem = null;
+    int? meridiem = null;
     // ----- Hours
-    var hour = int.parse(match[HOUR_GROUP]);
+    var hour = int.tryParse(match[HOUR_GROUP]);
+    if(hour == null){
+      return null;
+    }
     if (hour > 100) {
-      if (this.strictMode || match[MINUTE_GROUP] != null) {
+      if (this.strictMode || match[MINUTE_GROUP].isNotEmpty) {
         return null;
       }
       minute = hour % 100;
@@ -136,7 +143,7 @@ abstract class AbstractTimeExpressionParser implements Parser {
       return null;
     }
     // ----- Minutes
-    if (match[MINUTE_GROUP] != null) {
+    if (match[MINUTE_GROUP].isNotEmpty) {
       if (match[MINUTE_GROUP].length == 1 &&
           match.matches.length > AM_PM_HOUR_GROUP &&
           match.matches[AM_PM_HOUR_GROUP] != null) {
@@ -149,20 +156,20 @@ abstract class AbstractTimeExpressionParser implements Parser {
       return null;
     }
     if (hour > 12) {
-      meridiem = Meridiem.PM;
+      meridiem = Meridiem.PM.index;
     }
     // ----- AM & PM
-    if (match[AM_PM_HOUR_GROUP] != null) {
+    if (match[AM_PM_HOUR_GROUP].isNotEmpty) {
       if (hour > 12) return null;
       final ampm = match[AM_PM_HOUR_GROUP][0].toLowerCase();
       if (ampm == "a") {
-        meridiem = Meridiem.AM;
+        meridiem = Meridiem.AM.index;
         if (hour == 12) {
           hour = 0;
         }
       }
       if (ampm == "p") {
-        meridiem = Meridiem.PM;
+        meridiem = Meridiem.PM.index;
         if (hour != 12) {
           hour += 12;
         }
@@ -180,13 +187,13 @@ abstract class AbstractTimeExpressionParser implements Parser {
       }
     }
     // ----- Millisecond
-    if (match[MILLI_SECOND_GROUP] != null) {
+    if (match[MILLI_SECOND_GROUP].isNotEmpty) {
       final millisecond = int.parse(match[MILLI_SECOND_GROUP].substring(0, 3));
       if (millisecond >= 1000) return null;
       components.assign(Component.millisecond, millisecond);
     }
     // ----- Second
-    if (match[SECOND_GROUP] != null) {
+    if (match[SECOND_GROUP].isNotEmpty) {
       final second = int.parse(match[SECOND_GROUP]);
       if (second >= 60) return null;
       components.assign(Component.second, second);
@@ -198,13 +205,13 @@ abstract class AbstractTimeExpressionParser implements Parser {
       ParsingContext context, RegExpMatchArray match, ParsingResult result) {
     final components = context.createParsingComponents();
     // ----- Millisecond
-    if (match[MILLI_SECOND_GROUP] != null) {
+    if (match[MILLI_SECOND_GROUP].isNotEmpty) {
       final millisecond = int.parse(match[MILLI_SECOND_GROUP].substring(0, 3));
       if (millisecond >= 1000) return null;
       components.assign(Component.millisecond, millisecond);
     }
     // ----- Second
-    if (match[SECOND_GROUP] != null) {
+    if (match[SECOND_GROUP].isNotEmpty) {
       final second = int.parse(match[SECOND_GROUP]);
       if (second >= 60) return null;
       components.assign(Component.second, second);
@@ -213,7 +220,7 @@ abstract class AbstractTimeExpressionParser implements Parser {
     var minute = 0;
     var meridiem = -1;
     // ----- Minute
-    if (match[MINUTE_GROUP] != null) {
+    if (match[MINUTE_GROUP].isNotEmpty) {
       minute = int.parse(match[MINUTE_GROUP]);
     } else if (hour > 100) {
       minute = hour % 100;
@@ -226,7 +233,7 @@ abstract class AbstractTimeExpressionParser implements Parser {
       meridiem = Meridiem.PM.index;
     }
     // ----- AM & PM
-    if (match[AM_PM_HOUR_GROUP] != null) {
+    if (match[AM_PM_HOUR_GROUP].isNotEmpty) {
       if (hour > 12) {
         return null;
       }
@@ -291,7 +298,7 @@ abstract class AbstractTimeExpressionParser implements Parser {
     return components;
   }
 
-  checkAndReturnWithoutFollowingPattern(result) {
+  checkAndReturnWithoutFollowingPattern(ParsingResult result) {
     // Single digit (e.g "1") should not be counted as time expression (without proper context)
     if (result.text.match(new RegExp(r'^\d$'))) {
       return null;
@@ -305,9 +312,9 @@ abstract class AbstractTimeExpressionParser implements Parser {
       return null;
     }
     // If it ends only with numbers or dots
-    final endingWithNumbers =
-        result.text.match(new RegExp(r'[^\d:.](\d[\d.]+)$'));
-    if (endingWithNumbers) {
+    final endingWithNumbers = RegExp(r'[^\d:.](\d[\d.]+)$').exec(result.text);
+        // result.text.match(new RegExp(r'[^\d:.](\d[\d.]+)$'));
+    if (endingWithNumbers != null && endingWithNumbers.matches.isNotEmpty) {
       final String endingNumbers = endingWithNumbers[1];
       // In strict mode (e.g. "at 1" or "at 1.2"), this should not be accepted
       if (this.strictMode) {
@@ -384,7 +391,7 @@ abstract class AbstractTimeExpressionParser implements Parser {
   var cachedFollowingSuffix = null;
   var cachedFollowingTimePatten = null;
 
-  getFollowingTimePatternThroughCache() {
+  RegExp getFollowingTimePatternThroughCache() {
     final followingPhase = this.followingPhase();
     final followingSuffix = this.followingSuffix();
     if (identical(this.cachedFollowingPhase, followingPhase) &&

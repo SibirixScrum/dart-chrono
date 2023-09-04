@@ -103,7 +103,7 @@ class ParsingComponents implements ParsedComponents {
 
   ParsingComponents assign(Component component, num value) {
     this.knownValues[component] = value;
-    this.knownValues.remove(component);
+    this.impliedValues.remove(component);
     return this;
   }
 
@@ -150,15 +150,15 @@ class ParsingComponents implements ParsedComponents {
   }
 
   bool isValidDate() {
-    final date = this.dateWithoutTimezoneAdjustment();
-    if (!identical(date.getFullYear(), this.get(Component.year))) return false;
-    if (!identical(date.getMonth(), this.get(Component.month)!.toInt() - 1))
+    final date = dateWithoutTimezoneAdjustment();
+    if (!identical(date.year, this.get(Component.year))) return false;
+    if (!identical(date.month, this.get(Component.month)!.toInt()))
       return false;
-    if (!identical(date.getDate(), this.get(Component.day))) return false;
+    if (!identical(date.day, this.get(Component.day))) return false;
     if (this.get(Component.hour) != null &&
-        date.getHours() != this.get(Component.hour)) return false;
+        date.hour != this.get(Component.hour)) return false;
     if (this.get(Component.minute) != null &&
-        date.getMinutes() != this.get(Component.minute)) return false;
+        date.minute != this.get(Component.minute)) return false;
     return true;
   }
 
@@ -174,14 +174,14 @@ class ParsingComponents implements ParsedComponents {
     final date = this.dateWithoutTimezoneAdjustment();
     final timezoneAdjustment = this.reference.getSystemTimezoneAdjustmentMinute(
         date, this.get(Component.timezoneOffset));
-    return new DateTime(date.getTime() + timezoneAdjustment * 60000);
+    return new DateTime(date.millisecondsSinceEpoch + timezoneAdjustment * 60000);
   }
 
-  dateWithoutTimezoneAdjustment() {
+  DateTime dateWithoutTimezoneAdjustment() {
     final date = new DateTime(
         this.get(Component.year)?.toInt() ?? 1990,
         this.get(Component.month) != null
-            ? this.get(Component.month)!.toInt() - 1
+            ? this.get(Component.month)!.toInt()
             : 1,
         this.get(Component.day)?.toInt() ?? 1,
         this.get(Component.hour)?.toInt() ?? 0,

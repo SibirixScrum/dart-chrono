@@ -376,7 +376,7 @@ TimeUnits parseTimeUnits(timeunitText) {
   var match = SINGLE_TIME_UNIT_REGEX.exec(remainingText);
   while (match?.matches != null && match!.matches.isNotEmpty) {
     collectDateTimeFragment(fragments, match);
-    remainingText = remainingText.substring(match[0].length).trim();
+    remainingText = remainingText.substring((match[0] ?? "").length).trim();
     match = SINGLE_TIME_UNIT_REGEX.exec(remainingText);
   }
   return fragments;

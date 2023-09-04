@@ -36,7 +36,7 @@ abstract class AbstractParserWithWordBoundaryChecking implements Parser {
   }
 
   extract(ParsingContext context, RegExpMatchArray match) {
-    final header = match[1] ?? "";
+    final header = match[1];
     match.index = match.index + header.length;
     match.matches[0] = match.matches[0]!.substring(header.length);
     for (var i = 2; i < match.matches.length; i++) {

@@ -1,12 +1,15 @@
 class RegExpMatchArray {
-  final List<String?> matches;
+  late List<String?> matches;
+
   var index = 0;
   final String input;
 
-  RegExpMatchArray(this.matches, this.input, this.index);
+  RegExpMatchArray(List<String?> matches, this.input, this.index){
+    this.matches = matches + List.generate(6, (index) => null);
+  }
 
   String operator [](int index) {
-    return matches[index].toString();
+    return matches.length >index ?  (matches[index] ?? "") : "";
   }
 }
 
@@ -27,5 +30,11 @@ extension RegExpUtil on RegExp {
           str,
           index);
     }
+  }
+}
+
+extension RegExpUtil2 on String{
+  bool match(RegExp exp){
+    return exp.firstMatch(this) != null;
   }
 }

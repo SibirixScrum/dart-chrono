@@ -56,21 +56,21 @@ class ISOFormatParser extends AbstractParserWithWordBoundaryChecking {
     components["year"] = int.parse(match[YEAR_NUMBER_GROUP]);
     components["month"] = int.parse(match[MONTH_NUMBER_GROUP]);
     components["day"] = int.parse(match[DATE_NUMBER_GROUP]);
-    if (match[HOUR_NUMBER_GROUP] != null) {
+    if (match[HOUR_NUMBER_GROUP].isNotEmpty ) {
       components["hour"] = int.parse(match[HOUR_NUMBER_GROUP]);
       components["minute"] = int.parse(match[MINUTE_NUMBER_GROUP]);
-      if (match[SECOND_NUMBER_GROUP] != null) {
+      if (match[SECOND_NUMBER_GROUP].isNotEmpty) {
         components["second"] = int.parse(match[SECOND_NUMBER_GROUP]);
       }
-      if (match[MILLISECOND_NUMBER_GROUP] != null) {
+      if (match[MILLISECOND_NUMBER_GROUP].isNotEmpty) {
         components["millisecond"] = int.parse(match[MILLISECOND_NUMBER_GROUP]);
       }
-      if (match[TZD_HOUR_OFFSET_GROUP] == null) {
+      if (match[TZD_HOUR_OFFSET_GROUP].isEmpty) {
         components["timezoneOffset"] = 0;
       } else {
         final hourOffset = int.parse(match[TZD_HOUR_OFFSET_GROUP]);
         var minuteOffset = 0;
-        if (match[TZD_MINUTE_OFFSET_GROUP] != null) {
+        if (match[TZD_MINUTE_OFFSET_GROUP].isNotEmpty) {
           minuteOffset = int.parse(match[TZD_MINUTE_OFFSET_GROUP]);
         }
         var offset = hourOffset * 60;
