@@ -1,15 +1,12 @@
-import "dart:convert";
-import "dart:html";
-
 import "package:chrono/chrono.dart";
 import "package:chrono/debugging.dart";
-import "package:chrono/results.dart";
 import "package:chrono/types.dart";
 import "package:flutter_test/flutter_test.dart";
 
 abstract class ChronoLike {
   List<ParsedResult> parse(String text,
-      [dynamic /* ParsingReference | Date */ referenceDate, ParsingOption? option]);
+      [dynamic /* ParsingReference | Date */ referenceDate,
+      ParsingOption? option]);
 }
 
 typedef CheckResult = void Function(ParsedResult p, String text);
@@ -35,19 +32,20 @@ testSingleCase(Chrono chrono, String text,
     refDateOrCheckResult = null;
   }
   final debugHandler = BufferedDebugHandler();
-  optionOrCheckResult =
-      optionOrCheckResult is ParsingOption ? optionOrCheckResult : () {};
+  optionOrCheckResult = optionOrCheckResult is ParsingOption
+      ? optionOrCheckResult
+      : ParsingOptionDummy();
   if (optionOrCheckResult is ParsingOption) {
     optionOrCheckResult.debug = debugHandler;
   }
   try {
-    final results = chrono.parse(
-        text, refDateOrCheckResult as DateTime, optionOrCheckResult);
+    final results = chrono.parse(text, refDateOrCheckResult as DateTime?,
+        optionOrCheckResult as ParsingOption?);
     expectToBeSingleOnText(results, text);
     if (checkResult != null) {
       checkResult(results[0], text);
     }
-  } catch (e, e_stack) {
+  } on Exception {
     debugHandler.executeBufferedBlocks();
     // e_stack = e_stack.replace(new RegExp(r'[^\n]*at .*test_util.*\n'), ""); //пофиг на реплейс стактрейса?
     rethrow;
@@ -66,7 +64,7 @@ testUnexpectedResult(Chrono chrono, String text,
   options?.debug = debugHandler;
   try {
     final results = chrono.parse(text, refDate, options);
-    expect(results.length, 0,reason: "result must be empty");
+    expect(results.length, 0, reason: "result must be empty");
   } catch (e, e_stack) {
     debugHandler.executeBufferedBlocks();
     // e_stack = e_stack.replace(new RegExp(r'[^\n]*at .*test_util.*\n'), "");  //пофиг на реплейс стактрейса?
@@ -84,11 +82,11 @@ num measureMilliSec(void block()) {
 
 // noinspection JSUnusedGlobalSymbols
 
-expectToBeDate(resultOrComponent, DateTime date) {
-  expect(resultOrComponent is DateTime, isTrue,
-      reason: 'resultOrComponent must be datetime');
+expectToBeDate(ParsedComponents resultOrComponent, DateTime date) {
+  // expect(re, isTrue,
+  //     reason: 'resultOrComponent must be datetime');
   final actualDate = resultOrComponent.date();
-  final actualTime = actualDate.getTime();
+  final actualTime = actualDate.millisecondsSinceEpoch;
   final expectedTime = date.millisecondsSinceEpoch;
   expect(actualTime, expectedTime,
       reason:
@@ -98,15 +96,29 @@ expectToBeDate(resultOrComponent, DateTime date) {
 expectToBeSingleOnText(List<ParsedResult> results, text) {
   expect(results.length, 1,
       reason:
-          "result must have length 1, result from $text = ${results.map((result) => JsonEncoder().convert(result))}");
+          "result must have length 1, result from $text = ${results.map((result) => "text = ${result.text}"
+              "start = ${result.start.date()}"
+              "end = ${result.end?.date()}"
+              "refDate = ${result.refDate}")}");
 }
 
-class ParsingReferenceDummy implements ParsingReference{
+class ParsingReferenceDummy implements ParsingReference {
   @override
   DateTime instant;
 
   @override
   var timezone;
 
-  ParsingReferenceDummy(this.instant,[this.timezone]);
+  ParsingReferenceDummy(this.instant, [this.timezone]);
+}
+
+class ParsingOptionDummy implements ParsingOption {
+  @override
+  var debug;
+
+  @override
+  bool? forwardDate;
+
+  @override
+  TimezoneAbbrMap? timezones;
 }
