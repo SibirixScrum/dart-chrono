@@ -7,6 +7,8 @@ void main() async {
   // print(Weekday.FRIDAY.index);
   final Chrono chrono = Chrono();
   final b = ru.parse("18.02.2024");
+  final c = DateTime.parse("2021-06-11T16:00:00-0500");
+  print(c);
   // final a = chrono.parse("18.02.2024");
   print(b);
   // runApp(const MyApp());

@@ -83,6 +83,7 @@ class Chrono {
     return results.length > 0 ? results[0].start.date() : null;
   }
 
+
   List<ParsedResult> parse(String text,
       [dynamic /* ParsingReference | Date */ referenceDate,
         ParsingOption? option]) {
