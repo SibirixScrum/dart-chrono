@@ -29,10 +29,10 @@ class RUCasualTimeParser extends AbstractParserWithWordBoundaryChecking {
     var targetDate = context.refDate;
     final lowerText = match[0].toLowerCase();
     final component = context.createParsingComponents();
-    if (identical(lowerText, "сейчас")) {
+    if (lowerText == "сейчас") {
       return references.now(context.reference);
     }
-    if (identical(lowerText, "вечером") || identical(lowerText, "вечера")) {
+    if (lowerText == "вечером" || lowerText == "вечера") {
       return references.evening(context.reference);
     }
     if (lowerText.endsWith("утром") || lowerText.endsWith("утра")) {

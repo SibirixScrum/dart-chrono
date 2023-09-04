@@ -4,12 +4,12 @@ class RegExpMatchArray {
   var index = 0;
   final String input;
 
-  RegExpMatchArray(List<String?> matches, this.input, this.index){
-    this.matches = matches + List.generate(6, (index) => null);
+  RegExpMatchArray(List<String?> matches, this.input, this.index) {
+    this.matches = matches /*+ List.generate(6, (index) => null)*/;
   }
 
   String operator [](int index) {
-    return matches.length >index ?  (matches[index] ?? "") : "";
+    return matches.length > index ? (matches[index] ?? "") : "";
   }
 }
 
@@ -21,11 +21,13 @@ extension RegExpUtil on RegExp {
     } else {
       final index = firstMatch.start;
       final matches = allMatches(str);
+      // print(matches.map((e) => e.groups(groupIndices)));
       return RegExpMatchArray(
           matches
               .toList()
+              // .map((e) => e[0])
               .expand((element) => element
-                  .groups(List.generate(element.groupCount, (index) => index)))
+                  .groups(List.generate(element.groupCount+1, (index) => index)))
               .toList(),
           str,
           index);
@@ -33,8 +35,8 @@ extension RegExpUtil on RegExp {
   }
 }
 
-extension RegExpUtil2 on String{
-  bool match(RegExp exp){
+extension RegExpUtil2 on String {
+  bool match(RegExp exp) {
     return exp.firstMatch(this) != null;
   }
 }

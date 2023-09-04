@@ -15,7 +15,7 @@ implyTheNextDay(ParsingComponents component, DateTime targetDayJs) {
 
 assignSimilarDate(ParsingComponents component, DateTime targetDayJs) {
   component.assign(Component.day, targetDayJs.day);
-  component.assign(Component.month, targetDayJs.month + 1);
+  component.assign(Component.month, targetDayJs.month);
   component.assign(Component.year, targetDayJs.year);
 }
 
@@ -33,7 +33,7 @@ assignSimilarTime(ParsingComponents component, DateTime targetDayJs) {
 
 implySimilarDate(ParsingComponents component, DateTime targetDayJs) {
   component.imply(Component.day, targetDayJs.day);
-  component.imply(Component.month, targetDayJs.month + 1);
+  component.imply(Component.month, targetDayJs.month );
   component.imply(Component.year, targetDayJs.year);
 }
 

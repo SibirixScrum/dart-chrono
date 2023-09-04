@@ -6,11 +6,26 @@ import 'package:flutter/material.dart';
 void main() async {
   // print(Weekday.FRIDAY.index);
   final Chrono chrono = Chrono();
-  final b = ru.parse("18.02.2024");
-  final c = DateTime.parse("2021-06-11T16:00:00-0500");
-  print(c);
+  // final regexp = RegExp(
+  //     "([^\p{L}\p{N}_]|^)(?:с|со)?\s*(сегодня|вчера|завтра|послезавтра"
+  //         "|послепослезавтра|позапозавчера|позавчера)(?=[^\p{L}\p{N}_]|\$)");
+  // final matches = regexp.allMatches("дедлайн сегодня");
+  // final List<String?> list = List.generate(0, (index) => "");
+  // print("len = ${matches.length}");
+  // matches.forEach((element) {
+  //   final groups = element.groups(
+  //       List.generate(element.groupCount+1, (index) => index));
+  //   print("groups = $groups");
+  //   list.addAll(groups);
+  // });
+  //
+  //
+  // print(list);
+
+  final b = ru.parse("дедлайн сейчас",new DateTime(2012, 7, 10, 8, 9, 10, 11));
+
   // final a = chrono.parse("18.02.2024");
-  print(b);
+  print("${b.length} ${b[0].refDate} ${b[0].end} ${b[0].start} ${b[0].text}");
   // runApp(const MyApp());
 }
 //

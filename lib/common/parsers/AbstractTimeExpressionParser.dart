@@ -177,7 +177,7 @@ abstract class AbstractTimeExpressionParser implements Parser {
     }
     components.assign(Component.hour, hour);
     components.assign(Component.minute, minute);
-    if (!identical(meridiem, null)) {
+    if (meridiem != null) {
       components.assign(Component.meridiem, meridiem);
     } else {
       if (hour < 12) {
@@ -373,8 +373,8 @@ abstract class AbstractTimeExpressionParser implements Parser {
   getPrimaryTimePatternThroughCache() {
     final primaryPrefix = this.primaryPrefix();
     final primarySuffix = this.primarySuffix();
-    if (identical(this.cachedPrimaryPrefix, primaryPrefix) &&
-        identical(this.cachedPrimarySuffix, primarySuffix)) {
+    if (this.cachedPrimaryPrefix == primaryPrefix &&
+        this.cachedPrimarySuffix == primarySuffix) {
       return this.cachedPrimaryTimePattern;
     }
     this.cachedPrimaryTimePattern = primaryTimePattern(
@@ -394,8 +394,8 @@ abstract class AbstractTimeExpressionParser implements Parser {
   RegExp getFollowingTimePatternThroughCache() {
     final followingPhase = this.followingPhase();
     final followingSuffix = this.followingSuffix();
-    if (identical(this.cachedFollowingPhase, followingPhase) &&
-        identical(this.cachedFollowingSuffix, followingSuffix)) {
+    if (this.cachedFollowingPhase == followingPhase &&
+        this.cachedFollowingSuffix == followingSuffix) {
       return this.cachedFollowingTimePatten;
     }
     this.cachedFollowingTimePatten =

@@ -252,7 +252,7 @@ DateTime getNthWeekdayOfMonth(num year, Month month, Weekday weekday,
     dayOfMonth++;
     final date =
         new DateTime(year.toInt(), month.plus(-1).index + 1, dayOfMonth);
-    if (identical(date.weekday, weekday)) i++;
+    if (date.weekday == weekday.index) i++;
   }
   return new DateTime(year.toInt(), month.plus(-1).index + 1, dayOfMonth, hour);
 }
@@ -272,12 +272,12 @@ DateTime getLastWeekdayOfMonth(num year, Month month, Weekday weekday,
   // Procedure: Find the first weekday of the next month, compare with the given weekday,
 
   // and use the difference to determine how many days to subtract from the first of the next month.
-  final oneIndexedWeekday = identical(weekday.index, 0) ? 7 : weekday.index;
+  final oneIndexedWeekday = weekday.index == 0 ? 7 : weekday.index;
   final date = new DateTime(year.toInt(), month.plus(-1).plus(1).index + 1, 1,
       12); //todo -1 +1 со смыслом?
-  final firstWeekdayNextMonth = identical(date.weekday, 0) ? 7 : date.weekday;
+  final firstWeekdayNextMonth = date.weekday == 0 ? 7 : date.weekday;
   var dayDiff;
-  if (identical(firstWeekdayNextMonth, oneIndexedWeekday))
+  if (firstWeekdayNextMonth == oneIndexedWeekday)
     dayDiff = 7;
   else if (firstWeekdayNextMonth < oneIndexedWeekday)
     dayDiff = 7 + firstWeekdayNextMonth - oneIndexedWeekday;

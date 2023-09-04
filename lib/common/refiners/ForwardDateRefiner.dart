@@ -41,7 +41,7 @@ class ForwardDateRefiner implements Refiner {
                   .toInt()); //refMoment.day((result.start.get(Component.weekday) as num));
         }
         result.start.imply(Component.day, refMoment.day);
-        result.start.imply(Component.month, refMoment.month + 1);
+        result.start.imply(Component.month, refMoment.month );
         result.start.imply(Component.year, refMoment.year);
         context.debug(() {
           print('''Forward weekly adjusted for ${result} (${result.start})''');
@@ -58,7 +58,7 @@ class ForwardDateRefiner implements Refiner {
                     .toInt()); //refMoment.day((result.end!.get(Component.weekday) as num));
           }
           result.end!.imply(Component.day, refMoment.day);
-          result.end!.imply(Component.month, refMoment.month + 1);
+          result.end!.imply(Component.month, refMoment.month );
           result.end!.imply(Component.year, refMoment.year);
           context.debug(() {
             print('''Forward weekly adjusted for ${result} (${result.end})''');

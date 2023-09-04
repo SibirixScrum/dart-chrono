@@ -36,7 +36,7 @@ class ExtractTimezoneOffsetRefiner implements Refiner {
       if (timezoneOffset > 14 * 60) {
         return;
       }
-      if (identical(match[TIMEZONE_OFFSET_SIGN_GROUP], "-")) {
+      if (match[TIMEZONE_OFFSET_SIGN_GROUP] == "-") {
         timezoneOffset = -timezoneOffset;
       }
       if (result.end != null) {

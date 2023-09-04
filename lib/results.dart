@@ -67,7 +67,7 @@ class ParsingComponents implements ParsedComponents {
     }
     final refDayJs = reference.instant;
     this.imply(Component.day, refDayJs.day);
-    this.imply(Component.month, refDayJs.month + 1);
+    this.imply(Component.month, refDayJs.month);
     this.imply(Component.year, refDayJs.year);
     this.imply(Component.hour, 12);
     this.imply(Component.minute, 0);
@@ -151,10 +151,9 @@ class ParsingComponents implements ParsedComponents {
 
   bool isValidDate() {
     final date = dateWithoutTimezoneAdjustment();
-    if (!identical(date.year, this.get(Component.year))) return false;
-    if (!identical(date.month, this.get(Component.month)!.toInt()))
-      return false;
-    if (!identical(date.day, this.get(Component.day))) return false;
+    if (date.year != this.get(Component.year)) return false;
+    if (date.month != this.get(Component.month)!.toInt()) return false;
+    if (date.day != this.get(Component.day)) return false;
     if (this.get(Component.hour) != null &&
         date.hour != this.get(Component.hour)) return false;
     if (this.get(Component.minute) != null &&
@@ -174,7 +173,8 @@ class ParsingComponents implements ParsedComponents {
     final date = this.dateWithoutTimezoneAdjustment();
     final timezoneAdjustment = this.reference.getSystemTimezoneAdjustmentMinute(
         date, this.get(Component.timezoneOffset));
-    return new DateTime(date.millisecondsSinceEpoch + timezoneAdjustment * 60000);
+    return new DateTime.fromMillisecondsSinceEpoch(
+        date.millisecondsSinceEpoch + timezoneAdjustment * 60000);
   }
 
   DateTime dateWithoutTimezoneAdjustment() {
@@ -215,19 +215,19 @@ class ParsingComponents implements ParsedComponents {
         fragments["second"] != null) {
       assignSimilarTime(components, date);
       assignSimilarDate(components, date);
-      if (!identical(reference.timezoneOffset, null)) {
+      if (reference.timezoneOffset != null) {
         components.assign(Component.timezoneOffset,
             -reference.instant.timeZoneOffset.inMinutes);
       }
     } else {
       implySimilarTime(components, date);
-      if (!identical(reference.timezoneOffset, null)) {
+      if (reference.timezoneOffset != null) {
         components.imply(Component.timezoneOffset,
             -reference.instant.timeZoneOffset.inMinutes);
       }
       if (fragments["d"] != null) {
         components.assign(Component.day, date.day);
-        components.assign(Component.month, date.month + 1);
+        components.assign(Component.month, date.month);
         components.assign(Component.year, date.year);
       } else {
         if (fragments["week"] != null) {
@@ -235,10 +235,10 @@ class ParsingComponents implements ParsedComponents {
         }
         components.imply(Component.day, date.day);
         if (fragments["month"] != null) {
-          components.assign(Component.month, date.month + 1);
+          components.assign(Component.month, date.month);
           components.assign(Component.year, date.year);
         } else {
-          components.imply(Component.month, date.month + 1);
+          components.imply(Component.month, date.month);
           if (fragments["year"] != null) {
             components.assign(Component.year, date.year);
           } else {

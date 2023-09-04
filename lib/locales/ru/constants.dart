@@ -311,7 +311,7 @@ num parseNumberPattern(String match) {
     return 0.5;
   } else if (RegExp(r'пар').firstMatch(num) != null) {
     return 2;
-  } else if (identical(num, "")) {
+  } else if (num == "") {
     return 1;
   }
   return double.parse(num);

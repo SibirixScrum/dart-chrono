@@ -13,7 +13,7 @@ ParsingComponents now(ReferenceWithTimezone reference) {
   final component = new ParsingComponents(reference, {});
   assignSimilarDate(component, targetDate);
   assignSimilarTime(component, targetDate);
-  if (!identical(reference.timezoneOffset, null)) {
+  if (reference.timezoneOffset != null) {
     component.assign(
         Component.timezoneOffset, targetDate.timeZoneOffset.inMinutes);
   }

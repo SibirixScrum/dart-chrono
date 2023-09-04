@@ -51,20 +51,20 @@ class RURelativeDateFormatParser
       date = date.subtract(
           Duration(days: date.day)); //  date = date.add(-date.get("d"), "d");
       components.imply(Component.day, date.day);
-      components.imply(Component.month, date.month + 1);
+      components.imply(Component.month, date.month );
       components.imply(Component.year, date.year);
     } else if (timeunit.match(new RegExp(r'month', caseSensitive: false))) {
       date = date.subtract(Duration(
           days: date.day - 1)); //  date = date.add(-date.date() + 1, "d");
       components.imply(Component.day, date.day);
       components.assign(Component.year, date.year);
-      components.assign(Component.month, date.month + 1);
+      components.assign(Component.month, date.month );
     } else if (timeunit.match(new RegExp(r'year', caseSensitive: false))) {
       date = date.subtract(Duration(
           days: date.day - 1)); //  date = date.add(-date.date() + 1, "d");
       date = date.copyWith(month: 0);
       components.imply(Component.day, date.day);
-      components.imply(Component.month, date.month + 1);
+      components.imply(Component.month, date.month );
       components.assign(Component.year, date.year);
     }
     return components;

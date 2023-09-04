@@ -40,7 +40,7 @@ ParsingComponents addImpliedTimeUnits(
       timeUnits.keys.contains("month") ||
       timeUnits.keys.contains("year")) {
     output.imply(Component.day, date.day);
-    output.imply(Component.month, date.month + 1);
+    output.imply(Component.month, date.month );
     output.imply(Component.year, date.year);
   }
   if (timeUnits.keys.contains("second") ||
