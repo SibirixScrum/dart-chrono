@@ -194,28 +194,90 @@ class ParsingComponents implements ParsedComponents {
     return date;
   }
 
+  static List<String> allFragmentKeys = [
+    "year",
+    "quarter",
+    "month",
+    "week",
+    "day",
+    "d",
+    "hour",
+    "minute",
+    "second",
+    "millisecond"
+  ];
+
+  static Map<String, int> processFloatTimeunits(Map<String, num> fragments) {
+    for (final key in allFragmentKeys) {
+      if (!fragments.containsKey(key)) {
+        continue;
+      }
+      final difference = fragments[key]! - fragments[key]!.toInt();
+      if (difference != 0) {
+        fragments[key] = fragments[key]!.toInt();
+        switch (key) {
+          case "year":
+            fragments["month"] =
+                (fragments["month"] ?? 0) + (difference * 12).toInt();
+            break;
+          case "quarter":
+            fragments["month"] = (fragments["month"] ?? 0) + (difference * 3);
+            break;
+          case "month":
+            fragments["day"] =
+                (fragments["day"] ?? 0) + (difference * 30).toInt();
+            break;
+          case "day":
+            fragments["hour"] =
+                (fragments["hour"] ?? 0) + (difference * 24).toInt();
+            break;
+          case "d":
+            fragments["hour"] =
+                (fragments["hour"] ?? 0) + (difference * 24).toInt();
+            break;
+          case "hour":
+            fragments["minute"] =
+                (fragments["minute"] ?? 0) + (difference * 60).toInt();
+            break;
+          case "minute":
+            fragments["second"] =
+                (fragments["second"] ?? 0) + (difference * 60).toInt();
+            break;
+          case "second":
+            fragments["millisecond"] =
+              (fragments["millisecond"] ?? 0) + (difference * 1000).toInt();
+            break;
+        }
+      }
+    }
+    return fragments.map((key, value) => MapEntry(key, value.toInt()));
+  }
+
   static ParsingComponents createRelativeFromReference(
-      ReferenceWithTimezone reference, Map<String, int> fragments) {
+      ReferenceWithTimezone reference, Map<String, num> fragments) {
     var date = reference.instant;
     // for (final key in fragments.keys) {
+    final intFragments = processFloatTimeunits(fragments);
     date = date.copyWith(
-      year: date.year + (fragments["year"] ?? 0),
-      month: date.month + (fragments["month"] ?? 0),
+      year: date.year + (intFragments["year"] ?? 0),
+      month: date.month + (intFragments["month"] ?? 0),
     );
-    date = date.addQuarter(fragments["quarter"] ?? 0);
+    date = date.addQuarter(intFragments["quarter"] ?? 0);
     date = date.add(Duration(
-      days: (fragments["day"] ?? 0) + ((fragments["week"] ?? 0) * 7),
-      hours: (fragments["hour"] ?? 0),
-      minutes: (fragments["minute"] ?? 0),
-      seconds: (fragments["second"] ?? 0),
-      milliseconds: (fragments["millisecond"] ?? 0),
+      days: (intFragments["d"] ?? 0) +
+          (intFragments["day"] ?? 0) +
+          ((intFragments["week"] ?? 0) * 7),
+      hours: (intFragments["hour"] ?? 0),
+      minutes: (intFragments["minute"] ?? 0),
+      seconds: (intFragments["second"] ?? 0),
+      milliseconds: (intFragments["millisecond"] ?? 0),
     ));
     // date = date.add(fragments[key].toInt(),key);
     // }
     final components = new ParsingComponents(reference, null);
-    if (fragments["hour"] != null ||
-        fragments["minute"] != null ||
-        fragments["second"] != null) {
+    if (intFragments["hour"] != null ||
+        intFragments["minute"] != null ||
+        intFragments["second"] != null) {
       assignSimilarTime(components, date);
       assignSimilarDate(components, date);
       if (reference.timezoneOffset != null) {
@@ -228,21 +290,21 @@ class ParsingComponents implements ParsedComponents {
         components.imply(Component.timezoneOffset,
             -reference.instant.timeZoneOffset.inMinutes);
       }
-      if (fragments["d"] != null) {
+      if (intFragments["d"] != null) {
         components.assign(Component.day, date.day);
         components.assign(Component.month, date.month);
         components.assign(Component.year, date.year);
       } else {
-        if (fragments["week"] != null) {
+        if (intFragments["week"] != null) {
           components.imply(Component.weekday, date.weekday);
         }
         components.imply(Component.day, date.day);
-        if (fragments["month"] != null) {
+        if (intFragments["month"] != null) {
           components.assign(Component.month, date.month);
           components.assign(Component.year, date.year);
         } else {
           components.imply(Component.month, date.month);
-          if (fragments["year"] != null) {
+          if (intFragments["year"] != null) {
             components.assign(Component.year, date.year);
           } else {
             components.imply(Component.year, date.year);

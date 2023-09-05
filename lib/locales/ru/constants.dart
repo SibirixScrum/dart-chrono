@@ -398,5 +398,6 @@ TimeUnits parseTimeUnits(timeunitText) {
 collectDateTimeFragment(fragments, match) {
   final num = parseNumberPattern(match[1]);
   final unit = TIME_UNIT_DICTIONARY[match[2].toLowerCase()];
+
   fragments[unit] = num;
 }
