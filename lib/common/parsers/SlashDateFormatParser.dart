@@ -75,7 +75,7 @@ class SlashDateFormatParser implements Parser {
     // MM/dd -> OK
 
     // MM.dd -> NG
-    if (match.matches.length <= YEAR_GROUP &&
+    if (match[YEAR_GROUP].isEmpty  &&
         match.matches[0] != null &&
         !match.matches[0]!.contains("/")) {
       return null;
@@ -99,8 +99,7 @@ class SlashDateFormatParser implements Parser {
     }
     result.start.assign(Component.day, day);
     result.start.assign(Component.month, month);
-    if (match.matches.length > YEAR_GROUP &&
-        match.matches[YEAR_GROUP] != null) {
+    if (match[YEAR_GROUP].isNotEmpty) {
       final rawYearNumber = int.parse(match[YEAR_GROUP]);
       final year = findMostLikelyADYear(rawYearNumber);
       result.start.assign(Component.year, year);

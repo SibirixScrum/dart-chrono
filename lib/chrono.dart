@@ -106,6 +106,7 @@ class Chrono {
       Parser parser) {
     final List<ParsingResult> results = [];
     final pattern = parser.pattern(context);
+    final isCaseSensitive = pattern.isCaseSensitive;
     final originalText = context.text;
     var remainingText = context.text;
     var match = pattern.exec(remainingText);

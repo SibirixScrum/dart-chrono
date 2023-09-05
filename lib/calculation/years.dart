@@ -19,7 +19,7 @@ num findYearClosestToRef(DateTime refDate, num day, num month) {
   //Find the most appropriated year
   final refMoment = refDate;
   var dateMoment = refMoment;
-  dateMoment = dateMoment.copyWith(month: dateMoment.month - 1);
+  dateMoment = dateMoment.copyWith(month: month.toInt());
   dateMoment = dateMoment.copyWith(day: day.toInt());
   dateMoment = dateMoment.copyWith(
       year: refMoment.year); // dateMoment.year(refMoment.year());

@@ -28,7 +28,7 @@ class ExtractTimezoneOffsetRefiner implements Refiner {
       });
       final hourOffset = int.parse(
           match[TIMEZONE_OFFSET_HOUR_OFFSET_GROUP]); //todo check size?
-      final minuteOffset = match.matches.length >= 4
+      final minuteOffset = match[TIMEZONE_OFFSET_MINUTE_OFFSET_GROUP].isNotEmpty
           ? int.parse(match[TIMEZONE_OFFSET_MINUTE_OFFSET_GROUP])
           : 0;
       var timezoneOffset = hourOffset * 60 + minuteOffset;

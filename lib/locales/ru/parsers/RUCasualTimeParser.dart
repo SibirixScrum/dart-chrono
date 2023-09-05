@@ -11,7 +11,7 @@ import "../constants.dart" show REGEX_PARTS;
 final PATTERN = new RegExp(
     '''(сейчас|прошлым\\s*вечером|прошлой\\s*ночью|следующей\\s*ночью|сегодня\\s*ночью|этой\\s*ночью|ночью|этим утром|утром|утра|в\\s*полдень|вечером|вечера|в\\s*полночь)''' +
         '''${REGEX_PARTS["rightBoundary"]}''',
-    caseSensitive: REGEX_PARTS["flags"]!.contains("i"),
+    caseSensitive: !REGEX_PARTS["flags"]!.contains("i"),
     dotAll: REGEX_PARTS["flags"]!.contains("d"),
     multiLine: REGEX_PARTS["flags"]!.contains("m"),
     unicode: REGEX_PARTS["flags"]!.contains("u"));

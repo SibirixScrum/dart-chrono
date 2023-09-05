@@ -19,7 +19,7 @@ final PATTERN = new RegExp(
         '''(?:\\s*(?:,|\\)|）))?''' +
         '''(?:\\s*на\\s*(этой|прошлой|следующей)\\s*неделе)?''' +
         '''${REGEX_PARTS["rightBoundary"]}''',
-    caseSensitive: REGEX_PARTS["flags"]!.contains("i"),
+    caseSensitive: !REGEX_PARTS["flags"]!.contains("i"),
     dotAll: REGEX_PARTS["flags"]!.contains("d"),
     multiLine: REGEX_PARTS["flags"]!.contains("m"),
     unicode: REGEX_PARTS["flags"]!.contains("u"));

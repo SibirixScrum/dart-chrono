@@ -22,7 +22,7 @@ final PATTERN = new RegExp(
         '''[,-]?\\s*(${YEAR_PATTERN})?''' +
         ''')?''' +
         '''(?=[^\\s\\w]|\\s+[^0-9]|\\s+\$|\$)''',
-    caseSensitive: REGEX_PARTS["flags"]!.contains("i"),
+    caseSensitive: !REGEX_PARTS["flags"]!.contains("i"),
     dotAll: REGEX_PARTS["flags"]!.contains("d"),
     multiLine: REGEX_PARTS["flags"]!.contains("m"),
     unicode: REGEX_PARTS["flags"]!.contains("u"));
@@ -56,7 +56,7 @@ class RUMonthNameParser extends AbstractParserWithWordBoundaryChecking {
     result.start.imply(Component.day, 1);
     final month = MONTH_NAME_DICTIONARY[monthName]!;
     result.start.assign(Component.month, month);
-    if (match.matches.length > YEAR_GROUP) {
+    if (match[YEAR_GROUP].isNotEmpty) {
       final year = parseYear(match[YEAR_GROUP]);
       result.start.assign(Component.year, year);
     } else {

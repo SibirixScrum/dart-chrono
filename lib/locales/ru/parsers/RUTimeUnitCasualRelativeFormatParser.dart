@@ -9,7 +9,7 @@ import "../constants.dart" show TIME_UNITS_PATTERN, parseTimeUnits, REGEX_PARTS;
 
 final PATTERN = new RegExp(
     '''(эти|последние|прошлые|следующие|после|спустя|через|\\+|-)\\s*(${TIME_UNITS_PATTERN})${REGEX_PARTS["rightBoundary"]}''',
-    caseSensitive: REGEX_PARTS["flags"]!.contains("i"),
+    caseSensitive: !REGEX_PARTS["flags"]!.contains("i"),
     dotAll: REGEX_PARTS["flags"]!.contains("d"),
     multiLine: REGEX_PARTS["flags"]!.contains("m"),
     unicode: REGEX_PARTS["flags"]!.contains("u"));

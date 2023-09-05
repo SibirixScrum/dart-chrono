@@ -1,28 +1,25 @@
 import 'package:chrono/chrono.dart';
 import 'package:chrono/locales/ru/index.dart' as ru;
-import 'package:flutter/material.dart';
-
 
 void main() async {
   // print(Weekday.FRIDAY.index);
   final Chrono chrono = Chrono();
   // final regexp = RegExp(
-  //     "([^\p{L}\p{N}_]|^)(?:с|со)?\s*(сегодня|вчера|завтра|послезавтра"
-  //         "|послепослезавтра|позапозавчера|позавчера)(?=[^\p{L}\p{N}_]|\$)");
-  // final matches = regexp.allMatches("дедлайн сегодня");
+  //     "([^\p{L}\p{N}_]|^)((?:в)\s*)?((?:сентябрь|сентября|сентябре|февраль|февраля|феврале|августа|августе|октябрь|октября|октябре|декабрь|декабря|декабре|январь|января|январе|апрель|апреля|апреле|август|ноябрь|ноября|ноябре|марта|марте|март|июнь|июня|июне|июль|июля|июле|янв\.|фев\.|мар\.|апр\.|авг\.|сен\.|окт\.|ноя\.|дек\.|май|мая|мае|янв|фев|мар|апр|авг|сен|окт|ноя|дек))\s*(?:[,-]?\s*((?:[1-9][0-9]{0,3}(?:\s+(?:году|года|год|г|г.))?\s*(?:н.э.|до н.э.|н. э.|до н. э.)|[1-2][0-9]{3}(?:\s+(?:году|года|год|г|г.))?|[5-9][0-9](?:\s+(?:году|года|год|г|г.))?))?)?(?=[^\s\w]|\s+[^0-9]|\s+\$|\$)",
+  // caseSensitive: false);
+  // final matches = regexp.allMatches("Сентябрь 2012");
   // final List<String?> list = List.generate(0, (index) => "");
   // print("len = ${matches.length}");
   // matches.forEach((element) {
-  //   final groups = element.groups(
-  //       List.generate(element.groupCount+1, (index) => index));
+  //   final groups =
+  //       element.groups(List.generate(element.groupCount + 1, (index) => index));
   //   print("groups = $groups");
   //   list.addAll(groups);
   // });
   //
-  //
   // print(list);
 
-  final b = ru.parse("дедлайн сейчас",new DateTime(2012, 7, 10, 8, 9, 10, 11));
+  final b = ru.parse("авг 96", new DateTime(2020, 11, 22));
 
   // final a = chrono.parse("18.02.2024");
   print("${b.length} ${b[0].refDate} ${b[0].end} ${b[0].start} ${b[0].text}");

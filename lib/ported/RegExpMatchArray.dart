@@ -15,6 +15,9 @@ class RegExpMatchArray {
 
 extension RegExpUtil on RegExp {
   RegExpMatchArray? exec(String str) {
+    // if(!this.hasMatch(str)){
+    //   return null;
+    // }
     final firstMatch = this.firstMatch(str);
     if (firstMatch == null) {
       return null;

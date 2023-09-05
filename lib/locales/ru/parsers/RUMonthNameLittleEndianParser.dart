@@ -27,7 +27,7 @@ final PATTERN = new RegExp(
         '''(${YEAR_PATTERN}(?![^\\s]\\d))''' +
         ''')?''' +
         '''${REGEX_PARTS["rightBoundary"]}''',
-    caseSensitive: REGEX_PARTS["flags"]!.contains("i"),
+    caseSensitive: !REGEX_PARTS["flags"]!.contains("i"),
     dotAll: REGEX_PARTS["flags"]!.contains("d"),
     multiLine: REGEX_PARTS["flags"]!.contains("m"),
     unicode: REGEX_PARTS["flags"]!.contains("u"));
@@ -58,14 +58,14 @@ class RUMonthNameLittleEndianParser
     }
     result.start.assign(Component.month, month!);
     result.start.assign(Component.day, day);
-    if (match.matches.length > YEAR_GROUP) {
+    if (match[ YEAR_GROUP].isNotEmpty) {
       final yearNumber = parseYear(match[YEAR_GROUP]);
       result.start.assign(Component.year, yearNumber);
     } else {
       final year = findYearClosestToRef(context.refDate, day, month);
       result.start.imply(Component.year, year);
     }
-    if (match.matches.length > DATE_TO_GROUP) {
+    if (match[ DATE_TO_GROUP].isNotEmpty) {
       final endDate = parseOrdinalNumberPattern(match[DATE_TO_GROUP]);
       result.end = result.start.clone();
       result.end!.assign(Component.day, endDate);

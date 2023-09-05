@@ -23,7 +23,7 @@ primaryTimePattern(String leftBoundary, String primaryPrefix,
           ''')?''' +
           '''(?:\\s*(a\\.m\\.|p\\.m\\.|am?|pm?))?''' +
           '''${primarySuffix}''',
-      caseSensitive: flags.contains("i"),
+      caseSensitive: !flags.contains("i"),
       unicode: flags.contains('u'),
       dotAll: flags.contains('d'),
       multiLine: flags.contains('m'));
@@ -91,8 +91,7 @@ abstract class AbstractTimeExpressionParser implements Parser {
     final startComponents = this.extractPrimaryTimeComponents(context, match);
     if (startComponents == null) {
       match.index += match[0].length;
-      return ParsingResult(ReferenceWithTimezone(null), 0,
-          ""); //todo dummy ParsingResult instead of null
+      return null; //todo dummy ParsingResult instead of null
     }
     final index = match.index + match[1].length;
     final text = match[0].substring(match[1].length);
@@ -145,8 +144,8 @@ abstract class AbstractTimeExpressionParser implements Parser {
     // ----- Minutes
     if (match[MINUTE_GROUP].isNotEmpty) {
       if (match[MINUTE_GROUP].length == 1 &&
-          match.matches.length > AM_PM_HOUR_GROUP &&
-          match.matches[AM_PM_HOUR_GROUP] != null) {
+          // match.matches.length > AM_PM_HOUR_GROUP &&
+          match[AM_PM_HOUR_GROUP].isNotEmpty) {
         // Skip single digit minute e.g. "at 1.1 xx"
         return null;
       }
