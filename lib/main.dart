@@ -19,11 +19,11 @@ void main() async {
   //
   // print(list);
 
-  final b = ru.parse("на следующей квартале", new DateTime(2016, 10, 1, 12));
-  print(new DateTime(2017, 11, 19, 12).weekday);
+  final b = ru.parse("Это в 10.1 - 10.12", new DateTime(2016, 10, 1, 8));
+  // print(new DateTime(2017, 11, 19, 12).weekday);
 
   // final a = chrono.parse("18.02.2024");
-  print("${b.length} ${b[0].refDate} ${b[0].end} ${b[0].start} ${b[0].text}");
+  print("\n${b.length} \n${b[0].refDate} \n${b[0].end} \n${b[0].start} \n${b[0].text}");
   // runApp(const MyApp());
 }
 //

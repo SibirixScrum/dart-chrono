@@ -4,7 +4,7 @@ import "../utils/dayjs.dart" show assignSimilarDate, implySimilarDate;
 
 ParsingResult mergeDateTimeResult(
     ParsingResult dateResult, ParsingResult timeResult) {
-  final result = dateResult.clone();
+  final result = dateResult.clone() as ParsingResult;
   final beginDate = dateResult.start;
   final beginTime = timeResult.start;
   result.start = mergeDateTimeComponent(beginDate, beginTime);
@@ -14,7 +14,7 @@ ParsingResult mergeDateTimeResult(
     final endDateTime = mergeDateTimeComponent(endDate!, endTime!);
     if (dateResult.end == null &&
         endDateTime.date().millisecondsSinceEpoch <
-            result.start.date().getTime()) {
+            result.start.date().millisecondsSinceEpoch) {
       // For example,  "Tuesday 9pm - 1am" the ending should actually be 1am on the next day.
 
       // We need to add to ending by another day.
@@ -75,7 +75,7 @@ ParsingComponents mergeDateTimeComponent(
     dateTimeComponent.imply(
         Component.meridiem, timeComponent.get(Component.meridiem)!);
   }
-  if (dateTimeComponent.get(Component.meridiem) == Meridiem.PM &&
+  if (dateTimeComponent.get(Component.meridiem) == Meridiem.PM.index &&
       dateTimeComponent.get(Component.hour)! < 12) {
     if (timeComponent.isCertain(Component.hour)) {
       dateTimeComponent.assign(

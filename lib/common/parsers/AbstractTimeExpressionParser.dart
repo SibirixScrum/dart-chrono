@@ -1,4 +1,5 @@
 import "package:chrono/ported/RegExpMatchArray.dart";
+import "package:chrono/ported/StringUtils.dart";
 
 import "../../chrono.dart" show Parser, ParsingContext;
 import "../../results.dart"
@@ -85,7 +86,7 @@ abstract class AbstractTimeExpressionParser implements Parser {
   }
 
   ParsingResult? extract(ParsingContext context, RegExpMatchArray match) {
-    if(!match[AM_PM_HOUR_GROUP].toLowerCase().contains("m")){
+    if (!match[AM_PM_HOUR_GROUP].toLowerCase().contains("m")) {
       match.matches[AM_PM_HOUR_GROUP] = null;
     }
     final startComponents = this.extractPrimaryTimeComponents(context, match);
@@ -103,13 +104,14 @@ abstract class AbstractTimeExpressionParser implements Parser {
     // Pattern "456-12", "2022-12" should not be time without proper context
     if (RegExp(r'^\d{3,4}').firstMatch(text) != null &&
         followingMatch != null &&
-        RegExp(r'^\s*([+-])\s*\d{2,4}$').firstMatch(followingMatch[0]) !=null) {
+        RegExp(r'^\s*([+-])\s*\d{2,4}$').firstMatch(followingMatch[0]) !=
+            null) {
       return null;
     }
     if (followingMatch == null ||
         // Pattern "YY.YY -XXXX" is more like timezone offset
-        RegExp(r'^\s*([+-])\s*\d{3,4}$').firstMatch(followingMatch[0]) != null
-    ) {
+        RegExp(r'^\s*([+-])\s*\d{3,4}$').firstMatch(followingMatch[0]) !=
+            null) {
       return this.checkAndReturnWithoutFollowingPattern(result);
     }
     result.end =
@@ -128,7 +130,7 @@ abstract class AbstractTimeExpressionParser implements Parser {
     int? meridiem = null;
     // ----- Hours
     var hour = int.tryParse(match[HOUR_GROUP]);
-    if(hour == null){
+    if (hour == null) {
       return null;
     }
     if (hour > 100) {
@@ -145,7 +147,7 @@ abstract class AbstractTimeExpressionParser implements Parser {
     if (match[MINUTE_GROUP].isNotEmpty) {
       if (match[MINUTE_GROUP].length == 1 &&
           // match.matches.length > AM_PM_HOUR_GROUP &&
-          match[AM_PM_HOUR_GROUP].isNotEmpty) {
+          match[AM_PM_HOUR_GROUP].isEmpty) {
         // Skip single digit minute e.g. "at 1.1 xx"
         return null;
       }
@@ -312,7 +314,7 @@ abstract class AbstractTimeExpressionParser implements Parser {
     }
     // If it ends only with numbers or dots
     final endingWithNumbers = RegExp(r'[^\d:.](\d[\d.]+)$').exec(result.text);
-        // result.text.match(new RegExp(r'[^\d:.](\d[\d.]+)$'));
+    // result.text.match(new RegExp(r'[^\d:.](\d[\d.]+)$'));
     if (endingWithNumbers != null && endingWithNumbers.matches.isNotEmpty) {
       final String endingNumbers = endingWithNumbers[1];
       // In strict mode (e.g. "at 1" or "at 1.2"), this should not be accepted
@@ -327,7 +329,9 @@ abstract class AbstractTimeExpressionParser implements Parser {
         return null;
       }
       // If it ends only with numbers above 24, e.g. "at 25"
-      final endingNumberVal = int.parse(endingNumbers);
+      final extractedHour = endingNumbers[0] +
+          (endingNumbers[1].isDigit() ? endingNumbers[1] : '');
+      final endingNumberVal = int.parse(extractedHour);
       if (endingNumberVal > 24) {
         return null;
       }
@@ -340,8 +344,9 @@ abstract class AbstractTimeExpressionParser implements Parser {
       return null;
     }
     // If it ends only with numbers or dots
-    final endingWithNumbers = RegExp(r'[^\d:.](\d[\d.]+)\s*-\s*(\d[\d.]+)$').exec(result.text);
-        result.text.match(new RegExp(r'[^\d:.](\d[\d.]+)\s*-\s*(\d[\d.]+)$'));
+    final endingWithNumbers =
+        RegExp(r'[^\d:.](\d[\d.]+)\s*-\s*(\d[\d.]+)$').exec(result.text);
+    result.text.match(new RegExp(r'[^\d:.](\d[\d.]+)\s*-\s*(\d[\d.]+)$'));
     if (endingWithNumbers != null) {
       // In strict mode (e.g. "at 1-3" or "at 1.2 - 2.3"), this should not be accepted
       if (this.strictMode) {
@@ -356,8 +361,13 @@ abstract class AbstractTimeExpressionParser implements Parser {
         return null;
       }
       // If it ends only with numbers above 24, e.g. "at 25"
-      final endingNumberVal = int.parse(endingNumbers);
-      final startingNumberVal = int.parse(startingNumbers);
+      final extractedEndingHour = endingNumbers[0] +
+          (endingNumbers[1].isDigit() ? endingNumbers[1] : '');
+      final endingNumberVal = int.parse(extractedEndingHour);
+
+      final extractedStartingHour = startingNumbers[0] +
+          (startingNumbers[1].isDigit() ? startingNumbers[1] : '');
+      final startingNumberVal = int.parse(extractedStartingHour);
       if (endingNumberVal > 24 || startingNumberVal > 24) {
         return null;
       }
