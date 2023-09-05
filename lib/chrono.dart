@@ -111,7 +111,6 @@ class Chrono {
     var remainingText = context.text;
     var match = pattern.exec(remainingText);
     while (match != null && match.matches.isNotEmpty) {
-      //todo что такое match: странный объект RegExpExecArray, понять, что за индекс такой
       // Calculate match index on the full text;
       final index = match.index + originalText.length - remainingText.length;
       match.index = index;

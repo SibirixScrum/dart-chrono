@@ -335,14 +335,14 @@ abstract class AbstractTimeExpressionParser implements Parser {
     return result;
   }
 
-  checkAndReturnWithFollowingPattern(result) {
+  checkAndReturnWithFollowingPattern(ParsingResult result) {
     if (result.text.match(new RegExp(r'^\d+-\d+$'))) {
       return null;
     }
     // If it ends only with numbers or dots
-    final endingWithNumbers =
+    final endingWithNumbers = RegExp(r'[^\d:.](\d[\d.]+)\s*-\s*(\d[\d.]+)$').exec(result.text);
         result.text.match(new RegExp(r'[^\d:.](\d[\d.]+)\s*-\s*(\d[\d.]+)$'));
-    if (endingWithNumbers) {
+    if (endingWithNumbers != null) {
       // In strict mode (e.g. "at 1-3" or "at 1.2 - 2.3"), this should not be accepted
       if (this.strictMode) {
         return null;

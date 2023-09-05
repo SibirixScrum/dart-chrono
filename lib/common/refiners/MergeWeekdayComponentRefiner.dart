@@ -21,10 +21,10 @@ class MergeWeekdayComponentRefiner extends MergingRefiner {
     newResult.index = currentResult.index;
     newResult.text = currentResult.text + textBetween + newResult.text;
     newResult.start
-        .assign("weekday", currentResult.start.get(Component.weekday));
-    if (newResult.end) {
+        .assign(Component.weekday, currentResult.start.get(Component.weekday));
+    if (newResult.end != null) {
       newResult.end
-          .assign("weekday", currentResult.start.get(Component.weekday));
+          .assign(Component.weekday, currentResult.start.get(Component.weekday));
     }
     return newResult;
   }

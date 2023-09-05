@@ -121,4 +121,6 @@ class ParsingOptionDummy implements ParsingOption {
 
   @override
   TimezoneAbbrMap? timezones;
+
+  ParsingOptionDummy({this.forwardDate,this.debug,this.timezones});
 }

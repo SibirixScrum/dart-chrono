@@ -326,7 +326,8 @@ int parseOrdinalNumberPattern(String match) {
   if (ORDINAL_WORD_DICTIONARY.containsKey(num)) {
     return ORDINAL_WORD_DICTIONARY[num]!;
   }
-  return int.parse(num);
+  final extractedNumber = num.replaceAll(new RegExp(r'[^0-9]'),'');
+  return int.parse(extractedNumber);
 }
 
 //-----------------------------
@@ -340,6 +341,9 @@ num parseYear(String match) {
       null) {
     match = match.replaceAll(
         new RegExp(r'(год|года|г|г.)', caseSensitive: false), "");
+    if(match.contains(" ")) {
+      match = match.substring(0, match.indexOf(" "));
+    }
   }
   if (new RegExp(r'(до н.э.|до н. э.)', caseSensitive: false)
           .firstMatch(match) !=
@@ -347,6 +351,9 @@ num parseYear(String match) {
     //Before Common Era
     match = match.replaceAll(
         new RegExp(r'(до н.э.|до н. э.)', caseSensitive: false), "");
+    if(match.contains(" ")) {
+      match = match.substring(0, match.indexOf(" "));
+    }
     return -int.parse(match);
   }
   if (new RegExp(r'(н. э.|н.э.)', caseSensitive: false).firstMatch(match) !=
@@ -354,7 +361,13 @@ num parseYear(String match) {
     //Common Era
     match =
         match.replaceAll(new RegExp(r'(н. э.|н.э.)', caseSensitive: false), "");
+    if(match.contains(" ")) {
+      match = match.substring(0, match.indexOf(" "));
+    }
     return int.parse(match);
+  }
+  if(match.contains(" ")) {
+    match = match.substring(0, match.indexOf(" "));
   }
   final rawYearNumber = int.parse(match);
   return findMostLikelyADYear(rawYearNumber);
@@ -376,7 +389,7 @@ TimeUnits parseTimeUnits(timeunitText) {
   var match = SINGLE_TIME_UNIT_REGEX.exec(remainingText);
   while (match?.matches != null && match!.matches.isNotEmpty) {
     collectDateTimeFragment(fragments, match);
-    remainingText = remainingText.substring((match[0] ?? "").length).trim();
+    remainingText = remainingText.substring((match[0]).length).trim();
     match = SINGLE_TIME_UNIT_REGEX.exec(remainingText);
   }
   return fragments;

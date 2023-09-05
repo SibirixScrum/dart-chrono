@@ -19,7 +19,7 @@ void main() async {
   //
   // print(list);
 
-  final b = ru.parse("авг 96", new DateTime(2020, 11, 22));
+  final b = ru.parse("24го октября, 9:00", new DateTime(2012, 2, 10));
 
   // final a = chrono.parse("18.02.2024");
   print("${b.length} ${b[0].refDate} ${b[0].end} ${b[0].start} ${b[0].text}");
