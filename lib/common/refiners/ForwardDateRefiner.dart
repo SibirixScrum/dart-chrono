@@ -12,7 +12,7 @@ import "../../utils/dayjs.dart" show implySimilarDate;
 class ForwardDateRefiner implements Refiner {
   List<ParsingResult> refine(
       ParsingContext context, List<ParsingResult> results) {
-    if (context.option?.forwardDate == null) {
+    if (context.option?.forwardDate != true) {
       return results;
     }
     results.forEach((result) {
@@ -32,16 +32,22 @@ class ForwardDateRefiner implements Refiner {
           refMoment.isAfter(result.start.date())) {
         if (refMoment.weekday >= result.start.get(Component.weekday)!.toInt()) {
           //todo хрен знает, что за refMoment.day(), думаю, что copywith
-          refMoment = refMoment.copyWith(
-              day: result.start.get(Component.weekday)!.toInt() +
-                  7); // day(result.start.get(Component.weekday)!.toInt() + 7);
+
+          // refMoment = refMoment.subtract(Duration(days: result.start.get(Component.weekday)!.toInt() - 1));
+          final difference =
+              refMoment.weekday - result.start.get(Component.weekday)!.toInt();
+          refMoment = refMoment.add(Duration(
+              days: difference > 0 ? 7 - difference : 7 + difference.abs()));
+          // refMoment = refMoment.copyWith(
+          //     day: result.start.get(Component.weekday)!.toInt() +
+          //         7); // day(result.start.get(Component.weekday)!.toInt() + 7);
         } else {
           refMoment = refMoment.copyWith(
               day: (result.start.get(Component.weekday) as num)
                   .toInt()); //refMoment.day((result.start.get(Component.weekday) as num));
         }
         result.start.imply(Component.day, refMoment.day);
-        result.start.imply(Component.month, refMoment.month );
+        result.start.imply(Component.month, refMoment.month);
         result.start.imply(Component.year, refMoment.year);
         context.debug(() {
           print('''Forward weekly adjusted for ${result} (${result.start})''');
@@ -58,7 +64,7 @@ class ForwardDateRefiner implements Refiner {
                     .toInt()); //refMoment.day((result.end!.get(Component.weekday) as num));
           }
           result.end!.imply(Component.day, refMoment.day);
-          result.end!.imply(Component.month, refMoment.month );
+          result.end!.imply(Component.month, refMoment.month);
           result.end!.imply(Component.year, refMoment.year);
           context.debug(() {
             print('''Forward weekly adjusted for ${result} (${result.end})''');

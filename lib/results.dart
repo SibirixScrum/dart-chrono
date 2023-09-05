@@ -28,7 +28,7 @@ class ReferenceWithTimezone {
    * The output's instant is NOT the reference's instant when the reference's and system's timezone are different.
    */
   getDateWithAdjustedTimezone() {
-    return DateTime(this.instant.millisecondsSinceEpoch +
+    return DateTime.fromMillisecondsSinceEpoch(this.instant.millisecondsSinceEpoch +
         getSystemTimezoneAdjustmentMinute(this.instant) * 60000);
   }
 

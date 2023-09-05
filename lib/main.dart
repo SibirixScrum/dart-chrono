@@ -1,5 +1,6 @@
 import 'package:chrono/chrono.dart';
 import 'package:chrono/locales/ru/index.dart' as ru;
+import 'package:chrono/types.dart';
 
 void main() async {
   // print(Weekday.FRIDAY.index);
@@ -19,7 +20,7 @@ void main() async {
   //
   // print(list);
 
-  final b = ru.parse("5 дней назад что-то было", new DateTime(2012, 7, 10));
+  final b = ru.parse("В понедельник?", new DateTime(2012, 8, 9),ParsingOption(forwardDate: true));
   // print(new DateTime(2017, 11, 19, 12).weekday);
 
   // final a = chrono.parse("18.02.2024");

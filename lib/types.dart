@@ -1,6 +1,6 @@
 
 
-abstract class ParsingOption {
+class ParsingOption {
   /**
    * To parse only forward dates (the results should be after the reference date).
    * This effects date/time implication (e.g. weekday or time mentioning)
@@ -20,7 +20,7 @@ abstract class ParsingOption {
    */
   dynamic /* DebugHandler | DebugConsume */ debug;
 
-  ParsingOption([this.forwardDate, this.timezones, this.debug]);
+  ParsingOption({this.forwardDate, this.timezones, this.debug});
 }
 
 /**

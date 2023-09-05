@@ -73,7 +73,7 @@ num getDaysToWeekdayClosest(DateTime refDate, Weekday weekday) {
 
 num getDaysForwardToWeekday(DateTime refDate, Weekday weekday) {
   final refWeekday = refDate.weekday;
-  var forwardCount = weekday.index + 1 - refWeekday;
+  var forwardCount = weekday.index - refWeekday;
   if (forwardCount < 0) {
     forwardCount += 7;
   }
@@ -82,7 +82,7 @@ num getDaysForwardToWeekday(DateTime refDate, Weekday weekday) {
 
 num getBackwardDaysToWeekday(DateTime refDate, Weekday weekday) {
   final refWeekday = refDate.weekday;
-  var backwardCount = weekday.index + 1 - refWeekday;
+  var backwardCount = weekday.index - refWeekday;
   if (backwardCount >= 0) {
     backwardCount -= 7;
   }
