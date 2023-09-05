@@ -1,3 +1,5 @@
+import "package:chrono/ported/DateTime.dart";
+
 import "timezone.dart" show toTimezoneOffset;
 import "types.dart"
     show Component, ParsedComponents, ParsedResult, ParsingReference;
@@ -195,13 +197,14 @@ class ParsingComponents implements ParsedComponents {
   static ParsingComponents createRelativeFromReference(
       ReferenceWithTimezone reference, Map<String, int> fragments) {
     var date = reference.instant;
-    // for (final key in fragments.keys) { //todo recheck this part: add fragment with my method instead of dayjs
+    // for (final key in fragments.keys) {
     date = date.copyWith(
       year: date.year + (fragments["year"] ?? 0),
       month: date.month + (fragments["month"] ?? 0),
     );
+    date = date.addQuarter(fragments["quarter"] ?? 0);
     date = date.add(Duration(
-      days: (fragments["day"] ?? 0),
+      days: (fragments["day"] ?? 0) + ((fragments["week"] ?? 0) * 7),
       hours: (fragments["hour"] ?? 0),
       minutes: (fragments["minute"] ?? 0),
       seconds: (fragments["second"] ?? 0),

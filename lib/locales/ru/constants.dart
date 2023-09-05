@@ -237,7 +237,7 @@ final Map<String, int> ORDINAL_WORD_DICTIONARY = {
   "тридцать первого": 31
 };
 
-final Map<String, dynamic /* OpUnitType | QUnitType */ > TIME_UNIT_DICTIONARY =
+final Map<String, String /* OpUnitType | QUnitType */ > TIME_UNIT_DICTIONARY =
     {
   "сек": "second",
   "секунда": "second",
