@@ -1,7 +1,8 @@
 import "package:chrono/chrono.dart";
 import "package:flutter_test/flutter_test.dart";
 
-import "test_util.dart" show ParsingReferenceDummy, testSingleCase;
+import "test_util.dart"
+    show ParsingReferenceDummy, expectToBeDate, testSingleCase;
 
 void main() {
   final chrono = Chrono();
@@ -37,79 +38,78 @@ void main() {
 // Sun Jun 06 2021 19:00:00 GMT+0900 (JST)
 
 // Sun Jun 06 2021 11:00:00 GMT+0100 (BST)
-    final refInstant = new DateTime("2021-06-06T19:00:00 GMT+0900 (JST)");
+    final refInstant = DateTime.parse("2021-06-06T19:00:00+0900");
     testSingleCase(
         chrono, "At 4pm tomorrow", {"instant": refInstant, "timezone": "BST"},
         (result) {
-      final expectedInstant = new Date("2021-06-07T16:00:00 GMT+0100 (BST)");
-      expect(result).toBeDate(expectedInstant);
+      final expectedInstant = DateTime.parse("2021-06-07T16:00:00+0100");
+      expectToBeDate(result, expectedInstant);
     });
     testSingleCase(
         chrono, "At 4pm tomorrow", {"instant": refInstant, "timezone": "JST"},
         (result) {
-      final expectedInstant = new Date("2021-06-07T16:00:00 GMT+0900 (JST)");
-      expect(result).toBeDate(expectedInstant);
+      final expectedInstant = DateTime.parse("2021-06-07T16:00:00+0900");
+      expectToBeDate(result, expectedInstant);
     });
   });
   test("Test - Timezone difference on written date", () {
 // Sun Jun 06 2021 19:00:00 GMT+0900 (JST)
 
 // Sun Jun 06 2021 11:00:00 GMT+0100 (BST)
-    final refInstant = new Date("06 2021-06-06T19:00:00 GMT+0900 (JST)");
+    final refInstant = DateTime.parse("06 2021-06-06T19:00:00+0900");
     testSingleCase(chrono, "2021-06-06T19:00:00", {"timezone": "JST"},
         (result) {
-      expect(result).toBeDate(refInstant);
+      expectToBeDate(result, refInstant);
     });
     testSingleCase(chrono, "2021-06-06T11:00:00", {"timezone": "BST"},
         (result) {
-      expect(result).toBeDate(refInstant);
+      expectToBeDate(result, refInstant);
     });
     testSingleCase(chrono, "2021-06-06T11:00:00", {"timezone": 60}, (result) {
-      expect(result).toBeDate(refInstant);
+      expectToBeDate(result, refInstant);
     });
   });
   test("Test - Precise [now] mentioned", () {
-    final refDate =
-        new Date("Sat Mar 13 2021 14:22:14 GMT+0900 (Japan Standard Time)");
+    final refDate = DateTime.parse("Sat Mar 13 2021 14:22:14+0900");
     testSingleCase(chrono, "now", refDate, (result) {
-      expect(result).toBeDate(refDate);
+      expectToBeDate(result, refDate);
     });
     testSingleCase(chrono, "now", {"instant": refDate}, (result) {
-      expect(result).toBeDate(refDate);
+      expectToBeDate(result, refDate);
     });
     testSingleCase(chrono, "now", {"instant": refDate, "timezone": 540},
         (result) {
-      expect(result).toBeDate(refDate);
+      expectToBeDate(result, refDate);
     });
     testSingleCase(chrono, "now", {"instant": refDate, "timezone": "JST"},
         (result) {
-      expect(result).toBeDate(refDate);
+      expectToBeDate(result, refDate);
     });
     testSingleCase(chrono, "now", {"instant": refDate, "timezone": -300},
         (result) {
-      expect(result).toBeDate(refDate);
+      expectToBeDate(result, refDate);
     });
   });
   test("Test - Precise date/time mentioned", () {
-    const text = "Sat Mar 13 2021 14:22:14 GMT+0900";
-    final refDate = new Date();
+    const text = "2021-03-13T14:22:14+0900";
+    final refDate = DateTime.now();
     testSingleCase(chrono, text, refDate, (result, text) {
-      expect(result).toBeDate(new Date(text));
+      expectToBeDate(result, DateTime.parse(text));
     });
     testSingleCase(chrono, text, {"instant": refDate}, (result) {
-      expect(result).toBeDate(new Date(text));
+      expectToBeDate(result, DateTime.parse(text));
     });
     testSingleCase(chrono, text, {"instant": refDate, "timezone": 540},
         (result) {
-      expect(result).toBeDate(new Date(text));
+      expectToBeDate(result, DateTime.parse(text));
     });
     testSingleCase(chrono, text, {"instant": refDate, "timezone": "JST"},
         (result) {
-      expect(result).toBeDate(new Date(text));
+      expectToBeDate(result, DateTime.parse(text));
     });
     testSingleCase(chrono, text, {"instant": refDate, "timezone": -300},
         (result) {
-      expect(result).toBeDate(new Date(text));
+      expectToBeDate(result, DateTime.parse(text));
     });
   });
 }

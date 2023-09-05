@@ -1,75 +1,85 @@
-import "../src.dart" show Meridiem;
-import "../src/.dart" as chrono;
-import "test_util.dart" show testSingleCase, testUnexpectedResult;
-//-------------------------------------
+import 'package:chrono/chrono.dart';
+import 'package:chrono/locales/ru/index.dart' as ru;
+import 'package:chrono/types.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+import 'test_util.dart';
 
 void main() {
-  test("Test - Load modules", () {
-    expect(chrono).toBeDefined();
-    expect(chrono.Chrono).toBeDefined();
-    expect(chrono.parse).toBeDefined();
-    expect(chrono.parseDate).toBeDefined();
-    expect(chrono.casual).toBeDefined();
-    expect(chrono.strict).toBeDefined();
-  });
-  test("Test - Basic parse date functions", () {
-    expect(chrono.parseDate("7:00PM July 5th, 2020"))
-        .toStrictEqual(new Date(2020, 7 - 1, 5, 19));
-    expect(chrono.en.parseDate("7:00PM July 5th, 2020"))
-        .toStrictEqual(new Date(2020, 7 - 1, 5, 19));
-    expect(chrono.strict.parseDate("7:00PM July 5th, 2020"))
-        .toStrictEqual(new Date(2020, 7 - 1, 5, 19));
-    expect(chrono.casual.parseDate("7:00PM July 5th, 2020"))
-        .toStrictEqual(new Date(2020, 7 - 1, 5, 19));
-  });
+  final chrono = ru.casual;
+  // test("Test - Load modules", () {
+  //   expect(chrono).toBeDefined();
+  //   expect(chrono.Chrono).toBeDefined();
+  //   expect(chrono.parse).toBeDefined();
+  //   expect(chrono.parseDate).toBeDefined();
+  //   expect(chrono.casual).toBeDefined();
+  //   expect(chrono.strict).toBeDefined();
+  // });
+  // test("Test - Basic parse date functions", () {
+  //   expect(chrono.parseDateTime("7:00PM July 5th, 2020"))
+  //       .toStrictEqual(new DateTime(2020, 7 - 1, 5, 19));
+  //   expect(chrono.en.parseDateTime("7:00PM July 5th, 2020"))
+  //       .toStrictEqual(new DateTime(2020, 7 - 1, 5, 19));
+  //   expect(chrono.strict.parseDateTime("7:00PM July 5th, 2020"))
+  //       .toStrictEqual(new DateTime(2020, 7 - 1, 5, 19));
+  //   expect(chrono.casual.parseDateTime("7:00PM July 5th, 2020"))
+  //       .toStrictEqual(new DateTime(2020, 7 - 1, 5, 19));
+  // });
   test("Test - Add custom parser", () {
-    final customParser = {
-      "pattern": () {
-        return new RegExp(r'(\d{1,2})(st|nd|rd|th)', caseSensitive: false);
-      },
-      "extract": (context, match) {
-        expect(match[0]).toBe("25th");
-        expect(context.refDate).toBeTruthy();
-        return {"day": parseInt(match[1])};
-      }
-    };
-    final custom = new chrono.Chrono();
-    custom.parsers.push(customParser);
-    testSingleCase(custom, "meeting on 25th", new Date(2017, 11 - 1, 19),
+    final Parser customParser = CustomParser((context, match) {
+      expect(match[0], "25th");
+      expect(context.refDate == null, isFalse);
+      return {"day": int.parse(match[1])};
+    }, (_) {
+      return new RegExp(r'(\d{1,2})(st|nd|rd|th)', caseSensitive: false);
+    });
+    // {
+    //   "pattern": () {
+    //     return new RegExp(r'(\d{1,2})(st|nd|rd|th)', caseSensitive: false);
+    //   },
+    //   "extract": (context, match) {
+    //     expect(match[0],"25th");
+    //     expect(context.refDate == null,isFalse);
+    //     return {"day": int.parse(match[1])};
+    //   }
+    // };
+    final custom = Chrono(Configuration([customParser], []));
+    testSingleCase(custom, "meeting on 25th", new DateTime(2017, 11 - 1, 19),
         (result) {
-      expect(result.text).toBe("25th");
-      expect(result.start.get("month")).toBe(11);
-      expect(result.start.get("day")).toBe(25);
+      expect(result.text, "25th");
+      expect(result.start.get("month"), 11);
+      expect(result.start.get("day"), 25);
     });
   });
   test("Test - Add custom parser example", () {
-    final custom = chrono.casual.clone();
-    custom.parsers.push(pattern: () {
-      return new RegExp(r'\bChristmas\b', caseSensitive: false);
-    }, extract: () {
+    final custom = ru.casual.clone();
+    final Parser customParser = CustomParser((context, match) {
       return {"day": 25, "month": 12};
+    }, (_) {
+      return new RegExp(r'\bChristmas\b', caseSensitive: false);
     });
+    custom.parsers.add(customParser);
     testSingleCase(custom, "I'll arrive at 2.30AM on Christmas", (result) {
-      expect(result.text).toBe("at 2.30AM on Christmas");
-      expect(result.start.get("month")).toBe(12);
-      expect(result.start.get("day")).toBe(25);
-      expect(result.start.get("hour")).toBe(2);
-      expect(result.start.get("minute")).toBe(30);
+      expect(result.text, "at 2.30AM on Christmas");
+      expect(result.start.get("month"), 12);
+      expect(result.start.get("day"), 25);
+      expect(result.start.get("hour"), 2);
+      expect(result.start.get("minute"), 30);
     });
     testSingleCase(custom, "I'll arrive at Christmas night", (result) {
-      expect(result.text).toBe("Christmas night");
-      expect(result.start.get("month")).toBe(12);
-      expect(result.start.get("day")).toBe(25);
-      expect(result.start.get("meridiem")).toBe(Meridiem.PM);
-      expect(result.start.get("meridiem")).toBe(1);
+      expect(result.text, "Christmas night");
+      expect(result.start.get("month"), 12);
+      expect(result.start.get("day"), 25);
+      expect(result.start.get("meridiem"), Meridiem.PM.index);
+      expect(result.start.get("meridiem"), 1);
     });
     testSingleCase(custom, "Doing something tomorrow", (result) {
-      expect(result.text).toBe("tomorrow");
+      expect(result.text, "tomorrow");
     });
   });
   test("Test - Add custom refiner example", () {
-    final custom = chrono.casual.clone();
-    custom.refiners.push(refine: (context, results) {
+    final custom = ru.casual.clone();
+    final customRefiner = CustomRefiner((context, results){
       // If there is no AM/PM (meridiem) specified,
 
       //  let all time between 1:00 - 4:00 be PM (13.00 - 16.00)
@@ -82,16 +92,31 @@ void main() {
         }
       });
       return results;
-    });
+    } );
+
+    // custom.refiners.add(refine: (context, results) {
+    //   // If there is no AM/PM (meridiem) specified,
+    //
+    //   //  let all time between 1:00 - 4:00 be PM (13.00 - 16.00)
+    //   results.forEach((result) {
+    //     if (!result.start.isCertain("meridiem") &&
+    //         result.start.get("hour") >= 1 &&
+    //         result.start.get("hour") < 4) {
+    //       result.start.assign("meridiem", Meridiem.PM);
+    //       result.start.assign("hour", result.start.get("hour") + 12);
+    //     }
+    //   });
+    //   return results;
+    // });
     testSingleCase(custom, "This is at 2.30", (result) {
-      expect(result.text).toBe("at 2.30");
-      expect(result.start.get("hour")).toBe(14);
-      expect(result.start.get("minute")).toBe(30);
+      expect(result.text, "at 2.30");
+      expect(result.start.get("hour"), 14);
+      expect(result.start.get("minute"), 30);
     });
     testSingleCase(custom, "This is at 2.30 AM", (result) {
-      expect(result.text).toBe("at 2.30 AM");
-      expect(result.start.get("hour")).toBe(2);
-      expect(result.start.get("minute")).toBe(30);
+      expect(result.text, "at 2.30 AM");
+      expect(result.start.get("hour"), 2);
+      expect(result.start.get("minute"), 30);
     });
   });
   test("Test - Remove a parser example", () {
@@ -100,10 +125,10 @@ void main() {
         custom.parsers.filter((r) => !(r is SlashDateFormatParser));
     custom.parsers.push(new SlashDateFormatParser(true));
     testSingleCase(custom, "6/10/2018", (result) {
-      expect(result.text).toBe("6/10/2018");
-      expect(result.start.get("year")).toBe(2018);
-      expect(result.start.get("month")).toBe(10);
-      expect(result.start.get("day")).toBe(6);
+      expect(result.text, "6/10/2018");
+      expect(result.start.get("year"), 2018);
+      expect(result.start.get("month"), 10);
+      expect(result.start.get("day"), 6);
     });
   });
   test("Test - Remove a refiner example", () {
@@ -111,39 +136,41 @@ void main() {
     custom.refiners =
         custom.refiners.filter((r) => !(r is UnlikelyFormatFilter));
     testSingleCase(custom, "This is at 2.30", (result) {
-      expect(result.text).toBe("at 2.30");
-      expect(result.start.get("hour")).toBe(2);
-      expect(result.start.get("minute")).toBe(30);
+      expect(result.text, "at 2.30");
+      expect(result.start.get("hour"), 2);
+      expect(result.start.get("minute"), 30);
     });
   });
   test("Test - Replace a parser example", () {
     final custom = chrono.en.casual.clone();
-    testSingleCase(custom, "next 5m", new Date(2016, 10 - 1, 1, 14, 52),
+    testSingleCase(custom, "next 5m", new DateTime(2016, 10 - 1, 1, 14, 52),
         (result, text) {
-      expect(result.start.get("hour")).toBe(14);
-      expect(result.start.get("minute")).toBe(57);
+      expect(result.start.get("hour"), 14);
+      expect(result.start.get("minute"), 57);
     });
-    testSingleCase(custom, "next 5 minutes", new Date(2016, 10 - 1, 1, 14, 52),
+    testSingleCase(
+        custom, "next 5 minutes", new DateTime(2016, 10 - 1, 1, 14, 52),
         (result, text) {
-      expect(result.start.get("hour")).toBe(14);
-      expect(result.start.get("minute")).toBe(57);
+      expect(result.start.get("hour"), 14);
+      expect(result.start.get("minute"), 57);
     });
     final index = custom.parsers
         .findIndex((r) => r is ENTimeUnitCasualRelativeFormatParser);
     custom.parsers[index] = new ENTimeUnitCasualRelativeFormatParser(false);
     testUnexpectedResult(custom, "next 5m");
-    testSingleCase(custom, "next 5 minutes", new Date(2016, 10 - 1, 1, 14, 52),
+    testSingleCase(
+        custom, "next 5 minutes", new DateTime(2016, 10 - 1, 1, 14, 52),
         (result, text) {
-      expect(result.start.get("hour")).toBe(14);
-      expect(result.start.get("minute")).toBe(57);
+      expect(result.start.get("hour"), 14);
+      expect(result.start.get("minute"), 57);
     });
   });
   test("Test - Compare with native js", () {
     final testByCompareWithNative = (text) {
-      final expectedDate = new Date(text);
+      final expectedDate = new DateTime(text);
       testSingleCase(chrono, text, (result) {
-        expect(result.text).toBe(text);
-        expect(result).toBeDate(expectedDate);
+        expect(result.text, text);
+        expectToBeDate(result, expectedDate);
       });
     };
     testByCompareWithNative("1994-11-05T13:15:30Z");

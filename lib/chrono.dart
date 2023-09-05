@@ -37,6 +37,23 @@ abstract class Parser {
       ParsingContext context, RegExpMatchArray match);
 }
 
+class CustomParser implements Parser {
+  Function(ParsingContext context, RegExpMatchArray match) extractor;
+  RegExp Function(ParsingContext context) patternGetter;
+
+  @override
+  extract(ParsingContext context, RegExpMatchArray match) {
+    return extractor(context, match);
+  }
+
+  @override
+  RegExp pattern(ParsingContext context) {
+    return pattern(context);
+  }
+
+  CustomParser(this.extractor, this.patternGetter);
+}
+
 /**
  * A abstraction for Chrono *Refiner*.
  *
@@ -44,9 +61,22 @@ abstract class Parser {
  * Chrono applies each refiner in order and return the output from the last refiner.
  */
 abstract class Refiner {
-  List<ParsingResult> refine(ParsingContext context,
-      List<ParsingResult> results);
+  List<ParsingResult> refine(
+      ParsingContext context, List<ParsingResult> results);
 // dynamic /* (context: ParsingContext, results: ParsingResult[]) => ParsingResult[] */ refine;
+}
+
+class CustomRefiner implements Refiner {
+  List<ParsingResult> Function(
+      ParsingContext context, List<ParsingResult> results) refineFunction;
+
+  @override
+  List<ParsingResult> refine(
+      ParsingContext context, List<ParsingResult> results) {
+    return refineFunction(context, results);
+  }
+
+  CustomRefiner(this.refineFunction);
 }
 
 /**
@@ -78,15 +108,14 @@ class Chrono {
    */
   dynamic /* Date | null */ parseDate(String text,
       [dynamic /* ParsingReference | Date */ referenceDate,
-        ParsingOption? option]) {
+      ParsingOption? option]) {
     final results = this.parse(text, referenceDate, option);
     return results.length > 0 ? results[0].start.date() : null;
   }
 
-
   List<ParsedResult> parse(String text,
       [dynamic /* ParsingReference | Date */ referenceDate,
-        ParsingOption? option]) {
+      ParsingOption? option]) {
     final context = new ParsingContext(text, referenceDate, option);
     List<ParsingResult> results = [];
     this.parsers.forEach((parser) {
@@ -102,8 +131,8 @@ class Chrono {
     return results;
   }
 
-  static List<ParsingResult> executeParser(ParsingContext context,
-      Parser parser) {
+  static List<ParsingResult> executeParser(
+      ParsingContext context, Parser parser) {
     final List<ParsingResult> results = [];
     final pattern = parser.pattern(context);
     final isCaseSensitive = pattern.isCaseSensitive;
@@ -121,7 +150,8 @@ class Chrono {
           remainingText = originalText.substring(match.index + 1);
         } on RangeError {
           remainingText = '';
-        };
+        }
+        ;
         match = pattern.exec(remainingText);
         continue;
       }
@@ -137,9 +167,8 @@ class Chrono {
       }
       final parsedIndex = parsedResult.index;
       final parsedText = parsedResult.text;
-      context.debug(() =>
-          print(
-              '''executeParser extracted (at index=${parsedIndex}) \'${parsedText}\''''));
+      context.debug(() => print(
+          '''executeParser extracted (at index=${parsedIndex}) \'${parsedText}\''''));
       results.add(parsedResult);
       remainingText = originalText.substring(parsedIndex + parsedText.length);
       match = pattern.exec(remainingText);
@@ -176,19 +205,19 @@ class ParsingContext implements DebugHandler {
     return new ParsingComponents(this.reference, components);
   }
 
-  ParsingResult createParsingResult(num index,
-      dynamic /* num | String */ textOrEndIndex,
+  ParsingResult createParsingResult(
+      num index, dynamic /* num | String */ textOrEndIndex,
       [dynamic /* dynamic | ParsingComponents */ startComponents,
-        dynamic /* dynamic | ParsingComponents */ endComponents]) {
+      dynamic /* dynamic | ParsingComponents */ endComponents]) {
     final text = textOrEndIndex is String
         ? textOrEndIndex
         : this.text.substring(index.toInt(), textOrEndIndex);
-    final start =
-    startComponents != null
+    final start = startComponents != null
         ? this.createParsingComponents(startComponents)
         : null;
-    final end =
-    endComponents != null ? this.createParsingComponents(endComponents) : null;
+    final end = endComponents != null
+        ? this.createParsingComponents(endComponents)
+        : null;
     return new ParsingResult(this.reference, index.toInt(), text, start, end);
   }
 
