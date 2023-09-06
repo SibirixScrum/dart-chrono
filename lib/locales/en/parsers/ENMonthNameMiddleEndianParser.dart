@@ -1,27 +1,30 @@
-import "../../../chrono.dart" show ParsingContext;
+import "package:chrono/ported/RegExpMatchArray.dart";
+import "package:chrono/types.dart";
+
 import "../../../calculation/years.dart" show findYearClosestToRef;
+import "../../../chrono.dart" show ParsingContext;
+import "../../../common/parsers/AbstractParserWithWordBoundary.dart"
+    show AbstractParserWithWordBoundaryChecking;
+import "../../../utils/pattern.dart" show matchAnyPattern;
 import "../constants.dart" show MONTH_DICTIONARY;
 import "../constants.dart"
     show ORDINAL_NUMBER_PATTERN, parseOrdinalNumberPattern;
 import "../constants.dart" show YEAR_PATTERN, parseYear;
-import "../../../utils/pattern.dart" show matchAnyPattern;
-import "../../../common/parsers/AbstractParserWithWordBoundary.dart"
-    show AbstractParserWithWordBoundaryChecking;
 
 final PATTERN = new RegExp(
-    '''(${ matchAnyPattern ( MONTH_DICTIONARY )})''' +
+    '''(${matchAnyPattern(MONTH_DICTIONARY)})''' +
         "(?:-|/|\\s*,?\\s*)" +
-        '''(${ ORDINAL_NUMBER_PATTERN})(?!\\s*(?:am|pm))\\s*''' +
+        '''(${ORDINAL_NUMBER_PATTERN})(?!\\s*(?:am|pm))\\s*''' +
         "(?:" +
         "(?:to|\\-)\\s*" +
-        '''(${ ORDINAL_NUMBER_PATTERN})\\s*''' +
+        '''(${ORDINAL_NUMBER_PATTERN})\\s*''' +
         ")?" +
         "(?:" +
         "(?:-|/|\\s*,?\\s*)" +
-        '''(${ YEAR_PATTERN})''' +
+        '''(${YEAR_PATTERN})''' +
         ")?" +
         "(?=\\W|\$)(?!\\:\\d)",
-    "i");
+    caseSensitive: false);
 const MONTH_NAME_GROUP = 1;
 const DATE_GROUP = 2;
 const DATE_TO_GROUP = 3;
@@ -39,25 +42,25 @@ const YEAR_GROUP = 4;
  */
 class ENMonthNameMiddleEndianParser
     extends AbstractParserWithWordBoundaryChecking {
-  RegExp innerPattern() {
+  RegExp innerPattern(ParsingContext context) {
     return PATTERN;
   }
 
   innerExtract(ParsingContext context, RegExpMatchArray match) {
-    final month = MONTH_DICTIONARY[match[MONTH_NAME_GROUP].toLowerCase()];
+    final month = MONTH_DICTIONARY[match[MONTH_NAME_GROUP].toLowerCase()]!;
     final day = parseOrdinalNumberPattern(match[DATE_GROUP]);
     if (day > 31) {
       return null;
     }
-    final components = context.createParsingComponents(day: day, month: month);
-    if (match[YEAR_GROUP]) {
+    final components = context.createParsingComponents({Component.day: day, Component.month: month});
+    if (match[YEAR_GROUP].isNotEmpty) {
       final year = parseYear(match[YEAR_GROUP]);
-      components.assign("year", year);
+      components.assign(Component.year, year);
     } else {
       final year = findYearClosestToRef(context.refDate, day, month);
-      components.imply("year", year);
+      components.imply(Component.year, year);
     }
-    if (!match[DATE_TO_GROUP]) {
+    if (!match[DATE_TO_GROUP].isNotEmpty) {
       return components;
     }
     // Text can be 'range' value. Such as 'January 12 - 13, 2012'
@@ -65,7 +68,7 @@ class ENMonthNameMiddleEndianParser
     final result = context.createParsingResult(match.index, match[0]);
     result.start = components;
     result.end = components.clone();
-    result.end.assign("day", endDate);
+    result.end!.assign(Component.day, endDate);
     return result;
   }
 }

@@ -1,3 +1,5 @@
+import "package:chrono/ported/RegExpMatchArray.dart";
+
 import "../../../chrono.dart" show ParsingContext;
 import "../constants.dart"
     show parseTimeUnits, TIME_UNITS_NO_ABBR_PATTERN, TIME_UNITS_PATTERN;
@@ -8,7 +10,7 @@ import "../../../common/parsers/AbstractParserWithWordBoundary.dart"
 final PATTERN = new RegExp(
     '''(${ TIME_UNITS_PATTERN})\\s{0,5}(?:later|after|from now|henceforth|forward|out)''' +
         "(?=(?:\\W|\$))",
-    "i");
+    caseSensitive: false);
 final STRICT_PATTERN = new RegExp(
     "" +
         "(" +
@@ -16,7 +18,7 @@ final STRICT_PATTERN = new RegExp(
         ")" +
         "(later|from now)" +
         "(?=(?:\\W|\$))",
-    "i");
+    caseSensitive: false);
 const GROUP_NUM_TIMEUNITS = 1;
 
 class ENTimeUnitLaterFormatParser
@@ -25,7 +27,7 @@ class ENTimeUnitLaterFormatParser
   ENTimeUnitLaterFormatParser(this.strictMode) : super() {
     /* super call moved to initializer */;
   }
-  RegExp innerPattern() {
+  RegExp innerPattern(ParsingContext context) {
     return this.strictMode ? STRICT_PATTERN : PATTERN;
   }
 

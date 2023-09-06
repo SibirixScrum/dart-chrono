@@ -1,3 +1,5 @@
+import "package:chrono/ported/RegExpMatchArray.dart";
+
 import "../../../chrono.dart" show ParsingContext;
 import "../../../common/parsers/AbstractParserWithWordBoundary.dart"
     show AbstractParserWithWordBoundaryChecking;
@@ -8,7 +10,7 @@ final PATTERN = new RegExp(
     caseSensitive: false);
 
 class ENCasualTimeParser extends AbstractParserWithWordBoundaryChecking {
-  innerPattern() {
+  innerPattern(ParsingContext context) {
     return PATTERN;
   }
 

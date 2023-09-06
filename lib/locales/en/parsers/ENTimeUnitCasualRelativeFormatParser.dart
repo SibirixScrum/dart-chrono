@@ -1,3 +1,5 @@
+import "package:chrono/ported/RegExpMatchArray.dart";
+
 import "../constants.dart"
     show TIME_UNITS_PATTERN, parseTimeUnits, TIME_UNITS_NO_ABBR_PATTERN;
 import "../../../chrono.dart" show ParsingContext;
@@ -8,10 +10,10 @@ import "../../../utils/timeunits.dart" show reverseTimeUnits;
 
 final PATTERN = new RegExp(
     '''(this|last|past|next|after|\\+|-)\\s*(${ TIME_UNITS_PATTERN})(?=\\W|\$)''',
-    "i");
+    caseSensitive: false);
 final PATTERN_NO_ABBR = new RegExp(
     '''(this|last|past|next|after|\\+|-)\\s*(${ TIME_UNITS_NO_ABBR_PATTERN})(?=\\W|\$)''',
-    "i");
+    caseSensitive: false);
 
 class ENTimeUnitCasualRelativeFormatParser
     extends AbstractParserWithWordBoundaryChecking {
@@ -20,7 +22,7 @@ class ENTimeUnitCasualRelativeFormatParser
       : super() {
     /* super call moved to initializer */;
   }
-  RegExp innerPattern() {
+  RegExp innerPattern(ParsingContext context) {
     return this.allowAbbreviations ? PATTERN : PATTERN_NO_ABBR;
   }
 

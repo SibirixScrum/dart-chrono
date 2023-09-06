@@ -5,7 +5,7 @@ import 'locales/ru/index.dart' as ru;
 import "results.dart"
     show ReferenceWithTimezone, ParsingComponents, ParsingResult;
 import "types.dart"
-    show Component, ParsedResult, ParsingOption, ParsingReference;
+    show Component, ParsedResult, ParsingOption;
 
 /**
  * Chrono configuration.
@@ -135,7 +135,7 @@ class Chrono {
       ParsingContext context, Parser parser) {
     final List<ParsingResult> results = [];
     final pattern = parser.pattern(context);
-    final isCaseSensitive = pattern.isCaseSensitive;
+
     final originalText = context.text;
     var remainingText = context.text;
     var match = pattern.exec(remainingText);
@@ -197,11 +197,10 @@ class ParsingContext implements DebugHandler {
     this.refDate = this.reference.instant;
   }
 
-  ParsingComponents createParsingComponents(
-      [dynamic /* dynamic | ParsingComponents */ components]) {
-    if (components is ParsingComponents) {
-      return components;
-    }
+  ParsingComponents createParsingComponents([Map<Component, num>? components]) {
+    // if (components is ParsingComponents) {
+    //   return components;
+    // }
     return new ParsingComponents(this.reference, components);
   }
 

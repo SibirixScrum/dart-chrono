@@ -1,3 +1,7 @@
+import "package:chrono/ported/RegExpMatchArray.dart";
+import "package:chrono/ported/StringUtils.dart";
+import "package:chrono/types.dart";
+
 import "../../../chrono.dart" show ParsingContext;
 import "../../../results.dart" show ParsingComponents;
 import "../constants.dart" show WEEKDAY_DICTIONARY;
@@ -15,25 +19,21 @@ final PATTERN = new RegExp(
         "(?:\\s*(?:\\,|\\)|\\）))?" +
         "(?:\\s*(this|last|past|next)\\s*week)?" +
         "(?=\\W|\$)",
-    "i");
+    caseSensitive: false);
 const PREFIX_GROUP = 1;
 const WEEKDAY_GROUP = 2;
 const POSTFIX_GROUP = 3;
 
 class ENWeekdayParser extends AbstractParserWithWordBoundaryChecking {
-  RegExp innerPattern() {
-    return PATTERN;
-  }
-
   ParsingComponents innerExtract(
       ParsingContext context, RegExpMatchArray match) {
     final dayOfWeek = match[WEEKDAY_GROUP].toLowerCase();
     final weekday = WEEKDAY_DICTIONARY[dayOfWeek];
     final prefix = match[PREFIX_GROUP];
     final postfix = match[POSTFIX_GROUP];
-    var modifierWord = prefix || postfix;
-    modifierWord = modifierWord || "";
-    modifierWord = modifierWord.toLowerCase();
+    var modifierWord = or(prefix, postfix);
+    modifierWord = or(modifierWord,"");
+    modifierWord = modifierWord!.toLowerCase();
     var modifier = null;
     if (modifierWord == "last" || modifierWord == "past") {
       modifier = "last";
@@ -43,6 +43,11 @@ class ENWeekdayParser extends AbstractParserWithWordBoundaryChecking {
       modifier = "this";
     }
     return createParsingComponentsAtWeekday(
-        context.reference, weekday, modifier);
+        context.reference, Weekday.values[weekday!.toInt()], modifier);
+  }
+
+  @override
+  RegExp innerPattern(ParsingContext context) {
+    return PATTERN;
   }
 }
