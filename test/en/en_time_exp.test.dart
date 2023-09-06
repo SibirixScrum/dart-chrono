@@ -1,294 +1,301 @@
 import 'package:chrono/locales/en/index.dart' as en;
+import 'package:chrono/types.dart';
 import "package:flutter_test/flutter_test.dart";
+
 import '../test_util.dart';
 
  void main() {
    test("Test - Parsing text offset", () {
-     testSingleCase(
-         en.casual, "  11 AM ", new Date (2016, 10 - 1, 1, 8), (result, text) {
-       expect(result.index).toBe(2);
-       expect(result.text).toBe("11 AM");
-     });
-     testSingleCase(
-         en.casual, "2020 at  11 AM ", new Date (2016, 10 - 1, 1, 8), (result,
-         text) {
-       expect(result.index).toBe(5);
-       expect(result.text).toBe("at  11 AM");
-     });
+     testSingleCase(en.casual, "  11 AM ", DateTime(2016, 10 - 1, 1, 8),
+        (ParsedResult result, String text) {
+      expect(result.index, 2);
+      expect(result.text, "11 AM");
+    });
+     testSingleCase(en.casual, "2020 at  11 AM ", DateTime(2016, 10 - 1, 1, 8),
+        (ParsedResult result, String text) {
+      expect(result.index, 5);
+      expect(result.text, "at  11 AM");
+    });
    });
    test("Test - Time expression", () {
-     testSingleCase(
-         en.casual, "20:32:13", new Date (2016, 10 - 1, 1, 8), (result, text) {
-       expect(result.text).toBe(text);
-       expect(result.start.get("hour")).toBe(20);
-       expect(result.start.get("minute")).toBe(32);
-       expect(result.start.get("second")).toBe(13);
-       expect(result.start.get("meridiem")).toBe(Meridiem.PM);
-     });
+     testSingleCase(en.casual, "20:32:13", DateTime(2016, 10 - 1, 1, 8),
+        (ParsedResult result, String text) {
+      expect(result.text, text);
+      expect(result.start.get("hour"), 20);
+      expect(result.start.get("minute"), 32);
+      expect(result.start.get("second"), 13);
+      expect(result.start.get("meridiem"), Meridiem.PM);
+    });
    });
    test("Test - Time range expression", () {
      testSingleCase(
-         en.casual, "10:00:00 - 21:45:00", new Date (2016, 10 - 1, 1, 8), (result,
-         text) {
-       expect(result.text).toBe(text);
-       expect(result.start.get("hour")).toBe(10);
-       expect(result.start.get("minute")).toBe(0);
-       expect(result.start.get("second")).toBe(0);
-       expect(result.start.get("meridiem")).toBe(Meridiem.AM);
-       expect(result.end.get("hour")).toBe(21);
-       expect(result.end.get("minute")).toBe(45);
-       expect(result.end.get("second")).toBe(0);
-       expect(result.end.get("meridiem")).toBe(Meridiem.PM);
-     });
+        en.casual, "10:00:00 - 21:45:00", DateTime(2016, 10 - 1, 1, 8),
+        (ParsedResult result, String text) {
+      expect(result.text, text);
+      expect(result.start.get("hour"), 10);
+      expect(result.start.get("minute"), 0);
+      expect(result.start.get("second"), 0);
+      expect(result.start.get("meridiem"), Meridiem.AM);
+      expect(result.end.get("hour"), 21);
+      expect(result.end.get("minute"), 45);
+      expect(result.end.get("second"), 0);
+      expect(result.end.get("meridiem"), Meridiem.PM);
+    });
      testSingleCase(
-         en.casual, "10:00:00 until 21:45:00", new Date (2016, 10 - 1, 1, 11), (
-         result, text) {
-       expect(result.text).toBe(text);
-       expect(result.start.get("hour")).toBe(10);
-       expect(result.start.get("minute")).toBe(0);
-       expect(result.start.get("second")).toBe(0);
-       expect(result.start.get("meridiem")).toBe(Meridiem.AM);
-       expect(result.end.get("hour")).toBe(21);
-       expect(result.end.get("minute")).toBe(45);
-       expect(result.end.get("second")).toBe(0);
-       expect(result.end.get("meridiem")).toBe(Meridiem.PM);
-     });
+         en.casual, "10:00:00 until 21:45:00", DateTime(2016, 10 - 1, 1, 11),
+        (result, text) {
+      expect(result.text, text);
+      expect(result.start.get("hour"), 10);
+      expect(result.start.get("minute"), 0);
+      expect(result.start.get("second"), 0);
+      expect(result.start.get("meridiem"), Meridiem.AM);
+      expect(result.end.get("hour"), 21);
+      expect(result.end.get("minute"), 45);
+      expect(result.end.get("second"), 0);
+      expect(result.end.get("meridiem"), Meridiem.PM);
+    });
      testSingleCase(
-         en.casual, "10:00:00 till 21:45:00", new Date (2016, 10 - 1, 1, 11), (
-         result, text) {
-       expect(result.text).toBe(text);
-       expect(result.start.get("hour")).toBe(10);
-       expect(result.start.get("minute")).toBe(0);
-       expect(result.start.get("second")).toBe(0);
-       expect(result.start.get("meridiem")).toBe(Meridiem.AM);
-       expect(result.end.get("hour")).toBe(21);
-       expect(result.end.get("minute")).toBe(45);
-       expect(result.end.get("second")).toBe(0);
-       expect(result.end.get("meridiem")).toBe(Meridiem.PM);
-     });
+         en.casual, "10:00:00 till 21:45:00", DateTime(2016, 10 - 1, 1, 11),
+        (result, text) {
+      expect(result.text, text);
+      expect(result.start.get("hour"), 10);
+      expect(result.start.get("minute"), 0);
+      expect(result.start.get("second"), 0);
+      expect(result.start.get("meridiem"), Meridiem.AM);
+      expect(result.end.get("hour"), 21);
+      expect(result.end.get("minute"), 45);
+      expect(result.end.get("second"), 0);
+      expect(result.end.get("meridiem"), Meridiem.PM);
+    });
      testSingleCase(
-         en.casual, "10:00:00 through 21:45:00", new Date (2016, 10 - 1, 1, 11), (
-         result, text) {
-       expect(result.text).toBe(text);
-       expect(result.start.get("hour")).toBe(10);
-       expect(result.start.get("minute")).toBe(0);
-       expect(result.start.get("second")).toBe(0);
-       expect(result.start.get("meridiem")).toBe(Meridiem.AM);
-       expect(result.end.get("hour")).toBe(21);
-       expect(result.end.get("minute")).toBe(45);
-       expect(result.end.get("second")).toBe(0);
-       expect(result.end.get("meridiem")).toBe(Meridiem.PM);
-     });
+         en.casual, "10:00:00 through 21:45:00", DateTime(2016, 10 - 1, 1, 11),
+        (result, text) {
+      expect(result.text, text);
+      expect(result.start.get("hour"), 10);
+      expect(result.start.get("minute"), 0);
+      expect(result.start.get("second"), 0);
+      expect(result.start.get("meridiem"), Meridiem.AM);
+      expect(result.end.get("hour"), 21);
+      expect(result.end.get("minute"), 45);
+      expect(result.end.get("second"), 0);
+      expect(result.end.get("meridiem"), Meridiem.PM);
+    });
    });
    test("Test - Casual time number expression", () {
+     testSingleCase(en.casual, "11 at night", DateTime(2016, 10 - 1, 1, 8),
+        (ParsedResult result, String text) {
+      expect(result.text, text);
+      expect(result.start.get("year"), 2016);
+      expect(result.start.get("month"), 10);
+      expect(result.start.get("day"), 1);
+      expect(result.start.get("hour"), 23);
+    });
+     testSingleCase(en.casual, "11 tonight", DateTime(2016, 10 - 1, 1, 8),
+        (ParsedResult result, String text) {
+      expect(result.text, text);
+      expect(result.start.get("year"), 2016);
+      expect(result.start.get("month"), 10);
+      expect(result.start.get("day"), 1);
+      expect(result.start.get("hour"), 23);
+    });
+     testSingleCase(en.casual, "6 in the morning", DateTime(2016, 10 - 1, 1, 8),
+        (ParsedResult result, String text) {
+      expect(result.text, text);
+      expect(result.start.get("year"), 2016);
+      expect(result.start.get("month"), 10);
+      expect(result.start.get("day"), 1);
+      expect(result.start.get("hour"), 6);
+      expect(result.start.get("minute"), 0);
+      expect(result.start.get("meridiem"), Meridiem.AM);
+    });
      testSingleCase(
-         en.casual, "11 at night", new Date (2016, 10 - 1, 1, 8), (result, text) {
-       expect(result.text).toBe(text);
-       expect(result.start.get("year")).toBe(2016);
-       expect(result.start.get("month")).toBe(10);
-       expect(result.start.get("day")).toBe(1);
-       expect(result.start.get("hour")).toBe(23);
-     });
-     testSingleCase(
-         en.casual, "11 tonight", new Date (2016, 10 - 1, 1, 8), (result, text) {
-       expect(result.text).toBe(text);
-       expect(result.start.get("year")).toBe(2016);
-       expect(result.start.get("month")).toBe(10);
-       expect(result.start.get("day")).toBe(1);
-       expect(result.start.get("hour")).toBe(23);
-     });
-     testSingleCase(
-         en.casual, "6 in the morning", new Date (2016, 10 - 1, 1, 8), (result,
-         text) {
-       expect(result.text).toBe(text);
-       expect(result.start.get("year")).toBe(2016);
-       expect(result.start.get("month")).toBe(10);
-       expect(result.start.get("day")).toBe(1);
-       expect(result.start.get("hour")).toBe(6);
-       expect(result.start.get("minute")).toBe(0);
-       expect(result.start.get("meridiem")).toBe(Meridiem.AM);
-     });
-     testSingleCase(
-         en.casual, "6 in the afternoon", new Date (2016, 10 - 1, 1, 8), (result,
-         text) {
-       expect(result.text).toBe(text);
-       expect(result.start.get("year")).toBe(2016);
-       expect(result.start.get("month")).toBe(10);
-       expect(result.start.get("day")).toBe(1);
-       expect(result.start.get("hour")).toBe(18);
-       expect(result.start.get("minute")).toBe(0);
-       expect(result.start.get("meridiem")).toBe(Meridiem.PM);
-     });
+        en.casual, "6 in the afternoon", DateTime(2016, 10 - 1, 1, 8),
+        (ParsedResult result, String text) {
+      expect(result.text, text);
+      expect(result.start.get("year"), 2016);
+      expect(result.start.get("month"), 10);
+      expect(result.start.get("day"), 1);
+      expect(result.start.get("hour"), 18);
+      expect(result.start.get("minute"), 0);
+      expect(result.start.get("meridiem"), Meridiem.PM);
+    });
    });
    test("Test - Time range's meridiem handling", () {
-     testSingleCase(
-         en.casual, "10 - 11 at night", new Date (2016, 10 - 1, 1, 8), (result,
-         text) {
-       expect(result.text).toBe(text);
-       expect(result.start.get("year")).toBe(2016);
-       expect(result.start.get("month")).toBe(10);
-       expect(result.start.get("day")).toBe(1);
-       expect(result.start.get("hour")).toBe(22);
-       expect(result.end.get("year")).toBe(2016);
-       expect(result.end.get("month")).toBe(10);
-       expect(result.end.get("day")).toBe(1);
-       expect(result.end.get("hour")).toBe(23);
-     });
-     testSingleCase(
-         en.casual, "8pm - 11", new Date (2016, 10 - 1, 1, 8), (result, text) {
-       expect(result.text).toBe(text);
-       expect(result.start.get("year")).toBe(2016);
-       expect(result.start.get("month")).toBe(10);
-       expect(result.start.get("day")).toBe(1);
-       expect(result.start.get("hour")).toBe(20);
-       expect(result.start.get("meridiem")).toBe(Meridiem.PM);
-       expect(result.end.get("year")).toBe(2016);
-       expect(result.end.get("month")).toBe(10);
-       expect(result.end.get("day")).toBe(1);
-       expect(result.end.get("hour")).toBe(23);
-       expect(result.end.get("meridiem")).toBe(Meridiem.PM);
-     });
-     testSingleCase(
-         en.casual, "8 - 11pm", new Date (2016, 10 - 1, 1, 8), (result, text) {
-       expect(result.text).toBe(text);
-       expect(result.start.get("year")).toBe(2016);
-       expect(result.start.get("month")).toBe(10);
-       expect(result.start.get("day")).toBe(1);
-       expect(result.start.get("hour")).toBe(20);
-       expect(result.start.get("meridiem")).toBe(Meridiem.PM);
-       expect(result.end.get("year")).toBe(2016);
-       expect(result.end.get("month")).toBe(10);
-       expect(result.end.get("day")).toBe(1);
-       expect(result.end.get("hour")).toBe(23);
-       expect(result.end.get("meridiem")).toBe(Meridiem.PM);
-     });
-     testSingleCase(
-         en.casual, "7 - 8", new Date (2016, 10 - 1, 1, 8), (result, text) {
-       expect(result.text).toBe(text);
-       expect(result.start.get("year")).toBe(2016);
-       expect(result.start.get("month")).toBe(10);
-       expect(result.start.get("day")).toBe(1);
-       expect(result.start.get("hour")).toBe(7);
-       expect(result.start.get("meridiem")).toBe(Meridiem.AM);
-       expect(result.end.get("year")).toBe(2016);
-       expect(result.end.get("month")).toBe(10);
-       expect(result.end.get("day")).toBe(1);
-       expect(result.end.get("hour")).toBe(8);
-       expect(result.end.get("meridiem")).toBe(Meridiem.AM);
-     });
-     testSingleCase(en.casual.fr, "1pm-3", new Date (2012, 7, 10), (result, text) {
-       expect(result.text).toBe(text);
-       expect(result.start.get("year")).toBe(2012);
-       expect(result.start.get("month")).toBe(8);
-       expect(result.start.get("day")).toBe(10);
-       expect(result.start.get("hour")).toBe(13);
-       expect(result.start.get("minute")).toBe(0);
-       expect(result.start.get("meridiem")).toBe(Meridiem.PM);
-       expect(result.start.isCertain("meridiem")).toBe(true);
-       expect(result.end.get("year")).toBe(2012);
-       expect(result.end.get("month")).toBe(8);
-       expect(result.end.get("day")).toBe(10);
-       expect(result.end.get("hour")).toBe(15);
-       expect(result.end.get("minute")).toBe(0);
-       expect(result.end.get("meridiem")).toBe(Meridiem.PM);
-       expect(result.end.isCertain("meridiem")).toBe(true);
-     });
-     testSingleCase(en.casual.fr, "1am-3", new Date (2012, 7, 10), (result) {
-       expect(result.start.get("year")).toBe(2012);
-       expect(result.start.get("month")).toBe(8);
-       expect(result.start.get("day")).toBe(10);
-       expect(result.start.get("hour")).toBe(1);
-       expect(result.start.get("minute")).toBe(0);
-       expect(result.start.get("meridiem")).toBe(Meridiem.AM);
-       expect(result.start.isCertain("meridiem")).toBe(true);
-       expect(result.end.get("year")).toBe(2012);
-       expect(result.end.get("month")).toBe(8);
-       expect(result.end.get("day")).toBe(10);
-       expect(result.end.get("hour")).toBe(3);
-       expect(result.end.get("minute")).toBe(0);
-       expect(result.end.get("meridiem")).toBe(Meridiem.AM);
-       expect(result.end.isCertain("meridiem")).toBe(false);
-     });
-     testSingleCase(en.casual.fr, "11pm-3", new Date (2012, 7, 10), (result) {
-       expect(result.start.get("year")).toBe(2012);
-       expect(result.start.get("month")).toBe(8);
-       expect(result.start.get("day")).toBe(10);
-       expect(result.start.get("hour")).toBe(23);
-       expect(result.start.get("minute")).toBe(0);
-       expect(result.start.get("meridiem")).toBe(Meridiem.PM);
-       expect(result.start.isCertain("meridiem")).toBe(true);
-       expect(result.end.get("year")).toBe(2012);
-       expect(result.end.get("month")).toBe(8);
-       expect(result.end.get("day")).toBe(11);
-       expect(result.end.get("hour")).toBe(3);
-       expect(result.end.get("minute")).toBe(0);
-       expect(result.end.get("meridiem")).toBe(Meridiem.AM);
-       expect(result.end.isCertain("meridiem")).toBe(false);
-     });
-     testSingleCase(en.casual.fr, "12-3am", new Date (2012, 7, 10), (result) {
-       expect(result.start.get("year")).toBe(2012);
-       expect(result.start.get("month")).toBe(8);
-       expect(result.start.get("day")).toBe(10);
-       expect(result.start.get("hour")).toBe(0);
-       expect(result.start.get("minute")).toBe(0);
-       expect(result.start.get("meridiem")).toBe(Meridiem.AM);
-       expect(result.end.get("year")).toBe(2012);
-       expect(result.end.get("month")).toBe(8);
-       expect(result.end.get("day")).toBe(10);
-       expect(result.end.get("hour")).toBe(3);
-       expect(result.end.get("minute")).toBe(0);
-       expect(result.end.get("meridiem")).toBe(Meridiem.AM);
-       expect(result.end.isCertain("meridiem")).toBe(true);
-     });
-     testSingleCase(en.casual.fr, "12-3pm", new Date (2012, 7, 10), (result) {
-       expect(result.start.get("year")).toBe(2012);
-       expect(result.start.get("month")).toBe(8);
-       expect(result.start.get("day")).toBe(10);
-       expect(result.start.get("hour")).toBe(12);
-       expect(result.start.get("minute")).toBe(0);
-       expect(result.start.get("meridiem")).toBe(Meridiem.PM);
-       expect(result.end.get("year")).toBe(2012);
-       expect(result.end.get("month")).toBe(8);
-       expect(result.end.get("day")).toBe(10);
-       expect(result.end.get("hour")).toBe(15);
-       expect(result.end.get("minute")).toBe(0);
-       expect(result.end.get("meridiem")).toBe(Meridiem.PM);
-       expect(result.end.isCertain("meridiem")).toBe(true);
-     });
-   });
+     testSingleCase(en.casual, "10 - 11 at night", DateTime(2016, 10 - 1, 1, 8),
+        (ParsedResult result, String text) {
+      expect(result.text, text);
+      expect(result.start.get("year"), 2016);
+      expect(result.start.get("month"), 10);
+      expect(result.start.get("day"), 1);
+      expect(result.start.get("hour"), 22);
+      expect(result.end.get("year"), 2016);
+      expect(result.end.get("month"), 10);
+      expect(result.end.get("day"), 1);
+      expect(result.end.get("hour"), 23);
+    });
+     testSingleCase(en.casual, "8pm - 11", DateTime(2016, 10 - 1, 1, 8),
+        (ParsedResult result, String text) {
+      expect(result.text, text);
+      expect(result.start.get("year"), 2016);
+      expect(result.start.get("month"), 10);
+      expect(result.start.get("day"), 1);
+      expect(result.start.get("hour"), 20);
+      expect(result.start.get("meridiem"), Meridiem.PM);
+      expect(result.end.get("year"), 2016);
+      expect(result.end.get("month"), 10);
+      expect(result.end.get("day"), 1);
+      expect(result.end.get("hour"), 23);
+      expect(result.end.get("meridiem"), Meridiem.PM);
+    });
+     testSingleCase(en.casual, "8 - 11pm", DateTime(2016, 10 - 1, 1, 8),
+        (ParsedResult result, String text) {
+      expect(result.text, text);
+      expect(result.start.get("year"), 2016);
+      expect(result.start.get("month"), 10);
+      expect(result.start.get("day"), 1);
+      expect(result.start.get("hour"), 20);
+      expect(result.start.get("meridiem"), Meridiem.PM);
+      expect(result.end.get("year"), 2016);
+      expect(result.end.get("month"), 10);
+      expect(result.end.get("day"), 1);
+      expect(result.end.get("hour"), 23);
+      expect(result.end.get("meridiem"), Meridiem.PM);
+    });
+     testSingleCase(en.casual, "7 - 8", DateTime(2016, 10 - 1, 1, 8),
+        (ParsedResult result, String text) {
+      expect(result.text, text);
+      expect(result.start.get("year"), 2016);
+      expect(result.start.get("month"), 10);
+      expect(result.start.get("day"), 1);
+      expect(result.start.get("hour"), 7);
+      expect(result.start.get("meridiem"), Meridiem.AM);
+      expect(result.end.get("year"), 2016);
+      expect(result.end.get("month"), 10);
+      expect(result.end.get("day"), 1);
+      expect(result.end.get("hour"), 8);
+      expect(result.end.get("meridiem"), Meridiem.AM);
+    });
+    testSingleCase(en.casual.fr, "1pm-3", DateTime(2012, 7, 10),
+        (ParsedResult result, String text) {
+      expect(result.text, text);
+      expect(result.start.get("year"), 2012);
+      expect(result.start.get("month"), 8);
+      expect(result.start.get("day"), 10);
+      expect(result.start.get("hour"), 13);
+      expect(result.start.get("minute"), 0);
+      expect(result.start.get("meridiem"), Meridiem.PM);
+      expect(result.start.isCertain("meridiem"), true);
+      expect(result.end.get("year"), 2012);
+      expect(result.end.get("month"), 8);
+      expect(result.end.get("day"), 10);
+      expect(result.end.get("hour"), 15);
+      expect(result.end.get("minute"), 0);
+      expect(result.end.get("meridiem"), Meridiem.PM);
+      expect(result.end.isCertain("meridiem"), true);
+    });
+    testSingleCase(en.casual.fr, "1am-3", DateTime(2012, 7, 10),
+        (ParsedResult result, String text) {
+      expect(result.start.get("year"), 2012);
+      expect(result.start.get("month"), 8);
+      expect(result.start.get("day"), 10);
+      expect(result.start.get("hour"), 1);
+      expect(result.start.get("minute"), 0);
+      expect(result.start.get("meridiem"), Meridiem.AM);
+      expect(result.start.isCertain("meridiem"), true);
+      expect(result.end.get("year"), 2012);
+      expect(result.end.get("month"), 8);
+      expect(result.end.get("day"), 10);
+      expect(result.end.get("hour"), 3);
+      expect(result.end.get("minute"), 0);
+      expect(result.end.get("meridiem"), Meridiem.AM);
+      expect(result.end.isCertain("meridiem"), false);
+    });
+    testSingleCase(en.casual.fr, "11pm-3", DateTime(2012, 7, 10),
+        (ParsedResult result, String text) {
+      expect(result.start.get("year"), 2012);
+      expect(result.start.get("month"), 8);
+      expect(result.start.get("day"), 10);
+      expect(result.start.get("hour"), 23);
+      expect(result.start.get("minute"), 0);
+      expect(result.start.get("meridiem"), Meridiem.PM);
+      expect(result.start.isCertain("meridiem"), true);
+      expect(result.end.get("year"), 2012);
+      expect(result.end.get("month"), 8);
+      expect(result.end.get("day"), 11);
+      expect(result.end.get("hour"), 3);
+      expect(result.end.get("minute"), 0);
+      expect(result.end.get("meridiem"), Meridiem.AM);
+      expect(result.end.isCertain("meridiem"), false);
+    });
+    testSingleCase(en.casual.fr, "12-3am", DateTime(2012, 7, 10),
+        (ParsedResult result, String text) {
+      expect(result.start.get("year"), 2012);
+      expect(result.start.get("month"), 8);
+      expect(result.start.get("day"), 10);
+      expect(result.start.get("hour"), 0);
+      expect(result.start.get("minute"), 0);
+      expect(result.start.get("meridiem"), Meridiem.AM);
+      expect(result.end.get("year"), 2012);
+      expect(result.end.get("month"), 8);
+      expect(result.end.get("day"), 10);
+      expect(result.end.get("hour"), 3);
+      expect(result.end.get("minute"), 0);
+      expect(result.end.get("meridiem"), Meridiem.AM);
+      expect(result.end.isCertain("meridiem"), true);
+    });
+    testSingleCase(en.casual.fr, "12-3pm", DateTime(2012, 7, 10),
+        (ParsedResult result, String text) {
+      expect(result.start.get("year"), 2012);
+      expect(result.start.get("month"), 8);
+      expect(result.start.get("day"), 10);
+      expect(result.start.get("hour"), 12);
+      expect(result.start.get("minute"), 0);
+      expect(result.start.get("meridiem"), Meridiem.PM);
+      expect(result.end.get("year"), 2012);
+      expect(result.end.get("month"), 8);
+      expect(result.end.get("day"), 10);
+      expect(result.end.get("hour"), 15);
+      expect(result.end.get("minute"), 0);
+      expect(result.end.get("meridiem"), Meridiem.PM);
+      expect(result.end.isCertain("meridiem"), true);
+    });
+  });
    test("Test - Time range to the next day", () {
      testSingleCase(en.casual, "December 31, 2022 10:00 pm - 1:00 am",
-         new Date (2017, 7 - 1, 7), (result) {
-           expect(result.start.get("day")).toBe(31);
-           expect(result.start.get("month")).toBe(12);
-           expect(result.start.get("year")).toBe(2022);
-           expect(result.start.get("hour")).toBe(22);
-           expect(result.start.get("meridiem")).toBe(Meridiem.PM);
-         });
+        DateTime(2017, 7 - 1, 7), (ParsedResult result, String text) {
+      expect(result.start.get("day"), 31);
+      expect(result.start.get("month"), 12);
+      expect(result.start.get("year"), 2022);
+      expect(result.start.get("hour"), 22);
+      expect(result.start.get("meridiem"), Meridiem.PM);
+    });
      testSingleCase(en.casual, "December 31, 2022 10:00 pm - 12:00 am",
-         new Date (2017, 7 - 1, 7), (result) {
-           expect(result.start.get("day")).toBe(31);
-           expect(result.start.get("month")).toBe(12);
-           expect(result.start.get("year")).toBe(2022);
-           expect(result.start.get("hour")).toBe(22);
-           expect(result.start.get("meridiem")).toBe(Meridiem.PM);
-         });
+        DateTime(2017, 7 - 1, 7), (ParsedResult result, String text) {
+      expect(result.start.get("day"), 31);
+      expect(result.start.get("month"), 12);
+      expect(result.start.get("year"), 2022);
+      expect(result.start.get("hour"), 22);
+      expect(result.start.get("meridiem"), Meridiem.PM);
+    });
    });
    test("Test - Parsing causal positive cases", () {
-     testSingleCase(en.casual.casual, "at 1", (result) {
-       expect(result.text).toBe("at 1");
-       expect(result.start.get("hour")).toBe(1);
-     });
-     testSingleCase(en.casual.casual, "at 12", (result) {
-       expect(result.text).toBe("at 12");
-       expect(result.start.get("hour")).toBe(12);
-     });
-     testSingleCase(en.casual.casual, "at 12.30", (result) {
-       expect(result.text).toBe("at 12.30");
-       expect(result.start.get("hour")).toBe(12);
-       expect(result.start.get("minute")).toBe(30);
-     });
-   });
+    testSingleCase(en.casual.casual, "at 1",
+        (ParsedResult result, String text) {
+      expect(result.text, "at 1");
+      expect(result.start.get("hour"), 1);
+    });
+    testSingleCase(en.casual.casual, "at 12",
+        (ParsedResult result, String text) {
+      expect(result.text, "at 12");
+      expect(result.start.get("hour"), 12);
+    });
+    testSingleCase(en.casual.casual, "at 12.30",
+        (ParsedResult result, String text) {
+      expect(result.text, "at 12.30");
+      expect(result.start.get("hour"), 12);
+      expect(result.start.get("minute"), 30);
+    });
+  });
    test("Test - Parsing negative cases : [year-like] pattern", () {
      testUnexpectedResult(en.casual, "2020");
      testUnexpectedResult(en.casual, "2020  ");
@@ -319,44 +326,47 @@ import '../test_util.dart';
    });
    test("Test - forward dates only option", () {
      testSingleCase(en.casual, "1am", {
-       "instant": new Date ("Wed May 26 2022 01:57:00 GMT-0500 (CDT)"),
-       "timezone": "CDT"
-     }, { "forwardDate": true}, (result) {
-       expect(result.start.get("year")).toBe(2022);
-       expect(result.start.get("month")).toBe(5);
-       expect(result.start.get("day")).toBe(27);
-       expect(result.start.get("hour")).toBe(1);
-     });
-     testSingleCase(en.casual, "11am", new Date (2016, 10 - 1, 1, 12),
-         { "forwardDate": true}, (result) {
-           expect(result.start.get("year")).toBe(2016);
-           expect(result.start.get("month")).toBe(10);
-           expect(result.start.get("day")).toBe(2);
-           expect(result.start.get("hour")).toBe(11);
-         });
-     testSingleCase(en.casual, "  11am to 1am  ", new Date (2016, 10 - 1, 1, 12),
-         { "forwardDate": true}, (result) {
-           expect(result.start.get("year")).toBe(2016);
-           expect(result.start.get("month")).toBe(10);
-           expect(result.start.get("day")).toBe(2);
-           expect(result.start.get("hour")).toBe(11);
-           expect(result.end).not.toBeNull();
-           expect(result.end.get("year")).toBe(2016);
-           expect(result.end.get("month")).toBe(10);
-           expect(result.end.get("day")).toBe(3);
-           expect(result.end.get("hour")).toBe(1);
-         });
-     testSingleCase(en.casual, "  10am to 12pm  ", new Date (2016, 10 - 1, 1, 11),
-         { "forwardDate": true}, (result) {
-           expect(result.start.get("year")).toBe(2016);
-           expect(result.start.get("month")).toBe(10);
-           expect(result.start.get("day")).toBe(2);
-           expect(result.start.get("hour")).toBe(10);
-           expect(result.end).not.toBeNull();
-           expect(result.end.get("year")).toBe(2016);
-           expect(result.end.get("month")).toBe(10);
-           expect(result.end.get("day")).toBe(2);
-           expect(result.end.get("hour")).toBe(12);
-         });
-   });
+      "instant": DateTime("Wed May 26 2022 01:57:00 GMT-0500 (CDT)"),
+      "timezone": "CDT"
+    }, {
+      "forwardDate": true
+    }, (ParsedResult result, String text) {
+      expect(result.start.get("year"), 2022);
+      expect(result.start.get("month"), 5);
+      expect(result.start.get("day"), 27);
+      expect(result.start.get("hour"), 1);
+    });
+    testSingleCase(
+        en.casual, "11am", DateTime(2016, 10 - 1, 1, 12), {"forwardDate": true},
+        (ParsedResult result, String text) {
+      expect(result.start.get("year"), 2016);
+      expect(result.start.get("month"), 10);
+      expect(result.start.get("day"), 2);
+      expect(result.start.get("hour"), 11);
+    });
+    testSingleCase(en.casual, "  11am to 1am  ", DateTime(2016, 10 - 1, 1, 12),
+        {"forwardDate": true}, (ParsedResult result, String text) {
+      expect(result.start.get("year"), 2016);
+      expect(result.start.get("month"), 10);
+      expect(result.start.get("day"), 2);
+      expect(result.start.get("hour"), 11);
+      expect(result.end == null, isFalse);
+      expect(result.end.get("year"), 2016);
+      expect(result.end.get("month"), 10);
+      expect(result.end.get("day"), 3);
+      expect(result.end.get("hour"), 1);
+    });
+    testSingleCase(en.casual, "  10am to 12pm  ", DateTime(2016, 10 - 1, 1, 11),
+        {"forwardDate": true}, (ParsedResult result, String text) {
+      expect(result.start.get("year"), 2016);
+      expect(result.start.get("month"), 10);
+      expect(result.start.get("day"), 2);
+      expect(result.start.get("hour"), 10);
+      expect(result.end == null, isFalse);
+      expect(result.end.get("year"), 2016);
+      expect(result.end.get("month"), 10);
+      expect(result.end.get("day"), 2);
+      expect(result.end.get("hour"), 12);
+    });
+  });
  }

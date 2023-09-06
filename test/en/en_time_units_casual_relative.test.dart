@@ -1,181 +1,174 @@
 import 'package:chrono/locales/en/index.dart' as en;
+import 'package:chrono/types.dart';
 import "package:flutter_test/flutter_test.dart";
+
 import '../test_util.dart';
 
 
  void main() {
    test("Test - Positive time units", () {
+     testSingleCase(en.casual, "next 2 weeks", DateTime(2016, 10 - 1, 1, 12),
+        (ParsedResult result, String text) {
+      expect(result.text, text);
+      expect(result.start.get("year"), 2016);
+      expect(result.start.get("month"), 10);
+      expect(result.start.get("day"), 15);
+    });
+     testSingleCase(en.casual, "next 2 days", DateTime(2016, 10 - 1, 1, 12),
+        (ParsedResult result, String text) {
+      expect(result.text, text);
+      expect(result.start.get("year"), 2016);
+      expect(result.start.get("month"), 10);
+      expect(result.start.get("day"), 3);
+      expect(result.start.get("hour"), 12);
+    });
+     testSingleCase(en.casual, "next two years", DateTime(2016, 10 - 1, 1, 12),
+        (ParsedResult result, String text) {
+      expect(result.text, text);
+      expect(result.start.get("year"), 2018);
+      expect(result.start.get("month"), 10);
+      expect(result.start.get("day"), 1);
+      expect(result.start.get("hour"), 12);
+    });
      testSingleCase(
-         en.casual, "next 2 weeks", new Date (2016, 10 - 1, 1, 12), (result,
-         text) {
-       expect(result.text).toBe(text);
-       expect(result.start.get("year")).toBe(2016);
-       expect(result.start.get("month")).toBe(10);
-       expect(result.start.get("day")).toBe(15);
-     });
-     testSingleCase(
-         en.casual, "next 2 days", new Date (2016, 10 - 1, 1, 12), (result, text) {
-       expect(result.text).toBe(text);
-       expect(result.start.get("year")).toBe(2016);
-       expect(result.start.get("month")).toBe(10);
-       expect(result.start.get("day")).toBe(3);
-       expect(result.start.get("hour")).toBe(12);
-     });
-     testSingleCase(
-         en.casual, "next two years", new Date (2016, 10 - 1, 1, 12), (result,
-         text) {
-       expect(result.text).toBe(text);
-       expect(result.start.get("year")).toBe(2018);
-       expect(result.start.get("month")).toBe(10);
-       expect(result.start.get("day")).toBe(1);
-       expect(result.start.get("hour")).toBe(12);
-     });
-     testSingleCase(
-         en.casual, "next 2 weeks 3 days", new Date (2016, 10 - 1, 1, 12), (result,
-         text) {
-       expect(result.text).toBe(text);
-       expect(result.start.get("year")).toBe(2016);
-       expect(result.start.get("month")).toBe(10);
-       expect(result.start.get("day")).toBe(18);
-       expect(result.start.get("hour")).toBe(12);
-     });
-     testSingleCase(
-         en.casual, "after a year", new Date (2016, 10 - 1, 1, 12), (result,
-         text) {
-       expect(result.text).toBe(text);
-       expect(result.start.get("year")).toBe(2017);
-       expect(result.start.get("month")).toBe(10);
-       expect(result.start.get("day")).toBe(1);
-       expect(result.start.get("hour")).toBe(12);
-     });
-     testSingleCase(
-         en.casual, "after an hour", new Date (2016, 10 - 1, 1, 15), (result,
-         text) {
-       expect(result.text).toBe(text);
-       expect(result.start.get("year")).toBe(2016);
-       expect(result.start.get("month")).toBe(10);
-       expect(result.start.get("day")).toBe(1);
-       expect(result.start.get("hour")).toBe(16);
-     });
+        en.casual, "next 2 weeks 3 days", DateTime(2016, 10 - 1, 1, 12),
+        (ParsedResult result, String text) {
+      expect(result.text, text);
+      expect(result.start.get("year"), 2016);
+      expect(result.start.get("month"), 10);
+      expect(result.start.get("day"), 18);
+      expect(result.start.get("hour"), 12);
+    });
+     testSingleCase(en.casual, "after a year", DateTime(2016, 10 - 1, 1, 12),
+        (ParsedResult result, String text) {
+      expect(result.text, text);
+      expect(result.start.get("year"), 2017);
+      expect(result.start.get("month"), 10);
+      expect(result.start.get("day"), 1);
+      expect(result.start.get("hour"), 12);
+    });
+     testSingleCase(en.casual, "after an hour", DateTime(2016, 10 - 1, 1, 15),
+        (ParsedResult result, String text) {
+      expect(result.text, text);
+      expect(result.start.get("year"), 2016);
+      expect(result.start.get("month"), 10);
+      expect(result.start.get("day"), 1);
+      expect(result.start.get("hour"), 16);
+    });
    });
    test("Test - Negative time units", () {
+     testSingleCase(en.casual, "last 2 weeks", DateTime(2016, 10 - 1, 1, 12),
+        (ParsedResult result, String text) {
+      expect(result.text, text);
+      expect(result.start.get("year"), 2016);
+      expect(result.start.get("month"), 9);
+      expect(result.start.get("day"), 17);
+      expect(result.start.get("hour"), 12);
+    });
+     testSingleCase(en.casual, "last two weeks", DateTime(2016, 10 - 1, 1, 12),
+        (ParsedResult result, String text) {
+      expect(result.text, text);
+      expect(result.start.get("year"), 2016);
+      expect(result.start.get("month"), 9);
+      expect(result.start.get("day"), 17);
+      expect(result.start.get("hour"), 12);
+    });
+     testSingleCase(en.casual, "past 2 days", DateTime(2016, 10 - 1, 1, 12),
+        (ParsedResult result, String text) {
+      expect(result.text, text);
+      expect(result.start.get("year"), 2016);
+      expect(result.start.get("month"), 9);
+      expect(result.start.get("day"), 29);
+      expect(result.start.get("hour"), 12);
+    });
      testSingleCase(
-         en.casual, "last 2 weeks", new Date (2016, 10 - 1, 1, 12), (result,
-         text) {
-       expect(result.text).toBe(text);
-       expect(result.start.get("year")).toBe(2016);
-       expect(result.start.get("month")).toBe(9);
-       expect(result.start.get("day")).toBe(17);
-       expect(result.start.get("hour")).toBe(12);
-     });
-     testSingleCase(
-         en.casual, "last two weeks", new Date (2016, 10 - 1, 1, 12), (result,
-         text) {
-       expect(result.text).toBe(text);
-       expect(result.start.get("year")).toBe(2016);
-       expect(result.start.get("month")).toBe(9);
-       expect(result.start.get("day")).toBe(17);
-       expect(result.start.get("hour")).toBe(12);
-     });
-     testSingleCase(
-         en.casual, "past 2 days", new Date (2016, 10 - 1, 1, 12), (result, text) {
-       expect(result.text).toBe(text);
-       expect(result.start.get("year")).toBe(2016);
-       expect(result.start.get("month")).toBe(9);
-       expect(result.start.get("day")).toBe(29);
-       expect(result.start.get("hour")).toBe(12);
-     });
-     testSingleCase(
-         en.casual, "+2 months, 5 days", new Date (2016, 10 - 1, 1, 12), (result,
-         text) {
-       expect(result.text).toBe(text);
-       expect(result.start.get("year")).toBe(2016);
-       expect(result.start.get("month")).toBe(12);
-       expect(result.start.get("day")).toBe(6);
-       expect(result.start.get("hour")).toBe(12);
-     });
+        en.casual, "+2 months, 5 days", DateTime(2016, 10 - 1, 1, 12),
+        (ParsedResult result, String text) {
+      expect(result.text, text);
+      expect(result.start.get("year"), 2016);
+      expect(result.start.get("month"), 12);
+      expect(result.start.get("day"), 6);
+      expect(result.start.get("hour"), 12);
+    });
    });
    test("Test - Plus '+' sign", () {
      testSingleCase(
-         en.casual.casual, "+15 minutes", new Date (2012, 7 - 1, 10, 12, 14), (
-         result, text) {
-       expect(result.text).toBe(text);
-       expect(result.start.get("hour")).toBe(12);
-       expect(result.start.get("minute")).toBe(29);
-       expect(result.start).toBeDate(new Date (2012, 7 - 1, 10, 12, 29));
-     });
+         en.casual.casual, "+15 minutes", DateTime(2012, 7 - 1, 10, 12, 14),
+        (result, text) {
+      expect(result.text, text);
+      expect(result.start.get("hour"), 12);
+      expect(result.start.get("minute"), 29);
+      expect(result.start).toBeDate(DateTime(2012, 7 - 1, 10, 12, 29));
+    });
      testSingleCase(
-         en.casual.casual, "+15min", new Date (2012, 7 - 1, 10, 12, 14), (result,
-         text) {
-       expect(result.text).toBe(text);
-       expect(result.start.get("hour")).toBe(12);
-       expect(result.start.get("minute")).toBe(29);
-       expect(result.start).toBeDate(new Date (2012, 7 - 1, 10, 12, 29));
-     });
+        en.casual.casual, "+15min", DateTime(2012, 7 - 1, 10, 12, 14),
+        (ParsedResult result, String text) {
+      expect(result.text, text);
+      expect(result.start.get("hour"), 12);
+      expect(result.start.get("minute"), 29);
+      expect(result.start).toBeDate(DateTime(2012, 7 - 1, 10, 12, 29));
+    });
      testSingleCase(
-         en.casual.casual, "+1 day 2 hour", new Date (2012, 7 - 1, 10, 12, 14), (
-         result, text) {
-       expect(result.text).toBe(text);
-       expect(result.start.get("day")).toBe(11);
-       expect(result.start.get("hour")).toBe(14);
-       expect(result.start.get("minute")).toBe(14);
-       expect(result.start).toBeDate(new Date (2012, 7 - 1, 11, 14, 14));
-     });
-     testSingleCase(
-         en.casual.casual, "+1m", new Date (2012, 7 - 1, 10, 12, 14), (result,
-         text) {
-       expect(result.text).toBe(text);
-       expect(result.start.get("hour")).toBe(12);
-       expect(result.start.get("minute")).toBe(15);
-       expect(result.start).toBeDate(new Date (2012, 7 - 1, 10, 12, 15));
-     });
+         en.casual.casual, "+1 day 2 hour", DateTime(2012, 7 - 1, 10, 12, 14),
+        (result, text) {
+      expect(result.text, text);
+      expect(result.start.get("day"), 11);
+      expect(result.start.get("hour"), 14);
+      expect(result.start.get("minute"), 14);
+      expect(result.start).toBeDate(DateTime(2012, 7 - 1, 11, 14, 14));
+    });
+     testSingleCase(en.casual.casual, "+1m", DateTime(2012, 7 - 1, 10, 12, 14),
+        (ParsedResult result, String text) {
+      expect(result.text, text);
+      expect(result.start.get("hour"), 12);
+      expect(result.start.get("minute"), 15);
+      expect(result.start).toBeDate(DateTime(2012, 7 - 1, 10, 12, 15));
+    });
    });
    test("Test - Minus '-' sign", () {
-     testSingleCase(
-         en.casual.casual, "-3y", new Date (2015, 7 - 1, 10, 12, 14), (result,
-         text) {
-       expect(result.text).toBe(text);
-       expect(result.start.get("year")).toBe(2012);
-       expect(result.start.get("month")).toBe(7);
-       expect(result.start.get("day")).toBe(10);
-       expect(result.start.get("hour")).toBe(12);
-       expect(result.start.get("minute")).toBe(14);
-       expect(result.start).toBeDate(new Date (2012, 7 - 1, 10, 12, 14));
-     });
-     testSingleCase(
-         en.casual, "-2hr5min", new Date (2016, 10 - 1, 1, 12), (result, text) {
-       expect(result.text).toBe(text);
-       expect(result.start.get("year")).toBe(2016);
-       expect(result.start.get("month")).toBe(10);
-       expect(result.start.get("day")).toBe(1);
-       expect(result.start.get("hour")).toBe(9);
-       expect(result.start.get("minute")).toBe(55);
-     });
+     testSingleCase(en.casual.casual, "-3y", DateTime(2015, 7 - 1, 10, 12, 14),
+        (ParsedResult result, String text) {
+      expect(result.text, text);
+      expect(result.start.get("year"), 2012);
+      expect(result.start.get("month"), 7);
+      expect(result.start.get("day"), 10);
+      expect(result.start.get("hour"), 12);
+      expect(result.start.get("minute"), 14);
+      expect(result.start).toBeDate(DateTime(2012, 7 - 1, 10, 12, 14));
+    });
+     testSingleCase(en.casual, "-2hr5min", DateTime(2016, 10 - 1, 1, 12),
+        (ParsedResult result, String text) {
+      expect(result.text, text);
+      expect(result.start.get("year"), 2016);
+      expect(result.start.get("month"), 10);
+      expect(result.start.get("day"), 1);
+      expect(result.start.get("hour"), 9);
+      expect(result.start.get("minute"), 55);
+    });
    });
    test("Test - Without custom parser without abbreviations", () {
      final custom = en.casual.en.strict.clone();
      custom.parsers.push(new ENTimeUnitCasualRelativeFormatParser (false));
      testUnexpectedResult(custom, "-3y");
      testUnexpectedResult(custom, "last 2m");
-     testSingleCase(
-         custom, "-2 hours 5 minutes", new Date (2016, 10 - 1, 1, 12), (result,
-         text) {
-       expect(result.text).toBe(text);
-       expect(result.start.get("year")).toBe(2016);
-       expect(result.start.get("month")).toBe(10);
-       expect(result.start.get("day")).toBe(1);
-       expect(result.start.get("hour")).toBe(9);
-       expect(result.start.get("minute")).toBe(55);
-     });
+     testSingleCase(custom, "-2 hours 5 minutes", DateTime(2016, 10 - 1, 1, 12),
+        (ParsedResult result, String text) {
+      expect(result.text, text);
+      expect(result.start.get("year"), 2016);
+      expect(result.start.get("month"), 10);
+      expect(result.start.get("day"), 1);
+      expect(result.start.get("hour"), 9);
+      expect(result.start.get("minute"), 55);
+    });
    });
    test("Test - Negative cases", () {
      testUnexpectedResult(
-         en.casual.casual, "3y", new Date (2015, 7 - 1, 10, 12, 14));
-     testUnexpectedResult(
-         en.casual.casual, "1 m", new Date (2015, 7 - 1, 10, 12, 14));
-     testUnexpectedResult(
-         en.casual.casual, "the day", new Date (2015, 7 - 1, 10, 12, 14));
-     testUnexpectedResult(
-         en.casual.casual, "a day", new Date (2015, 7 - 1, 10, 12, 14));
-   });
+        en.casual.casual, "3y", DateTime(2015, 7 - 1, 10, 12, 14));
+    testUnexpectedResult(
+        en.casual.casual, "1 m", DateTime(2015, 7 - 1, 10, 12, 14));
+    testUnexpectedResult(
+        en.casual.casual, "the day", DateTime(2015, 7 - 1, 10, 12, 14));
+    testUnexpectedResult(
+        en.casual.casual, "a day", DateTime(2015, 7 - 1, 10, 12, 14));
+  });
  }
