@@ -14,7 +14,7 @@ import '../test_util.dart';
       expect(result.start.get(Component.year), -234);
       expect(result.start.get(Component.month), 8);
       expect(result.start.get(Component.day), 10);
-      expectToBeDate(result.start).toBeDate(DateTime(-234, 8 - 1, 10, 12));
+      expectToBeDate(result.start , DateTime(-234, 8 - 1, 10, 12));
     });
      testSingleCase(en.casual, "10 August 88 CE", DateTime(2012, 7, 10),
         (ParsedResult result, String text) {
@@ -39,7 +39,7 @@ import '../test_util.dart';
       expect(result.start.get(Component.year), -234);
       expect(result.start.get(Component.month), 8);
       expect(result.start.get(Component.day), 10);
-      expectToBeDate(result.start).toBeDate(DateTime(-234, 8 - 1, 10, 12));
+      expectToBeDate(result.start , DateTime(-234, 8 - 1, 10, 12));
     });
      testSingleCase(en.casual, "10 August 88 AD", DateTime(2012, 7, 10),
         (ParsedResult result, String text) {
@@ -65,7 +65,7 @@ import '../test_util.dart';
       expect(result.start.get(Component.year), 2012);
       expect(result.start.get(Component.month), 8);
       expect(result.start.get(Component.day), 10);
-      expectToBeDate(result.start).toBeDate(DateTime(2012, 8 - 1, 10, 12));
+      expectToBeDate(result.start , DateTime(2012, 8 - 1, 10, 12));
     });
    });
  }

@@ -1,5 +1,9 @@
 import 'package:chrono/chrono.dart';
+import 'package:chrono/common/parsers/SlashDateFormatParser.dart';
+import 'package:chrono/common/refiners/UnlikelyFormatFilter.dart';
+import 'package:chrono/locales/en/parsers/ENTimeUnitCasualRelativeFormatParser.dart';
 import 'package:chrono/locales/ru/index.dart' as ru;
+import 'package:chrono/locales/en/index.dart' as en;
 import 'package:chrono/types.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -84,11 +88,11 @@ void main() {
 
       //  let all time between 1:00 - 4:00 be PM (13.00 - 16.00)
       results.forEach((result) {
-        if (!result.start.isCertain("meridiem") &&
-            result.start.get("hour") >= 1 &&
-            result.start.get("hour") < 4) {
-          result.start.assign("meridiem", Meridiem.PM);
-          result.start.assign("hour", result.start.get("hour") + 12);
+        if (!result.start.isCertain(Component.meridiem) &&
+            result.start.get(Component.hour)!.toInt() >= 1 &&
+            result.start.get(Component.hour)!.toInt() < 4) {
+          result.start.assign(Component.meridiem, Meridiem.PM.index);
+          result.start.assign(Component.hour, result.start.get(Component.hour)!.toInt() + 12);
         }
       });
       return results;
@@ -120,10 +124,10 @@ void main() {
     });
   });
   test("Test - Remove a parser example", () {
-    final custom = chrono.en.strict.clone();
+    final custom = en.strict.clone();
     custom.parsers =
-        custom.parsers.filter((r) => !(r is SlashDateFormatParser));
-    custom.parsers.push(new SlashDateFormatParser(true));
+        custom.parsers.where((r) => !(r is SlashDateFormatParser)).toList();
+    custom.parsers.add(new SlashDateFormatParser(true));
     testSingleCase(custom, "6/10/2018", (result) {
       expect(result.text, "6/10/2018");
       expect(result.start.get("year"), 2018);
@@ -132,9 +136,9 @@ void main() {
     });
   });
   test("Test - Remove a refiner example", () {
-    final custom = chrono.casual.clone();
+    final custom = en.casual.clone();
     custom.refiners =
-        custom.refiners.filter((r) => !(r is UnlikelyFormatFilter));
+        custom.refiners.where((r) => !(r is UnlikelyFormatFilter)).toList();
     testSingleCase(custom, "This is at 2.30", (result) {
       expect(result.text, "at 2.30");
       expect(result.start.get("hour"), 2);
@@ -142,7 +146,7 @@ void main() {
     });
   });
   test("Test - Replace a parser example", () {
-    final custom = chrono.en.casual.clone();
+    final custom = en.casual.clone();
     testSingleCase(custom, "next 5m", new DateTime(2016, 10 - 1, 1, 14, 52),
         (result, text) {
       expect(result.start.get("hour"), 14);
@@ -155,7 +159,7 @@ void main() {
       expect(result.start.get("minute"), 57);
     });
     final index = custom.parsers
-        .findIndex((r) => r is ENTimeUnitCasualRelativeFormatParser);
+        .indexWhere((r) => r is ENTimeUnitCasualRelativeFormatParser);
     custom.parsers[index] = new ENTimeUnitCasualRelativeFormatParser(false);
     testUnexpectedResult(custom, "next 5m");
     testSingleCase(

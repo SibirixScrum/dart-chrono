@@ -1,97 +1,126 @@
 import "package:chrono/results.dart";
+import "package:chrono/types.dart";
 import "package:flutter_test/flutter_test.dart";
-
-
 
 void main() {
   test("Test - Create & manipulate date results", () {
-    final reference = new ReferenceWithTimezone(new DateTime());
-    final components =
-        new ParsingComponents(reference, year: 2014, month: 11, day: 24);
-    expect(components.get("year"),2014);
-    expect(components.get("month"),11);
-    expect(components.get("day"),24);
-    expect(components.date()!=null,isTrue);
+    final reference = new ReferenceWithTimezone(DateTime.now());
+    final components = ParsingComponents(reference,
+        {Component.year: 2014, Component.month: 11, Component.day: 24});
+    expect(components.get(Component.year), 2014);
+    expect(components.get(Component.month), 11);
+    expect(components.get(Component.day), 24);
+    expect(components.date() != null, isTrue);
     // null
-    expect(components.get("weekday")!=null,isFalse);
-    expect(components.isCertain("weekday"),false);
+    expect(components.get(Component.weekday) != null, isFalse);
+    expect(components.isCertain(Component.weekday), false);
     // "imply"
-    components.imply("weekday", 1);
-    expect(components.get("weekday"),1);
-    expect(components.isCertain("weekday"),false);
+    components.imply(Component.weekday, 1);
+    expect(components.get(Component.weekday), 1);
+    expect(components.isCertain(Component.weekday), false);
     // "assign" overrides "imply"
-    components.assign("weekday", 2);
-    expect(components.get("weekday"),2);
-    expect(components.isCertain("weekday"),true);
+    components.assign(Component.weekday, 2);
+    expect(components.get(Component.weekday), 2);
+    expect(components.isCertain(Component.weekday), true);
     // "imply" doesn't overrides "assign"
-    components.imply("year", 2013);
-    expect(components.get("year"),2014);
+    components.imply(Component.year, 2013);
+    expect(components.get(Component.year), 2014);
     // "assign" overrides "assign"
-    components.assign("year", 2013);
-    expect(components.get("year"),2013);
+    components.assign(Component.year, 2013);
+    expect(components.get(Component.year), 2013);
   });
   test("Test - Calendar checking with implied components", () {
-    final reference = new ReferenceWithTimezone(new DateTime());
+    final reference = new ReferenceWithTimezone(DateTime.now());
     {
       final components = new ParsingComponents(reference, {
-        "day": 13,
-        "month": 3,
-        "year": 2021,
-        "hour": 14,
-        "minute": 22,
-        "second": 14,
-        "millisecond": 0
+        Component.day: 13,
+        Component.month: 3,
+        Component.year: 2021,
+        Component.hour: 14,
+        Component.minute: 22,
+        Component.second: 14,
+        Component.millisecond: 0
       });
-      components.imply("timezoneOffset", -300);
-      expect(components.isValidDateTime(),true);
+      components.imply(Component.timezoneOffset, -300);
+      expect(components.isValidDate(), true);
     }
   });
   test("Test - Calendar Checking", () {
-    final reference = new ReferenceWithTimezone(new DateTime());
+    final reference = new ReferenceWithTimezone(DateTime.now());
     {
-      final components =
-          new ParsingComponents(reference, year: 2014, month: 11, day: 24);
-      expect(components.isValidDateTime(),true);
+      final components = new ParsingComponents(reference,
+          {Component.year: 2014, Component.month: 11, Component.day: 24});
+      expect(components.isValidDate(), true);
+    }
+    {
+      final components = new ParsingComponents(reference, {
+        Component.year: 2014,
+        Component.month: 11,
+        Component.day: 24,
+        Component.hour: 12
+      });
+      expect(components.isValidDate(), true);
+    }
+    {
+      final components = new ParsingComponents(reference, {
+        Component.year: 2014,
+        Component.month: 11,
+        Component.day: 24,
+        Component.hour: 12,
+        Component.minute: 30
+      });
+      expect(components.isValidDate(), true);
+    }
+    {
+      final components = new ParsingComponents(reference, {
+        Component.year: 2014,
+        Component.month: 11,
+        Component.day: 24,
+        Component.hour: 12,
+        Component.minute: 30,
+        Component.second: 30
+      });
+      expect(components.isValidDate(), true);
     }
     {
       final components = new ParsingComponents(reference,
-          year: 2014, month: 11, day: 24, hour: 12);
-      expect(components.isValidDateTime(),true);
+          {Component.year: 2014, Component.month: 13, Component.day: 24});
+      expect(components.isValidDate(), false);
     }
     {
       final components = new ParsingComponents(reference,
-          year: 2014, month: 11, day: 24, hour: 12, minute: 30);
-      expect(components.isValidDateTime(),true);
+          {Component.year: 2014, Component.month: 11, Component.day: 32});
+      expect(components.isValidDate(), false);
     }
     {
-      final components = new ParsingComponents(reference,
-          year: 2014, month: 11, day: 24, hour: 12, minute: 30, second: 30);
-      expect(components.isValidDateTime(),true);
+      final components = new ParsingComponents(reference, {
+        Component.year: 2014,
+        Component.month: 11,
+        Component.day: 24,
+        Component.hour: 24
+      });
+      expect(components.isValidDate(), false);
     }
     {
-      final components =
-          new ParsingComponents(reference, year: 2014, month: 13, day: 24);
-      expect(components.isValidDateTime(),false);
+      final components = new ParsingComponents(reference, {
+        Component.year: 2014,
+        Component.month: 11,
+        Component.day: 24,
+        Component.hour: 12,
+        Component.minute: 60
+      });
+      expect(components.isValidDate(), false);
     }
     {
-      final components =
-          new ParsingComponents(reference, year: 2014, month: 11, day: 32);
-      expect(components.isValidDateTime(),false);
-    }
-    {
-      final components = new ParsingComponents(reference,
-          year: 2014, month: 11, day: 24, hour: 24);
-      expect(components.isValidDateTime(),false);
-    }
-    {
-      final components = new ParsingComponents(reference,
-          year: 2014, month: 11, day: 24, hour: 12, minute: 60);
-      expect(components.isValidDateTime(),false);
-    }
-    {
-      final components = new ParsingComponents(reference,
-          year: 2014, month: 11, day: 24, hour: 12, minute: 30, second: 60);
-      expect(components.isValidDateTime(),false);
+      final components = new ParsingComponents(reference, {
+        Component.year: 2014,
+        Component.month: 11,
+        Component.day: 24,
+        Component.hour: 12,
+        Component.minute: 30,
+        Component.second: 60
+      });
+      expect(components.isValidDate(), false);
     }
   });
 }

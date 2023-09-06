@@ -14,7 +14,7 @@ import '../test_util.dart';
       expect(result.start.get(Component.year), 2012);
       expect(result.start.get(Component.month), 8);
       expect(result.start.get(Component.day), 15);
-      expectToBeDate(result.start).toBeDate(DateTime(2012, 8 - 1, 15));
+      expectToBeDate(result.start , DateTime(2012, 8 - 1, 15));
     });
      testSingleCase(en.casual, "we have to make something in five days.",
         DateTime(2012, 7, 10), (ParsedResult result, String text) {
@@ -24,7 +24,7 @@ import '../test_util.dart';
       expect(result.start.get(Component.year), 2012);
       expect(result.start.get(Component.month), 8);
       expect(result.start.get(Component.day), 15);
-      expectToBeDate(result.start).toBeDate(DateTime(2012, 8 - 1, 15));
+      expectToBeDate(result.start , DateTime(2012, 8 - 1, 15));
     });
      testSingleCase(en.casual, "we have to make something within 10 day",
         DateTime(2012, 7, 10), (ParsedResult result, String text) {
@@ -34,101 +34,101 @@ import '../test_util.dart';
       expect(result.start.get(Component.year), 2012);
       expect(result.start.get(Component.month), 8);
       expect(result.start.get(Component.day), 20);
-      expectToBeDate(result.start).toBeDate(DateTime(2012, 8 - 1, 20));
+      expectToBeDate(result.start , DateTime(2012, 8 - 1, 20));
     });
      testSingleCase(en.casual, "in 5 minutes", DateTime(2012, 7, 10, 12, 14),
         (ParsedResult result, String text) {
       expect(result.index, 0);
       expect(result.text, "in 5 minutes");
-      expectToBeDate(result.start).toBeDate(DateTime(2012, 7, 10, 12, 19));
+      expectToBeDate(result.start , DateTime(2012, 7, 10, 12, 19));
     });
      testSingleCase(
         en.casual, "wait for 5 minutes", DateTime(2012, 7, 10, 12, 14),
         (ParsedResult result, String text) {
       expect(result.index, 5);
       expect(result.text, "for 5 minutes");
-      expectToBeDate(result.start).toBeDate(DateTime(2012, 7, 10, 12, 19));
+      expectToBeDate(result.start , DateTime(2012, 7, 10, 12, 19));
     });
      testSingleCase(en.casual, "within 1 hour", DateTime(2012, 7, 10, 12, 14),
         (ParsedResult result, String text) {
       expect(result.index, 0);
       expect(result.text, "within 1 hour");
-      expectToBeDate(result.start).toBeDate(DateTime(2012, 7, 10, 13, 14));
+      expectToBeDate(result.start , DateTime(2012, 7, 10, 13, 14));
     });
      testSingleCase(
         en.casual, "In 5 minutes I will go home", DateTime(2012, 7, 10, 12, 14),
         (ParsedResult result, String text) {
       expect(result.index, 0);
       expect(result.text, "In 5 minutes");
-      expectToBeDate(result.start).toBeDate(DateTime(2012, 7, 10, 12, 19));
+      expectToBeDate(result.start , DateTime(2012, 7, 10, 12, 19));
     });
      testSingleCase(en.casual, "In 5 minutes A car need to move",
         DateTime(2012, 7, 10, 12, 14), (ParsedResult result, String text) {
       expect(result.index, 0);
       expect(result.text, "In 5 minutes");
-      expectToBeDate(result.start).toBeDate(DateTime(2012, 7, 10, 12, 19));
+      expectToBeDate(result.start , DateTime(2012, 7, 10, 12, 19));
     });
      testSingleCase(en.casual, "In 5 seconds A car need to move",
         DateTime(2012, 7, 10, 12, 14), (ParsedResult result, String text) {
       expect(result.index, 0);
       expect(result.text, "In 5 seconds");
-      expectToBeDate(result.start).toBeDate(DateTime(2012, 7, 10, 12, 14, 5));
+      expectToBeDate(result.start , DateTime(2012, 7, 10, 12, 14, 5));
     });
      testSingleCase(
         en.casual, "within half an hour", DateTime(2012, 7, 10, 12, 14),
         (ParsedResult result, String text) {
       expect(result.index, 0);
       expect(result.text, "within half an hour");
-      expectToBeDate(result.start).toBeDate(DateTime(2012, 7, 10, 12, 44));
+      expectToBeDate(result.start , DateTime(2012, 7, 10, 12, 44));
     });
      testSingleCase(en.casual, "within two weeks", DateTime(2012, 7, 10, 12, 14),
         (ParsedResult result, String text) {
       expect(result.index, 0);
       expect(result.text, "within two weeks");
-      expectToBeDate(result.start).toBeDate(DateTime(2012, 7, 24, 12, 14));
+      expectToBeDate(result.start , DateTime(2012, 7, 24, 12, 14));
     });
      testSingleCase(en.casual, "within a month", DateTime(2012, 7, 10, 12, 14),
         (ParsedResult result, String text) {
       expect(result.index, 0);
       expect(result.text, "within a month");
-      expectToBeDate(result.start).toBeDate(DateTime(2012, 8, 10, 12, 14));
+      expectToBeDate(result.start , DateTime(2012, 8, 10, 12, 14));
     });
      testSingleCase(
         en.casual, "within a few months", DateTime(2012, 6, 10, 12, 14),
         (ParsedResult result, String text) {
       expect(result.index, 0);
       expect(result.text, "within a few months");
-      expectToBeDate(result.start).toBeDate(DateTime(2012, 9, 10, 12, 14));
+      expectToBeDate(result.start , DateTime(2012, 9, 10, 12, 14));
     });
      testSingleCase(en.casual, "within one year", DateTime(2012, 7, 10, 12, 14),
         (ParsedResult result, String text) {
       expect(result.index, 0);
       expect(result.text, "within one year");
-      expectToBeDate(result.start).toBeDate(DateTime(2013, 7, 10, 12, 14));
+      expectToBeDate(result.start , DateTime(2013, 7, 10, 12, 14));
     });
      testSingleCase(en.casual, "within one Year", DateTime(2012, 7, 10, 12, 14),
         (ParsedResult result, String text) {
       expect(result.index, 0);
       expect(result.text, "within one Year");
-      expectToBeDate(result.start).toBeDate(DateTime(2013, 7, 10, 12, 14));
+      expectToBeDate(result.start , DateTime(2013, 7, 10, 12, 14));
     });
      testSingleCase(en.casual, "within One year", DateTime(2012, 7, 10, 12, 14),
         (ParsedResult result, String text) {
       expect(result.index, 0);
       expect(result.text, "within One year");
-      expectToBeDate(result.start).toBeDate(DateTime(2013, 7, 10, 12, 14));
+      expectToBeDate(result.start , DateTime(2013, 7, 10, 12, 14));
     });
      testSingleCase(en.casual, "In 5 Minutes A car need to move",
         DateTime(2012, 7, 10, 12, 14), (ParsedResult result, String text) {
       expect(result.index, 0);
       expect(result.text, "In 5 Minutes");
-      expectToBeDate(result.start).toBeDate(DateTime(2012, 7, 10, 12, 19));
+      expectToBeDate(result.start , DateTime(2012, 7, 10, 12, 19));
     });
      testSingleCase(en.casual, "In 5 mins a car need to move",
         DateTime(2012, 7, 10, 12, 14), (ParsedResult result, String text) {
       expect(result.index, 0);
       expect(result.text, "In 5 mins");
-      expectToBeDate(result.start).toBeDate(DateTime(2012, 7, 10, 12, 19));
+      expectToBeDate(result.start , DateTime(2012, 7, 10, 12, 19));
     });
      testSingleCase(en.casual, "in a week", DateTime(2016, 10 - 1, 1),
         (ParsedResult result, String text) {

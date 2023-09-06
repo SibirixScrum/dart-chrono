@@ -20,7 +20,7 @@ import '../test_util.dart';
       expect(result.start.get(Component.second), 10);
       expect(result.start.get(Component.millisecond), 11);
       expect(result.start.get(Component.timezoneOffset),
-          result.refDate.getTimezoneOffset() * -1);
+          result.refDate.timeZoneOffset.inMinutes * -1);
       expectToBeDate(result.start,result.refDate);
       expectToBeDate(result.start,DateTime(2012, 7, 10, 8, 9, 10, 11));
     });
