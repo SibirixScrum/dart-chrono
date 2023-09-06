@@ -1,7 +1,11 @@
- import "../../src.dart" as chrono ; import "../test_util.dart" show testSingleCase ;
+
+import 'package:chrono/locales/en/index.dart' as en;
+import "package:flutter_test/flutter_test.dart";
+import '../test_util.dart';
+
  void main() {
    test("Test - Month-Year expression", () {
-     testSingleCase(chrono, "September 2012", (result) {
+     testSingleCase(en.casual, "September 2012", (result) {
        expect(result.text).toBe("September 2012");
        expect(result.start.get("year")).toBe(2012);
        expect(result.start.get("month")).toBe(9);
@@ -11,7 +15,7 @@
        expect(result.start.isCertain("day")).toBe(false);
        expect(result.start).toBeDate(new Date (2012, 9 - 1, 1, 12));
      });
-     testSingleCase(chrono, "Sept 2012", (result) {
+     testSingleCase(en.casual, "Sept 2012", (result) {
        expect(result.text).toBe("Sept 2012");
        expect(result.start.get("year")).toBe(2012);
        expect(result.start.get("month")).toBe(9);
@@ -21,7 +25,7 @@
        expect(result.start.isCertain("day")).toBe(false);
        expect(result.start).toBeDate(new Date (2012, 9 - 1, 1, 12));
      });
-     testSingleCase(chrono, "Sep 2012", (result) {
+     testSingleCase(en.casual, "Sep 2012", (result) {
        expect(result.text).toBe("Sep 2012");
        expect(result.start.get("year")).toBe(2012);
        expect(result.start.get("month")).toBe(9);
@@ -31,7 +35,7 @@
        expect(result.start.isCertain("day")).toBe(false);
        expect(result.start).toBeDate(new Date (2012, 9 - 1, 1, 12));
      });
-     testSingleCase(chrono, "Sep. 2012", (result) {
+     testSingleCase(en.casual, "Sep. 2012", (result) {
        expect(result.text).toBe("Sep. 2012");
        expect(result.start.get("year")).toBe(2012);
        expect(result.start.get("month")).toBe(9);
@@ -41,7 +45,7 @@
        expect(result.start.isCertain("day")).toBe(false);
        expect(result.start).toBeDate(new Date (2012, 9 - 1, 1, 12));
      });
-     testSingleCase(chrono, "Sep-2012", (result) {
+     testSingleCase(en.casual, "Sep-2012", (result) {
        expect(result.start).not.toBeNull();
        expect(result.start.get("year")).toBe(2012);
        expect(result.start.get("month")).toBe(9);
@@ -52,7 +56,7 @@
    });
    test("Test - Month-Only expression", () {
      testSingleCase(
-         chrono, "In January", new Date (2020, 11 - 1, 22), (result) {
+         en.casual, "In January", new Date (2020, 11 - 1, 22), (result) {
        expect(result.text).toContain("January");
        expect(result.start).not.toBeNull();
        expect(result.start.get("year")).toBe(2021);
@@ -63,7 +67,7 @@
        expect(result.start.isCertain("day")).toBe(false);
        expect(result.start).toBeDate(new Date (2021, 1 - 1, 1, 12));
      });
-     testSingleCase(chrono, "in Jan", new Date (2020, 11 - 1, 22), (result) {
+     testSingleCase(en.casual, "in Jan", new Date (2020, 11 - 1, 22), (result) {
        expect(result.text).toContain("Jan");
        expect(result.start).not.toBeNull();
        expect(result.start.get("year")).toBe(2021);
@@ -74,7 +78,7 @@
        expect(result.start.isCertain("day")).toBe(false);
        expect(result.start).toBeDate(new Date (2021, 1 - 1, 1, 12));
      });
-     testSingleCase(chrono, "May", new Date (2020, 11 - 1, 22), (result) {
+     testSingleCase(en.casual, "May", new Date (2020, 11 - 1, 22), (result) {
        expect(result.text).toContain("May");
        expect(result.start).not.toBeNull();
        expect(result.start.get("year")).toBe(2021);
@@ -88,21 +92,21 @@
    });
    test("Test - Month-Only Range expression", () {
      testSingleCase(
-         chrono, "From May to December", new Date (2023, 4 - 1, 9), (result) {
+         en.casual, "From May to December", new Date (2023, 4 - 1, 9), (result) {
        expect(result.start.get("year")).toBe(2023);
        expect(result.start.get("month")).toBe(5);
        expect(result.end.get("year")).toBe(2023);
        expect(result.end.get("month")).toBe(12);
      });
      testSingleCase(
-         chrono, "From December to May", new Date (2023, 4 - 1, 9), (result) {
+         en.casual, "From December to May", new Date (2023, 4 - 1, 9), (result) {
        expect(result.start.get("year")).toBe(2022);
        expect(result.start.get("month")).toBe(12);
        expect(result.end.get("year")).toBe(2023);
        expect(result.end.get("month")).toBe(5);
      });
      testSingleCase(
-         chrono, "From May to December, 2022", new Date (2023, 4 - 1, 9), (
+         en.casual, "From May to December, 2022", new Date (2023, 4 - 1, 9), (
          result) {
        expect(result.start.get("year")).toBe(2022);
        expect(result.start.get("month")).toBe(5);
@@ -110,7 +114,7 @@
        expect(result.end.get("month")).toBe(12);
      });
      testSingleCase(
-         chrono, "From December to May 2022", new Date (2023, 4 - 1, 9), (
+         en.casual, "From December to May 2022", new Date (2023, 4 - 1, 9), (
          result) {
        expect(result.start.get("year")).toBe(2021);
        expect(result.start.get("month")).toBe(12);
@@ -118,7 +122,7 @@
        expect(result.end.get("month")).toBe(5);
      });
      testSingleCase(
-         chrono, "From December to May 2020", new Date (2023, 4 - 1, 9), (
+         en.casual, "From December to May 2020", new Date (2023, 4 - 1, 9), (
          result) {
        expect(result.start.get("year")).toBe(2019);
        expect(result.start.get("month")).toBe(12);
@@ -126,7 +130,7 @@
        expect(result.end.get("month")).toBe(5);
      });
      testSingleCase(
-         chrono, "From December to May 2025", new Date (2023, 4 - 1, 9), (
+         en.casual, "From December to May 2025", new Date (2023, 4 - 1, 9), (
          result) {
        expect(result.start.get("year")).toBe(2024);
        expect(result.start.get("month")).toBe(12);
@@ -135,25 +139,25 @@
      });
    });
    test("Test - Month with farward date option", () {
-     testSingleCase(chrono, "in December", new Date (2023, 4 - 1, 9),
+     testSingleCase(en.casual, "in December", new Date (2023, 4 - 1, 9),
          { "forwardDate": true}, (result) {
            expect(result.start.get("year")).toBe(2023);
            expect(result.start.get("month")).toBe(12);
          });
      testSingleCase(
-         chrono, "in May", new Date (2023, 4 - 1, 9), { "forwardDate": true}, (
+         en.casual, "in May", new Date (2023, 4 - 1, 9), { "forwardDate": true}, (
          result) {
        expect(result.start.get("year")).toBe(2023);
        expect(result.start.get("month")).toBe(5);
      });
-     testSingleCase(chrono, "From May to December", new Date (2023, 4 - 1, 9),
+     testSingleCase(en.casual, "From May to December", new Date (2023, 4 - 1, 9),
          { "forwardDate": true}, (result) {
            expect(result.start.get("year")).toBe(2023);
            expect(result.start.get("month")).toBe(5);
            expect(result.end.get("year")).toBe(2023);
            expect(result.end.get("month")).toBe(12);
          });
-     testSingleCase(chrono, "From December to May", new Date (2023, 4 - 1, 9),
+     testSingleCase(en.casual, "From December to May", new Date (2023, 4 - 1, 9),
          { "forwardDate": true}, (result) {
            expect(result.start.get("year")).toBe(2023);
            expect(result.start.get("month")).toBe(12);
@@ -162,7 +166,7 @@
          });
    });
    test("Test - Month expression in context", () {
-     testSingleCase(chrono, "The date is Sep 2012 is the date", (result) {
+     testSingleCase(en.casual, "The date is Sep 2012 is the date", (result) {
        expect(result.index).toBe(12);
        expect(result.text).toBe("Sep 2012");
        expect(result.start).not.toBeNull();
@@ -170,7 +174,7 @@
        expect(result.start.get("month")).toBe(9);
        expect(result.start).toBeDate(new Date (2012, 9 - 1, 1, 12));
      });
-     testSingleCase(chrono, "By Angie Mar November 2019", (result) {
+     testSingleCase(en.casual, "By Angie Mar November 2019", (result) {
        expect(result.text).toBe("November 2019");
        expect(result.start).not.toBeNull();
        expect(result.start.get("year")).toBe(2019);
@@ -179,7 +183,7 @@
      });
    });
    test("Test - Month slash expression", () {
-     testSingleCase(chrono, "9/2012", new Date (2012, 7, 10), (result) {
+     testSingleCase(en.casual, "9/2012", new Date (2012, 7, 10), (result) {
        expect(result.start).not.toBeNull();
        expect(result.start.get("year")).toBe(2012);
        expect(result.start.get("month")).toBe(9);
@@ -187,7 +191,7 @@
        expect(result.text).toBe("9/2012");
        expect(result.start).toBeDate(new Date (2012, 9 - 1, 1, 12));
      });
-     testSingleCase(chrono, "09/2012", new Date (2012, 7, 10), (result) {
+     testSingleCase(en.casual, "09/2012", new Date (2012, 7, 10), (result) {
        expect(result.start.get("year")).toBe(2012);
        expect(result.start.get("month")).toBe(9);
        expect(result.index).toBe(0);
@@ -196,19 +200,19 @@
      });
    });
    test("Test - year 90's parsing", () {
-     testSingleCase(chrono, "Aug 96", new Date (2012, 7, 10), (result) {
+     testSingleCase(en.casual, "Aug 96", new Date (2012, 7, 10), (result) {
        expect(result.text).toBe("Aug 96");
        expect(result.start.get("year")).toBe(1996);
        expect(result.start.get("month")).toBe(8);
      });
-     testSingleCase(chrono, "96 Aug 96", new Date (2012, 7, 10), (result) {
+     testSingleCase(en.casual, "96 Aug 96", new Date (2012, 7, 10), (result) {
        expect(result.text).toBe("Aug 96");
        expect(result.start.get("year")).toBe(1996);
        expect(result.start.get("month")).toBe(8);
      });
    });
    test("Test - Month should not have timezone", () {
-     testSingleCase(chrono,
+     testSingleCase(en.casual,
          "People visiting Buñol towards the end of August get a good chance to participate in La Tomatina (under normal circumstances)",
          new Date (2012, 7, 10), (result) {
            expect(result.text).toBe("August");

@@ -1,14 +1,18 @@
- import "../../src.dart" as chrono ; import "../test_util.dart" show testSingleCase , testUnexpectedResult , testWithExpectedDate ;
+
+import 'package:chrono/locales/en/index.dart' as en;
+import "package:flutter_test/flutter_test.dart";
+import '../test_util.dart';
+
  void main() {
   test("Test - Parsing Offset Expression", () {
-   testSingleCase(chrono, "    04/2016   ", new Date (2012, 7, 10), (result) {
+   testSingleCase(en.casual, "    04/2016   ", new Date (2012, 7, 10), (result) {
     expect(result.index).toBe(4);
     expect(result.text).toBe("04/2016");
    });
   });
   test("Test - Single Expression", () {
    testSingleCase(
-       chrono, "The event is going ahead (04/2016)", new Date (2012, 7, 10), (
+       en.casual, "The event is going ahead (04/2016)", new Date (2012, 7, 10), (
        result) {
     expect(result.start).not.toBeNull();
     expect(result.start.get("year")).toBe(2016);
@@ -19,7 +23,7 @@
     expect(result.start).toBeDate(new Date (2016, 4 - 1, 1, 12));
    });
    testSingleCase(
-       chrono, "Published: 06/2004", new Date (2012, 7, 10), (result) {
+       en.casual, "Published: 06/2004", new Date (2012, 7, 10), (result) {
     expect(result.start).not.toBeNull();
     expect(result.start.get("year")).toBe(2004);
     expect(result.start.get("month")).toBe(6);
@@ -28,7 +32,7 @@
     expect(result.text).toBe("06/2004");
     expect(result.start).toBeDate(new Date (2004, 6 - 1, 1, 12));
    });
-   testSingleCase(chrono, "8/10/2012", new Date (2012, 7, 10), (result) {
+   testSingleCase(en.casual, "8/10/2012", new Date (2012, 7, 10), (result) {
     expect(result.start).not.toBeNull();
     expect(result.start.get("year")).toBe(2012);
     expect(result.start.get("month")).toBe(8);
@@ -40,7 +44,7 @@
     expect(result.start.isCertain("year")).toBe(true);
     expect(result.start).toBeDate(new Date (2012, 8 - 1, 10, 12));
    });
-   testSingleCase(chrono, ": 8/1/2012", new Date (2012, 7, 10), (result) {
+   testSingleCase(en.casual, ": 8/1/2012", new Date (2012, 7, 10), (result) {
     expect(result.start).not.toBeNull();
     expect(result.start.get("year")).toBe(2012);
     expect(result.start.get("month")).toBe(8);
@@ -49,7 +53,7 @@
     expect(result.text).toBe("8/1/2012");
     expect(result.start).toBeDate(new Date (2012, 8 - 1, 1, 12));
    });
-   testSingleCase(chrono, "8/10", new Date (2012, 7, 10), (result) {
+   testSingleCase(en.casual, "8/10", new Date (2012, 7, 10), (result) {
     expect(result.start).not.toBeNull();
     expect(result.start.get("year")).toBe(2012);
     expect(result.start.get("month")).toBe(8);
@@ -62,30 +66,30 @@
     expect(result.start).toBeDate(new Date (2012, 8 - 1, 10, 12));
    });
    testSingleCase(
-       chrono, "The Deadline is 8/10/2012", new Date (2012, 7, 10), (result) {
+       en.casual, "The Deadline is 8/10/2012", new Date (2012, 7, 10), (result) {
     expect(result.index).toBe(16);
     expect(result.text).toBe("8/10/2012");
     expect(result.start).toBeDate(new Date (2012, 7, 10, 12));
    });
    testSingleCase(
-       chrono, "The Deadline is Tuesday 11/3/2015", new Date (2015, 10, 3), (
+       en.casual, "The Deadline is Tuesday 11/3/2015", new Date (2015, 10, 3), (
        result) {
     expect(result.index).toBe(16);
     expect(result.text).toBe("Tuesday 11/3/2015");
     expect(result.start).toBeDate(new Date (2015, 10, 3, 12));
    });
-   testSingleCase(chrono.strict, "2/28/2014", (result) {
+   testSingleCase(en.casual.strict, "2/28/2014", (result) {
     expect(result.text).toBe("2/28/2014");
    });
    testWithExpectedDate(
-       chrono.strict, "12-30-16", new Date (2016, 12 - 1, 30, 12));
-   testSingleCase(chrono.strict, "Friday 12-30-16", (result) {
+       en.casual.strict, "12-30-16", new Date (2016, 12 - 1, 30, 12));
+   testSingleCase(en.casual.strict, "Friday 12-30-16", (result) {
     expect(result.text).toBe("Friday 12-30-16");
     expect(result).toBeDate(new Date (2016, 12 - 1, 30, 12));
    });
   });
   test("Test - Single Expression Little-Endian", () {
-   testSingleCase(chrono.en.GB, "8/10/2012", new Date (2012, 7, 10), (result) {
+   testSingleCase(en.casual.en.GB, "8/10/2012", new Date (2012, 7, 10), (result) {
     expect(result.start).not.toBeNull();
     expect(result.start.get("year")).toBe(2012);
     expect(result.start.get("month")).toBe(10);
@@ -95,14 +99,14 @@
     expect(result.start).toBeDate(new Date (2012, 10 - 1, 8, 12));
    });
    testWithExpectedDate(
-       chrono.strict, "30-12-16", new Date (2016, 12 - 1, 30, 12));
-   testSingleCase(chrono.strict, "Friday 30-12-16", (result) {
+       en.casual.strict, "30-12-16", new Date (2016, 12 - 1, 30, 12));
+   testSingleCase(en.casual.strict, "Friday 30-12-16", (result) {
     expect(result.text).toBe("Friday 30-12-16");
     expect(result).toBeDate(new Date (2016, 12 - 1, 30, 12));
    });
   });
   test("Test - Single Expression Little-Endian with Month name", () {
-   testSingleCase(chrono.en.GB, "8/Oct/2012", new Date (2012, 7, 10), (result) {
+   testSingleCase(en.casual.en.GB, "8/Oct/2012", new Date (2012, 7, 10), (result) {
     expect(result.start).not.toBeNull();
     expect(result.start.get("year")).toBe(2012);
     expect(result.start.get("month")).toBe(10);
@@ -114,7 +118,7 @@
   });
   test("Test - Range Expression", () {
    testSingleCase(
-       chrono.en, "8/10/2012 - 8/15/2012", new Date (2012, 7, 10), (result) {
+       en.casual.en, "8/10/2012 - 8/15/2012", new Date (2012, 7, 10), (result) {
     expect(result.index).toBe(0);
     expect(result.text).toBe("8/10/2012 - 8/15/2012");
     expect(result.start).not.toBeNull();
@@ -131,32 +135,32 @@
   });
   test("Test - Splitter variances patterns", () {
    final expectDate = new Date (2015, 5 - 1, 25, 12, 0);
-   testWithExpectedDate(chrono, "2015-05-25", expectDate);
-   testWithExpectedDate(chrono, "2015/05/25", expectDate);
-   testWithExpectedDate(chrono, "2015.05.25", expectDate);
-   testWithExpectedDate(chrono, "05-25-2015", expectDate);
-   testWithExpectedDate(chrono, "05/25/2015", expectDate);
-   testWithExpectedDate(chrono, "05.25.2015", expectDate);
-   testWithExpectedDate(chrono, "/05/25/2015", expectDate);
+   testWithExpectedDate(en.casual, "2015-05-25", expectDate);
+   testWithExpectedDate(en.casual, "2015/05/25", expectDate);
+   testWithExpectedDate(en.casual, "2015.05.25", expectDate);
+   testWithExpectedDate(en.casual, "05-25-2015", expectDate);
+   testWithExpectedDate(en.casual, "05/25/2015", expectDate);
+   testWithExpectedDate(en.casual, "05.25.2015", expectDate);
+   testWithExpectedDate(en.casual, "/05/25/2015", expectDate);
    // Also, guessing ambiguous date
-   testWithExpectedDate(chrono, "25/05/2015", expectDate);
+   testWithExpectedDate(en.casual, "25/05/2015", expectDate);
   });
   test("Test - Impossible Dates and Unexpected Results", () {
-   testUnexpectedResult(chrono, "8/32/2014");
-   testUnexpectedResult(chrono, "8/32");
-   testUnexpectedResult(chrono, "2/29/2014");
-   testUnexpectedResult(chrono, "2014/22/29");
-   testUnexpectedResult(chrono, "2014/13/22");
-   testUnexpectedResult(chrono, "80-32-89-89");
-   testUnexpectedResult(chrono, "02/29/2022");
-   testUnexpectedResult(chrono, "06/31/2022");
-   testUnexpectedResult(chrono, "06/-31/2022");
-   testUnexpectedResult(chrono, "18/13/2022");
-   testUnexpectedResult(chrono, "15/28/2022");
+   testUnexpectedResult(en.casual, "8/32/2014");
+   testUnexpectedResult(en.casual, "8/32");
+   testUnexpectedResult(en.casual, "2/29/2014");
+   testUnexpectedResult(en.casual, "2014/22/29");
+   testUnexpectedResult(en.casual, "2014/13/22");
+   testUnexpectedResult(en.casual, "80-32-89-89");
+   testUnexpectedResult(en.casual, "02/29/2022");
+   testUnexpectedResult(en.casual, "06/31/2022");
+   testUnexpectedResult(en.casual, "06/-31/2022");
+   testUnexpectedResult(en.casual, "18/13/2022");
+   testUnexpectedResult(en.casual, "15/28/2022");
   });
   test("Test - forward dates only option", () {
    testSingleCase(
-       chrono, "5/31", new Date (1999, 6 - 1, 1), { "forwardDate": true}, (
+       en.casual, "5/31", new Date (1999, 6 - 1, 1), { "forwardDate": true}, (
        result) {
     expect(result.start).not.toBeNull();
     expect(result.start.get("year")).toBe(2000);
@@ -169,7 +173,7 @@
     expect(result.start.isCertain("year")).toBe(false);
     expect(result.start).toBeDate(new Date (2000, 5 - 1, 31, 12));
    });
-   testSingleCase(chrono, "1/8 at 12pm", new Date ("Sep 25 2021 12:00:00"),
+   testSingleCase(en.casual, "1/8 at 12pm", new Date ("Sep 25 2021 12:00:00"),
        { "forwardDate": true}, (result) {
         expect(result.text).toBe("1/8 at 12pm");
         expect(result.start).not.toBeNull();

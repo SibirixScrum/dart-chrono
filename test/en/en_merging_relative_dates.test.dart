@@ -1,8 +1,11 @@
- import "../../src.dart" as chrono ; import "../test_util.dart" show testSingleCase ;
+import 'package:chrono/locales/en/index.dart' as en;
+import "package:flutter_test/flutter_test.dart";
+import '../test_util.dart';
+
  void main() {
    test("Test - Single Expression", () {
      testSingleCase(
-         chrono.casual, "2 weeks after yesterday", new Date (2022, 2 - 1, 2), (
+         en.casual.casual, "2 weeks after yesterday", new Date (2022, 2 - 1, 2), (
          result) {
        expect(result.text).toBe("2 weeks after yesterday");
        expect(result.start).not.toBeNull();
@@ -17,7 +20,7 @@
        expect(result.start).toBeDate(new Date (2022, 2 - 1, 15, 0));
      });
      testSingleCase(
-         chrono.casual, "2 months before 02/02", new Date (2022, 2 - 1, 2), (
+         en.casual.casual, "2 months before 02/02", new Date (2022, 2 - 1, 2), (
          result) {
        expect(result.text).toBe("2 months before 02/02");
        expect(result.start).not.toBeNull();
@@ -30,7 +33,7 @@
        expect(result.start).toBeDate(new Date (2021, 12 - 1, 2, 12));
      });
      testSingleCase(
-         chrono.casual, "2 days after next Friday", new Date (2022, 2 - 1, 2), (
+         en.casual.casual, "2 days after next Friday", new Date (2022, 2 - 1, 2), (
          result) {
        expect(result.text).toBe("2 days after next Friday");
        expect(result.start).not.toBeNull();

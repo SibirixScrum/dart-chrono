@@ -1,9 +1,10 @@
- import "../../src.dart" as chrono ; import "../test_util.dart" show testSingleCase ;
- import "../../src/results.dart" show ParsingResult ;
+import 'package:chrono/locales/en/index.dart' as en;
+import "package:flutter_test/flutter_test.dart";
+import '../test_util.dart';
  void main() {
   test("Test - 'This' expressions", () {
    testSingleCase(
-       chrono, "this week", new Date (2017, 11 - 1, 19, 12), (result, text) {
+       en.casual, "this week", new Date (2017, 11 - 1, 19, 12), (result, text) {
     expect(result.text).toBe(text);
     expect(result.start.get("year")).toBe(2017);
     expect(result.start.get("month")).toBe(11);
@@ -11,7 +12,7 @@
     expect(result.start.get("hour")).toBe(12);
    });
    testSingleCase(
-       chrono, "this month", new Date (2017, 11 - 1, 19, 12), (result, text) {
+       en.casual, "this month", new Date (2017, 11 - 1, 19, 12), (result, text) {
     expect(result.text).toBe(text);
     expect(result.start.get("year")).toBe(2017);
     expect(result.start.get("month")).toBe(11);
@@ -19,7 +20,7 @@
     expect(result.start.get("hour")).toBe(12);
    });
    testSingleCase(
-       chrono, "this month", new Date (2017, 11 - 1, 1, 12), (result, text) {
+       en.casual, "this month", new Date (2017, 11 - 1, 1, 12), (result, text) {
     expect(result.text).toBe(text);
     expect(result.start.get("year")).toBe(2017);
     expect(result.start.get("month")).toBe(11);
@@ -27,7 +28,7 @@
     expect(result.start.get("hour")).toBe(12);
    });
    testSingleCase(
-       chrono, "this year", new Date (2017, 11 - 1, 19, 12), (result, text) {
+       en.casual, "this year", new Date (2017, 11 - 1, 19, 12), (result, text) {
     expect(result.text).toBe(text);
     expect(result.start.get("year")).toBe(2017);
     expect(result.start.get("month")).toBe(1);
@@ -37,7 +38,7 @@
   });
   test("Test - Past relative expressions", () {
    testSingleCase(
-       chrono, "last week", new Date (2016, 10 - 1, 1, 12), (result, text) {
+       en.casual, "last week", new Date (2016, 10 - 1, 1, 12), (result, text) {
     expect(result.text).toBe(text);
     expect(result.start.get("year")).toBe(2016);
     expect(result.start.get("month")).toBe(9);
@@ -45,7 +46,7 @@
     expect(result.start.get("hour")).toBe(12);
    });
    testSingleCase(
-       chrono, "lastmonth", new Date (2016, 10 - 1, 1, 12), (result, text) {
+       en.casual, "lastmonth", new Date (2016, 10 - 1, 1, 12), (result, text) {
     expect(result.text).toBe(text);
     expect(result.start.get("year")).toBe(2016);
     expect(result.start.get("month")).toBe(9);
@@ -53,7 +54,7 @@
     expect(result.start.get("hour")).toBe(12);
    });
    testSingleCase(
-       chrono, "last day", new Date (2016, 10 - 1, 1, 12), (result, text) {
+       en.casual, "last day", new Date (2016, 10 - 1, 1, 12), (result, text) {
     expect(result.text).toBe(text);
     expect(result.start.get("year")).toBe(2016);
     expect(result.start.get("month")).toBe(9);
@@ -61,7 +62,7 @@
     expect(result.start.get("hour")).toBe(12);
    });
    testSingleCase(
-       chrono, "last month", new Date (2016, 10 - 1, 1, 12), (result, text) {
+       en.casual, "last month", new Date (2016, 10 - 1, 1, 12), (result, text) {
     expect(result.text).toBe(text);
     expect(result.start.get("year")).toBe(2016);
     expect(result.start.get("month")).toBe(9);
@@ -69,7 +70,7 @@
     expect(result.start.get("hour")).toBe(12);
    });
    testSingleCase(
-       chrono, "past week", new Date (2016, 10 - 1, 1, 12), (result, text) {
+       en.casual, "past week", new Date (2016, 10 - 1, 1, 12), (result, text) {
     expect(result.text).toBe(text);
     expect(result.start.get("year")).toBe(2016);
     expect(result.start.get("month")).toBe(9);
@@ -79,7 +80,7 @@
   });
   test("Test - Future relative expressions", () {
    testSingleCase(
-       chrono, "next hour", new Date (2016, 10 - 1, 1, 12), (result, text) {
+       en.casual, "next hour", new Date (2016, 10 - 1, 1, 12), (result, text) {
     expect(result.text).toBe(text);
     expect(result.start.get("year")).toBe(2016);
     expect(result.start.get("month")).toBe(10);
@@ -87,7 +88,7 @@
     expect(result.start.get("hour")).toBe(13);
    });
    testSingleCase(
-       chrono, "next week", new Date (2016, 10 - 1, 1, 12), (result, text) {
+       en.casual, "next week", new Date (2016, 10 - 1, 1, 12), (result, text) {
     expect(result.text).toBe(text);
     expect(result.start.get("year")).toBe(2016);
     expect(result.start.get("month")).toBe(10);
@@ -95,7 +96,7 @@
     expect(result.start.get("hour")).toBe(12);
    });
    testSingleCase(
-       chrono, "next day", new Date (2016, 10 - 1, 1, 12), (result, text) {
+       en.casual, "next day", new Date (2016, 10 - 1, 1, 12), (result, text) {
     expect(result.text).toBe(text);
     expect(result.start.get("year")).toBe(2016);
     expect(result.start.get("month")).toBe(10);
@@ -103,7 +104,7 @@
     expect(result.start.get("hour")).toBe(12);
    });
    testSingleCase(
-       chrono, "next month", new Date (2016, 10 - 1, 1, 12), (result, text) {
+       en.casual, "next month", new Date (2016, 10 - 1, 1, 12), (result, text) {
     expect(result.text).toBe(text);
     expect(result.start.get("year")).toBe(2016);
     expect(result.start.get("month")).toBe(11);
@@ -114,7 +115,7 @@
     expect(result.start.isCertain("day")).toBe(false);
     expect(result.start.isCertain("hour")).toBe(false);
    });
-   testSingleCase(chrono, "next year", new Date (
+   testSingleCase(en.casual, "next year", new Date (
        2020,
        11 - 1,
        22,
@@ -140,7 +141,7 @@
     expect(result.start.isCertain("timezoneOffset")).toBe(false);
    });
    testSingleCase(
-       chrono, "next quarter", new Date (2021, 1 - 1, 22, 12), (result, text) {
+       en.casual, "next quarter", new Date (2021, 1 - 1, 22, 12), (result, text) {
     expect(result.text).toBe(text);
     expect(result.start.get("year")).toBe(2021);
     expect(result.start.get("month")).toBe(4);
@@ -152,7 +153,7 @@
     expect(result.start.isCertain("hour")).toBe(false);
    });
    testSingleCase(
-       chrono, "next qtr", new Date (2021, 10 - 1, 22, 12), (result, text) {
+       en.casual, "next qtr", new Date (2021, 10 - 1, 22, 12), (result, text) {
     expect(result.text).toBe(text);
     expect(result.start.get("year")).toBe(2022);
     expect(result.start.get("month")).toBe(1);
@@ -164,7 +165,7 @@
     expect(result.start.isCertain("hour")).toBe(false);
    });
    testSingleCase(
-       chrono, "next two quarter", new Date (2021, 1 - 1, 22, 12), (result,
+       en.casual, "next two quarter", new Date (2021, 1 - 1, 22, 12), (result,
        text) {
     expect(result.text).toBe(text);
     expect(result.start.get("year")).toBe(2021);
@@ -176,7 +177,7 @@
     expect(result.start.isCertain("day")).toBe(false);
     expect(result.start.isCertain("hour")).toBe(false);
    });
-   testSingleCase(chrono, "after this year", new Date (
+   testSingleCase(en.casual, "after this year", new Date (
        2020,
        11 - 1,
        22,
@@ -202,7 +203,7 @@
     expect(result.start.isCertain("timezoneOffset")).toBe(false);
    });
    testSingleCase(
-       chrono, "Connect back after this year", new Date (2022, 4 - 1, 16, 12), (
+       en.casual, "Connect back after this year", new Date (2022, 4 - 1, 16, 12), (
        result, text) {
     expect(result.start.get("year")).toBe(2023);
     expect(result.start.get("month")).toBe(4);
@@ -211,7 +212,7 @@
   });
   test("Test - Relative date components' certainty", () {
    final refDate = new Date (2016, 10 - 1, 7, 12);
-   testSingleCase(chrono, "next hour", refDate, (result, text) {
+   testSingleCase(en.casual, "next hour", refDate, (result, text) {
     expect(result.text).toBe(text);
     expect(result.start.get("year")).toBe(2016);
     expect(result.start.get("month")).toBe(10);
@@ -225,7 +226,7 @@
     expect(result.start.isCertain("hour")).toBe(true);
     expect(result.start.isCertain("timezoneOffset")).toBe(true);
    });
-   testSingleCase(chrono, "next month", refDate, (result, text) {
+   testSingleCase(en.casual, "next month", refDate, (result, text) {
     //const expectedDate = new Date(2016, 11, 7, 12);
     expect(result.text).toBe(text);
     expect(result.start.get("year")).toBe(2016);

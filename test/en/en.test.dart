@@ -1,9 +1,12 @@
-import "../../src.dart" show Meridiem;
+
+import "package:flutter_test/flutter_test.dart";
+import 'package:chrono/locales/en/index.dart' as en;
 import "../test_util.dart" show testSingleCase, testUnexpectedResult;
+
 
 void main() {
   test("Test - Date + Time Expression", () {
-    testSingleCase(chrono, "Something happen on 2014-04-18 13:00 - 16:00 as",
+    testSingleCase(en.casual, "Something happen on 2014-04-18 13:00 - 16:00 as",
         (result) {
       expect(result.text).toBe("2014-04-18 13:00 - 16:00");
       expect(result.start).toBeDate(new Date(2014, 4 - 1, 18, 13));
@@ -11,13 +14,13 @@ void main() {
     });
   });
   test("Test - Time Expression", () {
-    testSingleCase(chrono, "between 3:30-4:30pm", new Date(2020, 7 - 1, 6),
+    testSingleCase(en.casual, "between 3:30-4:30pm", new Date(2020, 7 - 1, 6),
         (result) {
       expect(result.text).toBe("3:30-4:30pm");
       expect(result.start).toBeDate(new Date(2020, 7 - 1, 6, 15, 30));
       expect(result.end).toBeDate(new Date(2020, 7 - 1, 6, 16, 30));
     });
-    testSingleCase(chrono, "9:00 PST", new Date(2020, 7 - 1, 6), (result) {
+    testSingleCase(en.casual, "9:00 PST", new Date(2020, 7 - 1, 6), (result) {
       expect(result.text).toBe("9:00 PST");
       expect(result.start.get("hour")).toBe(9);
       expect(result.start.get("minute")).toBe(0);
@@ -26,53 +29,53 @@ void main() {
   });
   test("Test - Quoted Expressions", () {
     testSingleCase(
-        chrono, "Want to meet for dinner (5pm EST)?", new Date(2020, 7 - 1, 6),
+        en.casual, "Want to meet for dinner (5pm EST)?", new Date(2020, 7 - 1, 6),
         (result) {
       expect(result.text).toContain("5pm EST");
     });
-    testSingleCase(chrono, "between '3:30-4:30pm'", new Date(2020, 7 - 1, 6),
+    testSingleCase(en.casual, "between '3:30-4:30pm'", new Date(2020, 7 - 1, 6),
         (result) {
       expect(result.text).toContain("3:30-4:30pm");
       expect(result.start).toBeDate(new Date(2020, 7 - 1, 6, 15, 30));
       expect(result.end).toBeDate(new Date(2020, 7 - 1, 6, 16, 30));
     });
-    testSingleCase(chrono, "The date is '2014-04-18'", (result) {
+    testSingleCase(en.casual, "The date is '2014-04-18'", (result) {
       expect(result.text).toContain("2014-04-18");
       expect(result.start).toBeDate(new Date(2014, 4 - 1, 18, 12));
     });
   });
   test("Test - Strict Mode", () {
-    testUnexpectedResult(chrono.strict, "Tuesday");
+    testUnexpectedResult(en.casual.strict, "Tuesday");
   });
   test("Test - Built-in English variants", () {
-    testSingleCase(chrono.en, "6/10/2018", (result) {
+    testSingleCase(en.casual.en, "6/10/2018", (result) {
       expect(result.start).toBeDate(new Date(2018, 6 - 1, 10, 12));
     });
-    testSingleCase(chrono.en.GB, "6/10/2018", (result) {
+    testSingleCase(en.casual.en.GB, "6/10/2018", (result) {
       expect(result.start).toBeDate(new Date(2018, 10 - 1, 6, 12));
     });
   });
   test("Test - Random text", () {
-    testSingleCase(chrono,
+    testSingleCase(en.casual,
         "Adam <Adam@supercalendar.com> написал(а):\nThe date is 02.07.2013",
         (result) {
       expect(result.text).toBe("02.07.2013");
     });
-    testSingleCase(chrono, "174 November 1,2001- March 31,2002", (result) {
+    testSingleCase(en.casual, "174 November 1,2001- March 31,2002", (result) {
       expect(result.text).toBe("November 1,2001- March 31,2002");
     });
     testSingleCase(
-        chrono, "...Thursday, December 15, 2011 Best Available Rate ",
+        en.casual, "...Thursday, December 15, 2011 Best Available Rate ",
         (result) {
       expect(result.text).toBe("Thursday, December 15, 2011");
       expect(result.start.get("year")).toBe(2011);
     });
-    testSingleCase(chrono, "SUN 15SEP 11:05 AM - 12:50 PM", (result) {
+    testSingleCase(en.casual, "SUN 15SEP 11:05 AM - 12:50 PM", (result) {
       expect(result.text).toBe("SUN 15SEP 11:05 AM - 12:50 PM");
       expect(result.end.get("hour")).toBe(12);
       expect(result.end.get("minute")).toBe(50);
     });
-    testSingleCase(chrono, "FRI 13SEP 1:29 PM - FRI 13SEP 3:29 PM", (result) {
+    testSingleCase(en.casual, "FRI 13SEP 1:29 PM - FRI 13SEP 3:29 PM", (result) {
       expect(result.text).toBe("FRI 13SEP 1:29 PM - FRI 13SEP 3:29 PM");
       expect(result.start.get("day")).toBe(13);
       expect(result.start.get("hour")).toBe(13);
@@ -81,14 +84,14 @@ void main() {
       expect(result.end.get("hour")).toBe(15);
       expect(result.end.get("minute")).toBe(29);
     });
-    testSingleCase(chrono, "9:00 AM to 5:00 PM, Tuesday, 20 May 2013",
+    testSingleCase(en.casual, "9:00 AM to 5:00 PM, Tuesday, 20 May 2013",
         (result) {
       expect(result.text).toBe("9:00 AM to 5:00 PM, Tuesday, 20 May 2013");
       expect(result.start).toBeDate(new Date(2013, 4, 20, 9, 0));
       expect(result.end).toBeDate(new Date(2013, 4, 20, 17, 0));
     });
     testSingleCase(
-        chrono, "Monday afternoon to last night", new Date(2017, 7 - 1, 7),
+        en.casual, "Monday afternoon to last night", new Date(2017, 7 - 1, 7),
         (result) {
       expect(result.text).toBe("Monday afternoon to last night");
       expect(result.start.get("day")).toBe(3);
@@ -96,7 +99,7 @@ void main() {
       expect(result.end.get("day")).toBe(7);
       expect(result.end.get("month")).toBe(7);
     });
-    testSingleCase(chrono, "03-27-2022, 02:00 AM", new Date(2017, 7 - 1, 7),
+    testSingleCase(en.casual, "03-27-2022, 02:00 AM", new Date(2017, 7 - 1, 7),
         (result) {
       expect(result.text).toBe("03-27-2022, 02:00 AM");
       expect(result.start.get("day")).toBe(27);
@@ -112,7 +115,7 @@ void main() {
             "Apple announced on the same day that they had no plans for a public service, but were encouraging " +
             "\"well-wishers\" to send their remembrance messages to an email address created to receive such messages.[240] " +
             "Sunday, October 16, 2011";
-    final results = chrono.parse(text, new Date(2012, 7, 10));
+    final results = en.casual.parse(text, new Date(2012, 7, 10));
     expect(results.length).toBe(2);
     {
       final result = results[0];
@@ -134,7 +137,7 @@ void main() {
   test("Test - Parse multiple date results", () {
     const text =
         "I will see you at 2:30. If not I will see you somewhere between 3:30-4:30pm";
-    final results = chrono.parse(text, new Date(2020, 7 - 1, 6));
+    final results = en.casual.parse(text, new Date(2020, 7 - 1, 6));
     expect(results.length).toBe(2);
     {
       final result = results[0];
@@ -155,7 +158,7 @@ void main() {
     }
   });
   test("Test - Customize by removing time extraction", () {
-    final custom = chrono.en.casual.clone();
+    final custom = en.casual.en.casual.clone();
     custom.parsers =
         custom.parsers.filter((p) => !(p is ENTimeExpressionParser));
     custom.parse("Thursday 9AM");

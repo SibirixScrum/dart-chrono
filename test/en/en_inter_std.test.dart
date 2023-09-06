@@ -1,8 +1,10 @@
- import "../../src/.dart" as chrono ; import "../test_util.dart" show testSingleCase ;
+import 'package:chrono/locales/en/index.dart' as en;
+import "package:flutter_test/flutter_test.dart";
+import '../test_util.dart';
 
  void main() {
    test("Test - Single Expression", () {
-     testSingleCase(chrono, "Let's finish this before this 2013-2-7.",
+     testSingleCase(en.casual, "Let's finish this before this 2013-2-7.",
          new Date (2012, 7, 8), (result) {
            expect(result.start).not.toBeNull();
            expect(result.start.get("year")).toBe(2013);
@@ -13,7 +15,7 @@
            expect(expectDate.getTime()).toBeCloseTo(resultDate.getTime());
          });
      testSingleCase(
-         chrono, "1994-11-05T08:15:30-05:30", new Date (2012, 7, 8), (result) {
+         en.casual, "1994-11-05T08:15:30-05:30", new Date (2012, 7, 8), (result) {
        expect(result.start).not.toBeNull();
        expect(result.start.get("year")).toBe(1994);
        expect(result.start.get("month")).toBe(11);
@@ -26,7 +28,7 @@
        expect(result.start).toBeDate(new Date (784043130000));
      });
      testSingleCase(
-         chrono, "1994-11-05T13:15:30", new Date (2012, 7, 8), (result) {
+         en.casual, "1994-11-05T13:15:30", new Date (2012, 7, 8), (result) {
        expect(result.start).not.toBeNull();
        expect(result.start.get("year")).toBe(1994);
        expect(result.start.get("month")).toBe(11);
@@ -39,7 +41,7 @@
        expect(result.start).toBeDate(new Date (784041330000));
      });
      testSingleCase(
-         chrono, "2015-07-31T12:00:00", new Date (2012, 7, 8), (result) {
+         en.casual, "2015-07-31T12:00:00", new Date (2012, 7, 8), (result) {
        expect(result.start).not.toBeNull();
        expect(result.start.get("year")).toBe(2015);
        expect(result.start.get("month")).toBe(7);
@@ -52,7 +54,7 @@
        expect(result.start).toBeDate(new Date (1438344000000));
      });
      testSingleCase(
-         chrono, "1994-11-05T13:15:30Z", new Date (2012, 7, 8), (result) {
+         en.casual, "1994-11-05T13:15:30Z", new Date (2012, 7, 8), (result) {
        expect(result.start).not.toBeNull();
        expect(result.start.get("year")).toBe(1994);
        expect(result.start.get("month")).toBe(11);
@@ -65,7 +67,7 @@
        expect(result.start).toBeDate(new Date (784041330000));
      });
      testSingleCase(
-         chrono, "1994-11-05T13:15:30Z", new Date (2012, 7, 8), (result) {
+         en.casual, "1994-11-05T13:15:30Z", new Date (2012, 7, 8), (result) {
        expect(result.start).not.toBeNull();
        expect(result.start.get("year")).toBe(1994);
        expect(result.start.get("month")).toBe(11);
@@ -78,7 +80,7 @@
        expect(result.start).toBeDate(new Date (784041330000));
      });
      testSingleCase(
-         chrono, "- 1994-11-05T13:15:30Z", new Date (2012, 7, 8), (result) {
+         en.casual, "- 1994-11-05T13:15:30Z", new Date (2012, 7, 8), (result) {
        expect(result.start).not.toBeNull();
        expect(result.start.get("year")).toBe(1994);
        expect(result.start.get("month")).toBe(11);
@@ -91,7 +93,7 @@
        expect(result.text).toBe("1994-11-05T13:15:30Z");
        expect(result.start).toBeDate(new Date (784041330000));
      });
-     testSingleCase(chrono.strict, "2016-05-07T23:45:00.487+01:00",
+     testSingleCase(en.casual.strict, "2016-05-07T23:45:00.487+01:00",
          new Date (2012, 7, 8), (result) {
            expect(result.start).not.toBeNull();
            expect(result.start.get("year")).toBe(2016);

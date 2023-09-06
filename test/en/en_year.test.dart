@@ -1,8 +1,11 @@
- import "../../src.dart" as chrono ; import "../test_util.dart" show testSingleCase , testUnexpectedResult ;
+import 'package:chrono/locales/en/index.dart' as en;
+import "package:flutter_test/flutter_test.dart";
+import '../test_util.dart';
+
  void main() {
    test("Test - Year numbers with BCE/CE Era label", () {
      testSingleCase(
-         chrono, "10 August 234 BCE", new Date (2012, 7, 10), (result) {
+         en.casual, "10 August 234 BCE", new Date (2012, 7, 10), (result) {
        expect(result.index).toBe(0);
        expect(result.text).toBe("10 August 234 BCE");
        expect(result.start).not.toBeNull();
@@ -12,7 +15,7 @@
        expect(result.start).toBeDate(new Date (-234, 8 - 1, 10, 12));
      });
      testSingleCase(
-         chrono, "10 August 88 CE", new Date (2012, 7, 10), (result) {
+         en.casual, "10 August 88 CE", new Date (2012, 7, 10), (result) {
        expect(result.index).toBe(0);
        expect(result.text).toBe("10 August 88 CE");
        expect(result.start).not.toBeNull();
@@ -27,7 +30,7 @@
    });
    test("Test - Year numbers with BC/AD Era label", () {
      testSingleCase(
-         chrono, "10 August 234 BC", new Date (2012, 7, 10), (result) {
+         en.casual, "10 August 234 BC", new Date (2012, 7, 10), (result) {
        expect(result.index).toBe(0);
        expect(result.text).toBe("10 August 234 BC");
        expect(result.start).not.toBeNull();
@@ -37,7 +40,7 @@
        expect(result.start).toBeDate(new Date (-234, 8 - 1, 10, 12));
      });
      testSingleCase(
-         chrono, "10 August 88 AD", new Date (2012, 7, 10), (result) {
+         en.casual, "10 August 88 AD", new Date (2012, 7, 10), (result) {
        expect(result.index).toBe(0);
        expect(result.text).toBe("10 August 88 AD");
        expect(result.start).not.toBeNull();
@@ -52,7 +55,7 @@
    });
    test("Test - Year numbers with Buddhist Era label", () {
      testSingleCase(
-         chrono, "10 August 2555 BE", new Date (2012, 7, 10), (result) {
+         en.casual, "10 August 2555 BE", new Date (2012, 7, 10), (result) {
        expect(result.index).toBe(0);
        expect(result.text).toBe("10 August 2555 BE");
        expect(result.start).not.toBeNull();

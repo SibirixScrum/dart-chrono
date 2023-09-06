@@ -1,4 +1,7 @@
- import "../../src.dart" as chrono ; import "../test_util.dart" show measureMilliSec ;
+import 'package:chrono/locales/en/index.dart' as en;
+import "package:flutter_test/flutter_test.dart";
+import '../test_util.dart';
+
  void main() {
    test("Test - Benchmarking against whitespace backtracking", () {
      final time = measureMilliSec(() {
@@ -15,7 +18,7 @@
            "                                                                                                     " +
            "                                                             01                                      " +
            "          seconds";
-       final results = chrono.parse(str);
+       final results = en.casual.parse(str);
        expect(results.length).toBe(0);
      });
      expect(time).toBeLessThan(1000);
