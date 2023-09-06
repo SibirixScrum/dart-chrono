@@ -2,6 +2,8 @@
   
 */
 
+import 'package:chrono/common/refiners/AbstractMergeDateRangeRefiner.dart';
+
 /**
  * Merging before and after results (see. AbstractMergeDateRangeRefiner)
  * This implementation should provide English connecting phases

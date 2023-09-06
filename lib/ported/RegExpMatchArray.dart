@@ -40,6 +40,6 @@ extension RegExpUtil on RegExp {
 
 extension RegExpUtil2 on String {
   bool match(RegExp exp) {
-    return exp.firstMatch(this) != null;
+    return exp.hasMatch(this);
   }
 }
