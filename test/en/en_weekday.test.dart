@@ -67,7 +67,7 @@ import '../test_util.dart';
     });
      testSingleCase(
          en.casual, "Let's have a meeting on Friday next week",
-        DateTime("Sat Apr 18 2015"), (ParsedResult result, String text) {
+        DateTime.parse("2015-08-18"), (ParsedResult result, String text) {
       expect(result.index, 21);
       expect(result.text, "on Friday next week");
       expect(result.start == null, isFalse);
@@ -93,40 +93,40 @@ import '../test_util.dart';
    });
    test("Test - Weekday casual `This` guessing", () {
      testSingleCase(
-        en.casual, "This Saturday", DateTime("Tue Aug 2 2022"),
+        en.casual, "This Saturday", DateTime.parse("2022-08-02"),
         (ParsedResult result, String text) {
       expect(result.start.get(Component.day), 6);
       expect(result.start.get(Component.month), 8);
       expect(result.start.get(Component.year), 2022);
     });
-     testSingleCase(en.casual, "This Sunday", DateTime("Tue Aug 2 2022"),
+     testSingleCase(en.casual, "This Sunday", DateTime.parse("2022-08-02"),
         (ParsedResult result, String text) {
       expect(result.start.get(Component.day), 7);
       expect(result.start.get(Component.month), 8);
       expect(result.start.get(Component.year), 2022);
     });
      testSingleCase(
-        en.casual, "This Wednesday", DateTime("Tue Aug 2 2022"),
+        en.casual, "This Wednesday", DateTime.parse("2022-08-02"),
         (ParsedResult result, String text) {
       expect(result.start.get(Component.day), 3);
       expect(result.start.get(Component.month), 8);
       expect(result.start.get(Component.year), 2022);
     });
      testSingleCase(
-        en.casual, "This Saturday", DateTime("Sun Aug 7 2022"),
+        en.casual, "This Saturday", DateTime.parse("2022-08-07"),
         (ParsedResult result, String text) {
       expect(result.start.get(Component.day), 13);
       expect(result.start.get(Component.month), 8);
       expect(result.start.get(Component.year), 2022);
     });
-     testSingleCase(en.casual, "This Sunday", DateTime("Sun Aug 7 2022"),
+     testSingleCase(en.casual, "This Sunday", DateTime.parse("2022-08-07"),
         (ParsedResult result, String text) {
       expect(result.start.get(Component.day), 7);
       expect(result.start.get(Component.month), 8);
       expect(result.start.get(Component.year), 2022);
     });
      testSingleCase(
-        en.casual, "This Wednesday", DateTime("Sun Aug 7 2022"),
+        en.casual, "This Wednesday", DateTime.parse("2022-08-07"),
         (ParsedResult result, String text) {
       expect(result.start.get(Component.day), 10);
       expect(result.start.get(Component.month), 8);
@@ -135,20 +135,20 @@ import '../test_util.dart';
    });
    test("Test - Weekday casual `Last` guessing", () {
      testSingleCase(
-        en.casual, "Last Saturday", DateTime("Tue Aug 2 2022"),
+        en.casual, "Last Saturday", DateTime.parse("2022-08-02"),
         (ParsedResult result, String text) {
       expect(result.start.get(Component.day), 30);
       expect(result.start.get(Component.month), 7);
       expect(result.start.get(Component.year), 2022);
     });
-     testSingleCase(en.casual, "Last Sunday", DateTime("Tue Aug 2 2022"),
+     testSingleCase(en.casual, "Last Sunday", DateTime.parse("2022-08-02"),
         (ParsedResult result, String text) {
       expect(result.start.get(Component.day), 31);
       expect(result.start.get(Component.month), 7);
       expect(result.start.get(Component.year), 2022);
     });
      testSingleCase(
-        en.casual, "Last Wednesday", DateTime("Tue Aug 2 2022"),
+        en.casual, "Last Wednesday", DateTime.parse("2022-08-02"),
         (ParsedResult result, String text) {
       expect(result.start.get(Component.day), 27);
       expect(result.start.get(Component.month), 7);
@@ -157,7 +157,7 @@ import '../test_util.dart';
    });
    test("Test - Weekday casual `Next` guessing", () {
      {
-      final refDate = DateTime("Tue Aug 2 2022");
+      final refDate = DateTime.parse("2022-08-02");
       testSingleCase(en.casual, "Next Saturday", refDate,
           (ParsedResult result, String text) {
         expect(result.start.get(Component.day), 13);
@@ -178,7 +178,7 @@ import '../test_util.dart';
       });
     }
     {
-      final refDate = DateTime("Saturday Aug 6 2022");
+      final refDate = DateTime.parse("2022-08-06");
       testSingleCase(en.casual, "Next Saturday", refDate,
           (ParsedResult result, String text) {
         expect(result.start.get(Component.day), 13);
@@ -199,7 +199,7 @@ import '../test_util.dart';
       });
     }
     {
-      final refDate = DateTime("Sun Aug 7 2022");
+      final refDate = DateTime.parse("2022-08-07");
       testSingleCase(en.casual, "Next Saturday", refDate,
           (ParsedResult result, String text) {
         expect(result.start.get(Component.day), 13);
@@ -339,12 +339,12 @@ import '../test_util.dart';
       expect(result.end!.isCertain(Component.month), false);
       expect(result.end!.isCertain(Component.year), false);
       expect(result.end!.isCertain(Component.weekday), true);
-      expectToBeDate(result.end , DateTime(2016, 8 - 1, 8, 12));
+      expectToBeDate(result.end! , DateTime(2016, 8 - 1, 8, 12));
     });
      testSingleCase(
         en.casual,
         "sunday morning",
-        DateTime("August 15, 2021, 20:00"),
+        DateTime.parse("2021-08-15T20:00"),
         {"forwardDate": true}, (ParsedResult result, String text) {
       expect(result.index, 0);
       expect(result.text, "sunday morning");
@@ -362,7 +362,7 @@ import '../test_util.dart';
      testSingleCase(
         en.casual,
         "vacation monday - friday",
-        DateTime("thursday 13 June 2019"),
+        DateTime.parse("2019-06-14"),
         {"forwardDate": true}, (ParsedResult result, String text) {
       expect(result.text, "monday - friday");
       expect(result.start == null, isFalse);

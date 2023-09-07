@@ -295,22 +295,22 @@ import '../test_util.dart';
   test("Test - Not parsing timezone from relative time", () {
    {
     final refInstant =
-          DateTime("Sun Nov 29 2020 13:24:13 GMT+0900 (Japan Standard Time)");
+          DateTime.parse("2020-11-29T13:24:13+0900");
     final expectedInstant =
-          DateTime("Sun Nov 29 2020 14:24:13 GMT+0900 (Japan Standard Time)");
+          DateTime.parse("2020-11-29T14:24:13+0900");
     testSingleCase(en.casual, "in 1 hour get eggs and milk", refInstant,
           (ParsedResult result, String text) {
         expect(result.text, "in 1 hour");
         expect(result.start.get(Component.timezoneOffset),
-            -refInstant.getTimezoneOffset());
+            -refInstant.timeZoneOffset.inMinutes);
         expectToBeDate(result.start , expectedInstant);
       });
    }
    {
     final refInstant =
-          DateTime("Sun Nov 29 2020 13:24:13 GMT+0900 (Japan Standard Time)");
+          DateTime.parse("2020-11-29T13:24:13+0900");
       final expectedInstant =
-          DateTime("Sun Nov 29 2020 14:24:13 GMT+0900 (Japan Standard Time)");
+          DateTime.parse("2020-11-29T14:24:13+0900");
       testSingleCase(en.casual, "in 1 hour GMT", refInstant,
           (ParsedResult result, String text) {
         // expect(result.text , "in 1 hour"); known issue when running test in the GMT time
@@ -319,9 +319,9 @@ import '../test_util.dart';
     }
    {
     final refInstant =
-          DateTime("Sun Nov 29 2020 13:24:13 GMT+0900 (Japan Standard Time)");
+          DateTime.parse("2020-11-29T13:24:13+0900");
     final expectedInstant =
-          DateTime("Sun Nov 29 2020 14:24:13 GMT+0900 (Japan Standard Time)");
+          DateTime.parse("2020-11-29T14:24:13+0900");
     testSingleCase(
         en.casual, "in 1 hour GMT", { "instant": refInstant, "timezone": "JST"}, (
         result, text) {
@@ -331,9 +331,9 @@ import '../test_util.dart';
    }
    {
     final refInstant =
-          DateTime("Sun Nov 29 2020 13:24:13 GMT+0900 (Japan Standard Time)");
+          DateTime.parse("2020-11-29T13:24:13+0900");
     final expectedInstant =
-          DateTime("Sun Nov 29 2020 14:24:13 GMT+0900 (Japan Standard Time)");
+          DateTime.parse("2020-11-29T14:24:13+0900");
     testSingleCase(
         en.casual, "in 1 hour GMT", { "instant": refInstant, "timezone": "BST"}, (
         result, text) {

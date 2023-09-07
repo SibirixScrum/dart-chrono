@@ -1,4 +1,7 @@
 import 'package:chrono/locales/en/index.dart' as en;
+import 'package:chrono/results.dart';
+import 'package:chrono/results.dart';
+import 'package:chrono/results.dart';
 import 'package:chrono/types.dart';
 import "package:flutter_test/flutter_test.dart";
 import '../test_util.dart';
@@ -260,56 +263,55 @@ import '../test_util.dart';
    });
   });
   test("Test - Relative date components' certainty and imply timezone", () {
-   final refDate = DateTime(
-       "Sun Nov 29 2020 13:24:13 GMT+0900 (Japan Standard Time)");
+   final refDate = DateTime.parse ("2020-11-29T13:24:13+0900");
    {
     const text = "now";
-    final result =;
+    final result =en.casual.parse(text,ParsingReferenceDummy(refDate))[0] as ParsingResult;
     expect(result.text, text);
-    result.start.imply("timezoneOffset", 60);
+    result.start.imply(Component.timezoneOffset, 60);
     expectToBeDate(result.start,
-        DateTime("Sun Nov 29 2020 13:24:13 GMT+0900 (Japan Standard Time)"));
-    expectToBeDate(result.start,DateTime("Sun Nov 29 2020 5:24:13 GMT+0100"));
+        DateTime.parse("2020-11-29T13:24:13+0900"));
+    expectToBeDate(result.start,DateTime.parse("2020-11-29T5:24:13+0100"));
    }
    {
     const text = "tomorrow at 5pm";
-    final result =;
+    final result =en.casual.parse(text,ParsingReferenceDummy(refDate))[0] as ParsingResult;
     expect(result.text, text);
-    result.start.imply("timezoneOffset", 60);
+    result.start.imply(Component.timezoneOffset, 60);
     expectToBeDate(result.start,
-        DateTime("Sun Dec 1 2020 1:00:00 GMT+0900 (Japan Standard Time)"));
-    expectToBeDate(result.start,DateTime("Sun Nov 30 2020 17:00:00 GMT+0100"));
+        DateTime.parse("2020-12-1T1:00:00+0900"));
+    expectToBeDate(result.start,DateTime.parse("2020-11-30T17:00:00+0100"));
    }
    {
     const text = "in 10 minutes";
-    final result =;
+    final result =en.casual.parse(text,ParsingReferenceDummy(refDate))[0] as ParsingResult;
     expect(result.text, text);
-    result.start.imply("timezoneOffset", 60);
+    result.start.imply(Component.timezoneOffset, 60);
     expectToBeDate(result.start,
-        DateTime("Sun Nov 29 2020 13:34:13 GMT+0900 (Japan Standard Time)"));
-    expectToBeDate(result.start,DateTime("Sun Nov 29 2020 5:34:13 GMT+0100"));
+        DateTime.parse("2020-11-29T13:34:13+0900"));
+    expectToBeDate(result.start,DateTime.parse("2020-11-29T5:34:13+0100"));
    }
    {
     const text = "in 10 minutes";
-    final result =;
+    final result =en.casual.parse(text,ParsingReferenceDummy(refDate,60))[0] as ParsingResult;
     expect(result.text, text);
-    result.start.imply("timezoneOffset", 60);
+    result.start.imply(Component.timezoneOffset, 60);
     expectToBeDate(result.start,
-        DateTime("Sun Nov 29 2020 13:34:13 GMT+0900 (Japan Standard Time)"));
-    expectToBeDate(result.start,DateTime("Sun Nov 29 2020 5:34:13 GMT+0100"));
+        DateTime.parse("2020-11-29T13:34:13+0900"));
+    expectToBeDate(result.start,DateTime.parse("2020-11-29T5:34:13+0100"));
    }
    {
     const text = "in 10 minutes";
-    final result =;
+    final result =en.casual.parse(text,ParsingReferenceDummy(refDate,540))[0] as ParsingResult;
     expect(result.text, text);
-    result.start.imply("timezoneOffset", 60);
+    result.start.imply(Component.timezoneOffset, 60);
     expectToBeDate(result.start,
-        DateTime("Sun Nov 29 2020 13:34:13 GMT+0900 (Japan Standard Time)"));
-    expectToBeDate(result.start,DateTime("Sun Nov 29 2020 5:34:13 GMT+0100"));
+        DateTime.parse("2020-11-29T13:34:13+0900"));
+    expectToBeDate(result.start,DateTime.parse("2020-11-29T5:34:13+0100"));
    }
    {
     const text = "in 20 minutes";
-    final result =;
+    final result =en.casual.parse(text,ParsingReferenceDummy(refDate,null))[0]  as ParsingResult;
     expect(result.text, text);
     expect(result.start.isCertain(Component.timezoneOffset), false);
    }

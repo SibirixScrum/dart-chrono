@@ -185,7 +185,7 @@ import '../test_util.dart';
       expect(result.start.isCertain(Component.year), false);
       expectToBeDate(result.start,DateTime(2000, 5 - 1, 31, 12));
     });
-    testSingleCase(en.casual, "1/8 at 12pm", DateTime("Sep 25 2021 12:00:00"),
+    testSingleCase(en.casual, "1/8 at 12pm", DateTime.parse("2021-09-25T12:00:00"),
         {"forwardDate": true}, (ParsedResult result, String text) {
       expect(result.text, "1/8 at 12pm");
       expect(result.start == null, isFalse);

@@ -326,7 +326,7 @@ import '../test_util.dart';
    });
    test("Test - forward dates only option", () {
      testSingleCase(en.casual, "1am", {
-      "instant": DateTime("Wed May 26 2022 01:57:00 GMT-0500 (CDT)"),
+      "instant": DateTime.parse("2022-05-06T01:57:00-0500"),
       "timezone": "CDT"
     }, {
       "forwardDate": true

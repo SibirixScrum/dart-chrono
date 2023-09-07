@@ -344,7 +344,7 @@ import '../test_util.dart';
       expect(result.start.get(Component.day), 1);
       expect(result.start.get(Component.hour), 6);
       expect(result.start.get(Component.timezoneOffset),0);
-      expectToBeDate(result.start,DateTime("2020-01-01T06:00:00.000Z"));
+      expectToBeDate(result.start,DateTime.parse ("2020-01-01T06:00:00.000Z"));
     });
     testSingleCase(en.casual, "Jan 1, 2020 Evening JST",
         (ParsedResult result, String text) {
@@ -355,7 +355,7 @@ import '../test_util.dart';
       expect(result.start.get(Component.hour), 20);
       expect(result.start.get(Component.timezoneOffset),540);
       expectToBeDate(result.start,
-          DateTime("Wed Jan 01 2020 20:00:00 GMT+0900 (Japan Standard Time)"));
+          DateTime.parse("2020-01-01T20:00:00+0900"));
     });
   });
   test("Test - Random negative text", () {
