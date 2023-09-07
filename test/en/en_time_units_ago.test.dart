@@ -15,7 +15,7 @@ import '../test_util.dart';
       expect(result.start.get(Component.day), 5);
       expect(result.index, 0);
       expect(result.text, "5 days ago");
-      expectToBeDate(result.start,DateTime(2012, 8 - 1, 5));
+      expectToBeDate(result.start,DateTime(2012, 8 , 5));
     });
      testSingleCase(
         en.casual, "10 days ago, we did something", DateTime(2012, 7, 10),
@@ -26,7 +26,7 @@ import '../test_util.dart';
       expect(result.start.get(Component.day), 31);
       expect(result.index, 0);
       expect(result.text, "10 days ago");
-      expectToBeDate(result.start,DateTime(2012, 7 - 1, 31));
+      expectToBeDate(result.start,DateTime(2012, 7 , 31));
     });
      testSingleCase(en.casual, "15 minute ago", DateTime(2012, 7, 10, 12, 14),
         (ParsedResult result, String text) {
@@ -129,7 +129,7 @@ import '../test_util.dart';
       expect(result.start.get(Component.day), 5);
       expect(result.index, 0);
       expect(result.text, "5 Days ago");
-      expectToBeDate(result.start,DateTime(2012, 8 - 1, 5));
+      expectToBeDate(result.start,DateTime(2012, 8 , 5));
     });
      testSingleCase(
         en.casual, "   half An hour ago", DateTime(2012, 7, 10, 12, 14),
@@ -150,7 +150,7 @@ import '../test_util.dart';
       expect(result.start.get(Component.day), 9);
       expect(result.index, 0);
       expect(result.text, "A days ago");
-      expectToBeDate(result.start,DateTime(2012, 8 - 1, 9));
+      expectToBeDate(result.start,DateTime(2012, 8 , 9));
     });
      testSingleCase(en.casual, "a min before", DateTime(2012, 7, 10, 12, 14),
         (ParsedResult result, String text) {
@@ -173,7 +173,7 @@ import '../test_util.dart';
    });
    test("Test - Single Expression (Casual)", () {
      testSingleCase(
-        en.casual, "5 months ago, we did something", DateTime(2012, 10 - 1, 10),
+        en.casual, "5 months ago, we did something", DateTime(2012, 10 , 10),
         (ParsedResult result, String text) {
       expect(result.start == null, isFalse);
       expect(result.start.get(Component.year), 2012);
@@ -181,10 +181,10 @@ import '../test_util.dart';
       expect(result.start.get(Component.day), 10);
       expect(result.index, 0);
       expect(result.text, "5 months ago");
-      expectToBeDate(result.start,DateTime(2012, 5 - 1, 10));
+      expectToBeDate(result.start,DateTime(2012, 5 , 10));
     });
      testSingleCase(
-        en.casual, "5 years ago, we did something", DateTime(2012, 8 - 1, 10),
+        en.casual, "5 years ago, we did something", DateTime(2012, 8 , 10),
         (ParsedResult result, String text) {
       expect(result.start == null, isFalse);
       expect(result.start.get(Component.year), 2007);
@@ -192,10 +192,10 @@ import '../test_util.dart';
       expect(result.start.get(Component.day), 10);
       expect(result.index, 0);
       expect(result.text, "5 years ago");
-      expectToBeDate(result.start,DateTime(2007, 8 - 1, 10));
+      expectToBeDate(result.start,DateTime(2007, 8 , 10));
     });
      testSingleCase(
-        en.casual, "a week ago, we did something", DateTime(2012, 8 - 1, 3),
+        en.casual, "a week ago, we did something", DateTime(2012, 8 , 3),
         (ParsedResult result, String text) {
       expect(result.start == null, isFalse);
       expect(result.start.get(Component.year), 2012);
@@ -203,10 +203,10 @@ import '../test_util.dart';
       expect(result.start.get(Component.day), 27);
       expect(result.index, 0);
       expect(result.text, "a week ago");
-      expectToBeDate(result.start,DateTime(2012, 7 - 1, 27));
+      expectToBeDate(result.start,DateTime(2012, 7 , 27));
     });
      testSingleCase(
-        en.casual, "a few days ago, we did something", DateTime(2012, 8 - 1, 3),
+        en.casual, "a few days ago, we did something", DateTime(2012, 8 , 3),
         (ParsedResult result, String text) {
       expect(result.start == null, isFalse);
       expect(result.start.get(Component.year), 2012);
@@ -214,7 +214,7 @@ import '../test_util.dart';
       expect(result.start.get(Component.day), 31);
       expect(result.index, 0);
       expect(result.text, "a few days ago");
-      expectToBeDate(result.start,DateTime(2012, 7 - 1, 31));
+      expectToBeDate(result.start,DateTime(2012, 7 , 31));
     });
    });
    test("Test - Nested time ago", () {

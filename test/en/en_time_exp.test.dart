@@ -6,19 +6,19 @@ import '../test_util.dart';
 
  void main() {
    test("Test - Parsing text offset", () {
-     testSingleCase(en.casual, "  11 AM ", DateTime(2016, 10 - 1, 1, 8),
+     testSingleCase(en.casual, "  11 AM ", DateTime(2016, 10 , 1, 8),
         (ParsedResult result, String text) {
       expect(result.index, 2);
       expect(result.text, "11 AM");
     });
-     testSingleCase(en.casual, "2020 at  11 AM ", DateTime(2016, 10 - 1, 1, 8),
+     testSingleCase(en.casual, "2020 at  11 AM ", DateTime(2016, 10 , 1, 8),
         (ParsedResult result, String text) {
       expect(result.index, 5);
       expect(result.text, "at  11 AM");
     });
    });
    test("Test - Time expression", () {
-     testSingleCase(en.casual, "20:32:13", DateTime(2016, 10 - 1, 1, 8),
+     testSingleCase(en.casual, "20:32:13", DateTime(2016, 10 , 1, 8),
         (ParsedResult result, String text) {
       expect(result.text, text);
       expect(result.start.get(Component.hour), 20);
@@ -29,7 +29,7 @@ import '../test_util.dart';
    });
    test("Test - Time range expression", () {
      testSingleCase(
-        en.casual, "10:00:00 - 21:45:00", DateTime(2016, 10 - 1, 1, 8),
+        en.casual, "10:00:00 - 21:45:00", DateTime(2016, 10 , 1, 8),
         (ParsedResult result, String text) {
       expect(result.text, text);
       expect(result.start.get(Component.hour), 10);
@@ -42,7 +42,7 @@ import '../test_util.dart';
       expect(result.end!.get(Component.meridiem), Meridiem.PM);
     });
      testSingleCase(
-         en.casual, "10:00:00 until 21:45:00", DateTime(2016, 10 - 1, 1, 11),
+         en.casual, "10:00:00 until 21:45:00", DateTime(2016, 10 , 1, 11),
         (result, text) {
       expect(result.text, text);
       expect(result.start.get(Component.hour), 10);
@@ -55,7 +55,7 @@ import '../test_util.dart';
       expect(result.end!.get(Component.meridiem), Meridiem.PM);
     });
      testSingleCase(
-         en.casual, "10:00:00 till 21:45:00", DateTime(2016, 10 - 1, 1, 11),
+         en.casual, "10:00:00 till 21:45:00", DateTime(2016, 10 , 1, 11),
         (result, text) {
       expect(result.text, text);
       expect(result.start.get(Component.hour), 10);
@@ -68,7 +68,7 @@ import '../test_util.dart';
       expect(result.end!.get(Component.meridiem), Meridiem.PM);
     });
      testSingleCase(
-         en.casual, "10:00:00 through 21:45:00", DateTime(2016, 10 - 1, 1, 11),
+         en.casual, "10:00:00 through 21:45:00", DateTime(2016, 10 , 1, 11),
         (result, text) {
       expect(result.text, text);
       expect(result.start.get(Component.hour), 10);
@@ -82,7 +82,7 @@ import '../test_util.dart';
     });
    });
    test("Test - Casual time number expression", () {
-     testSingleCase(en.casual, "11 at night", DateTime(2016, 10 - 1, 1, 8),
+     testSingleCase(en.casual, "11 at night", DateTime(2016, 10 , 1, 8),
         (ParsedResult result, String text) {
       expect(result.text, text);
       expect(result.start.get(Component.year), 2016);
@@ -90,7 +90,7 @@ import '../test_util.dart';
       expect(result.start.get(Component.day), 1);
       expect(result.start.get(Component.hour), 23);
     });
-     testSingleCase(en.casual, "11 tonight", DateTime(2016, 10 - 1, 1, 8),
+     testSingleCase(en.casual, "11 tonight", DateTime(2016, 10 , 1, 8),
         (ParsedResult result, String text) {
       expect(result.text, text);
       expect(result.start.get(Component.year), 2016);
@@ -98,7 +98,7 @@ import '../test_util.dart';
       expect(result.start.get(Component.day), 1);
       expect(result.start.get(Component.hour), 23);
     });
-     testSingleCase(en.casual, "6 in the morning", DateTime(2016, 10 - 1, 1, 8),
+     testSingleCase(en.casual, "6 in the morning", DateTime(2016, 10 , 1, 8),
         (ParsedResult result, String text) {
       expect(result.text, text);
       expect(result.start.get(Component.year), 2016);
@@ -109,7 +109,7 @@ import '../test_util.dart';
       expect(result.start.get(Component.meridiem), Meridiem.AM);
     });
      testSingleCase(
-        en.casual, "6 in the afternoon", DateTime(2016, 10 - 1, 1, 8),
+        en.casual, "6 in the afternoon", DateTime(2016, 10 , 1, 8),
         (ParsedResult result, String text) {
       expect(result.text, text);
       expect(result.start.get(Component.year), 2016);
@@ -121,7 +121,7 @@ import '../test_util.dart';
     });
    });
    test("Test - Time range's meridiem handling", () {
-     testSingleCase(en.casual, "10 - 11 at night", DateTime(2016, 10 - 1, 1, 8),
+     testSingleCase(en.casual, "10 - 11 at night", DateTime(2016, 10 , 1, 8),
         (ParsedResult result, String text) {
       expect(result.text, text);
       expect(result.start.get(Component.year), 2016);
@@ -133,7 +133,7 @@ import '../test_util.dart';
       expect(result.end!.get(Component.day), 1);
       expect(result.end!.get(Component.hour), 23);
     });
-     testSingleCase(en.casual, "8pm - 11", DateTime(2016, 10 - 1, 1, 8),
+     testSingleCase(en.casual, "8pm - 11", DateTime(2016, 10 , 1, 8),
         (ParsedResult result, String text) {
       expect(result.text, text);
       expect(result.start.get(Component.year), 2016);
@@ -147,7 +147,7 @@ import '../test_util.dart';
       expect(result.end!.get(Component.hour), 23);
       expect(result.end!.get(Component.meridiem), Meridiem.PM);
     });
-     testSingleCase(en.casual, "8 - 11pm", DateTime(2016, 10 - 1, 1, 8),
+     testSingleCase(en.casual, "8 - 11pm", DateTime(2016, 10 , 1, 8),
         (ParsedResult result, String text) {
       expect(result.text, text);
       expect(result.start.get(Component.year), 2016);
@@ -161,7 +161,7 @@ import '../test_util.dart';
       expect(result.end!.get(Component.hour), 23);
       expect(result.end!.get(Component.meridiem), Meridiem.PM);
     });
-     testSingleCase(en.casual, "7 - 8", DateTime(2016, 10 - 1, 1, 8),
+     testSingleCase(en.casual, "7 - 8", DateTime(2016, 10 , 1, 8),
         (ParsedResult result, String text) {
       expect(result.text, text);
       expect(result.start.get(Component.year), 2016);
@@ -262,7 +262,7 @@ import '../test_util.dart';
   });
    test("Test - Time range to the next day", () {
      testSingleCase(en.casual, "December 31, 2022 10:00 pm - 1:00 am",
-        DateTime(2017, 7 - 1, 7), (ParsedResult result, String text) {
+        DateTime(2017, 7 , 7), (ParsedResult result, String text) {
       expect(result.start.get(Component.day), 31);
       expect(result.start.get(Component.month), 12);
       expect(result.start.get(Component.year), 2022);
@@ -270,7 +270,7 @@ import '../test_util.dart';
       expect(result.start.get(Component.meridiem), Meridiem.PM);
     });
      testSingleCase(en.casual, "December 31, 2022 10:00 pm - 12:00 am",
-        DateTime(2017, 7 - 1, 7), (ParsedResult result, String text) {
+        DateTime(2017, 7 , 7), (ParsedResult result, String text) {
       expect(result.start.get(Component.day), 31);
       expect(result.start.get(Component.month), 12);
       expect(result.start.get(Component.year), 2022);
@@ -337,14 +337,14 @@ import '../test_util.dart';
       expect(result.start.get(Component.hour), 1);
     });
     testSingleCase(
-        en.casual, "11am", DateTime(2016, 10 - 1, 1, 12), {"forwardDate": true},
+        en.casual, "11am", DateTime(2016, 10 , 1, 12), {"forwardDate": true},
         (ParsedResult result, String text) {
       expect(result.start.get(Component.year), 2016);
       expect(result.start.get(Component.month), 10);
       expect(result.start.get(Component.day), 2);
       expect(result.start.get(Component.hour), 11);
     });
-    testSingleCase(en.casual, "  11am to 1am  ", DateTime(2016, 10 - 1, 1, 12),
+    testSingleCase(en.casual, "  11am to 1am  ", DateTime(2016, 10 , 1, 12),
         {"forwardDate": true}, (ParsedResult result, String text) {
       expect(result.start.get(Component.year), 2016);
       expect(result.start.get(Component.month), 10);
@@ -356,7 +356,7 @@ import '../test_util.dart';
       expect(result.end!.get(Component.day), 3);
       expect(result.end!.get(Component.hour), 1);
     });
-    testSingleCase(en.casual, "  10am to 12pm  ", DateTime(2016, 10 - 1, 1, 11),
+    testSingleCase(en.casual, "  10am to 12pm  ", DateTime(2016, 10 , 1, 11),
         {"forwardDate": true}, (ParsedResult result, String text) {
       expect(result.start.get(Component.year), 2016);
       expect(result.start.get(Component.month), 10);

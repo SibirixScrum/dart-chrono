@@ -1,4 +1,5 @@
 import "package:chrono/ported/RegExpMatchArray.dart";
+import "package:chrono/types.dart";
 
 import "../../chrono.dart" show ParsingContext;
 import "AbstractParserWithWordBoundary.dart"
@@ -52,21 +53,21 @@ class ISOFormatParser extends AbstractParserWithWordBoundaryChecking {
   // }
 
   innerExtract(ParsingContext context, RegExpMatchArray match) {
-    final dynamic components = {};
-    components["year"] = int.parse(match[YEAR_NUMBER_GROUP]);
-    components["month"] = int.parse(match[MONTH_NUMBER_GROUP]);
-    components["day"] = int.parse(match[DATE_NUMBER_GROUP]);
+    final Map<Component,num> components = {};
+    components[Component.year] = int.parse(match[YEAR_NUMBER_GROUP]);
+    components[Component.month] = int.parse(match[MONTH_NUMBER_GROUP]);
+    components[Component.day] = int.parse(match[DATE_NUMBER_GROUP]);
     if (match[HOUR_NUMBER_GROUP].isNotEmpty ) {
-      components["hour"] = int.parse(match[HOUR_NUMBER_GROUP]);
-      components["minute"] = int.parse(match[MINUTE_NUMBER_GROUP]);
+      components[Component.hour] = int.parse(match[HOUR_NUMBER_GROUP]);
+      components[Component.minute] = int.parse(match[MINUTE_NUMBER_GROUP]);
       if (match[SECOND_NUMBER_GROUP].isNotEmpty) {
-        components["second"] = int.parse(match[SECOND_NUMBER_GROUP]);
+        components[Component.second] = int.parse(match[SECOND_NUMBER_GROUP]);
       }
       if (match[MILLISECOND_NUMBER_GROUP].isNotEmpty) {
-        components["millisecond"] = int.parse(match[MILLISECOND_NUMBER_GROUP]);
+        components[Component.millisecond] = int.parse(match[MILLISECOND_NUMBER_GROUP]);
       }
       if (match[TZD_HOUR_OFFSET_GROUP].isEmpty) {
-        components["timezoneOffset"] = 0;
+        components[Component.timezoneOffset] = 0;
       } else {
         final hourOffset = int.parse(match[TZD_HOUR_OFFSET_GROUP]);
         var minuteOffset = 0;
@@ -79,7 +80,7 @@ class ISOFormatParser extends AbstractParserWithWordBoundaryChecking {
         } else {
           offset += minuteOffset;
         }
-        components["timezoneOffset"] = offset;
+        components[Component.timezoneOffset] = offset;
       }
     }
     return components;

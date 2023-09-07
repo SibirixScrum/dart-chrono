@@ -108,7 +108,7 @@ import '../test_util.dart';
       // JST: GMT+9:00
       expect(result.start.get(Component.timezoneOffset), 9 * 60);
     });
-   testSingleCase(en.casual, "10:30 pst today", DateTime(2016, 10 - 1, 1, 8),
+   testSingleCase(en.casual, "10:30 pst today", DateTime(2016, 10 , 1, 8),
         (ParsedResult result, String text) {
       expect(result.text, "10:30 pst today");
       expect(result.start.get(Component.year), 2016);
@@ -122,7 +122,7 @@ import '../test_util.dart';
   });
   test("Test - Parsing date range with timezone abbreviation", () {
    testSingleCase(en.casual, "10:30 JST today to 10:30 pst tomorrow ",
-        DateTime(2016, 10 - 1, 1, 8), (ParsedResult result, String text) {
+        DateTime(2016, 10 , 1, 8), (ParsedResult result, String text) {
       expect(result.text, "10:30 JST today to 10:30 pst tomorrow");
       expect(result.start.get(Component.year), 2016);
       expect(result.start.get(Component.month), 10);
@@ -249,7 +249,7 @@ import '../test_util.dart';
     testSingleCase(en.casual, "Jan 1st 2023 at 10:00 XYZ",
         (ParsedResult result, String text) {
       expect(result.text, "Jan 1st 2023 at 10:00");
-      expectToBeDate(result.start , DateTime(2023, 1 - 1, 1, 10));
+      expectToBeDate(result.start , DateTime(2023, 1 , 1, 10));
     });
     // Parse the correct tzoffset when XYZ is provided as a custom tz in parsingOptions
     testSingleCase(
@@ -394,7 +394,7 @@ import '../test_util.dart';
     });
   });
   test("Test - Parsing timezone from relative date when valid", () {
-   final refDate = DateTime(2020, 11 - 1, 14, 13, 48, 22);
+   final refDate = DateTime(2020, 11 , 14, 13, 48, 22);
     testSingleCase(en.casual, "in 1 day get eggs and milk", refDate,
         (ParsedResult result, String text) {
       expect(result.text, "in 1 day");

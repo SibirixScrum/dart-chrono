@@ -1,5 +1,6 @@
 import 'package:chrono/chrono.dart';
 import 'package:chrono/locales/ru/index.dart' as ru;
+import 'package:chrono/locales/en/index.dart' as en;
 import 'package:chrono/types.dart';
 
 void main() async {
@@ -20,7 +21,7 @@ void main() async {
   //
   // print(list);
 
-  final b = ru.parse("В понедельник?", new DateTime(2012, 8, 9),ParsingOption(forwardDate: true));
+  final b = en.parse("Adam <Adam@supercalendar.com> написал(а):\nThe date is 02.07.2013");
   // print(new DateTime(2017, 11, 19, 12).weekday);
 
   // final a = chrono.parse("18.02.2024");

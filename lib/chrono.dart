@@ -197,10 +197,10 @@ class ParsingContext implements DebugHandler {
     this.refDate = this.reference.instant;
   }
 
-  ParsingComponents createParsingComponents([Map<Component, num>? components]) {
-    // if (components is ParsingComponents) {
-    //   return components;
-    // }
+  ParsingComponents createParsingComponents([dynamic? components]) {
+    if (components is ParsingComponents) {
+      return components;
+    }
     return new ParsingComponents(this.reference, components);
   }
 

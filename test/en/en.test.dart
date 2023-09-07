@@ -12,18 +12,18 @@ void main() {
     testSingleCase(en.casual, "Something happen on 2014-04-18 13:00 - 16:00 as",
         (ParsedResult result, String text) {
           expect(result.text, "2014-04-18 13:00 - 16:00");
-      expectToBeDate(result.start, DateTime(2014, 4 - 1, 18, 13));
-      expectToBeDate(result.end!, DateTime(2014, 4 - 1, 18, 16));
+      expectToBeDate(result.start, DateTime(2014, 4 , 18, 13));
+      expectToBeDate(result.end!, DateTime(2014, 4 , 18, 16));
     });
   });
   test("Test - Time Expression", () {
-    testSingleCase(en.casual, "between 3:30-4:30pm", DateTime(2020, 7 - 1, 6),
+    testSingleCase(en.casual, "between 3:30-4:30pm", DateTime(2020, 7 , 6),
         (ParsedResult result, String text) {
           expect(result.text, "3:30-4:30pm");
-      expectToBeDate(result.start, DateTime(2020, 7 - 1, 6, 15, 30));
-      expectToBeDate(result.end!, DateTime(2020, 7 - 1, 6, 16, 30));
+      expectToBeDate(result.start, DateTime(2020, 7 , 6, 15, 30));
+      expectToBeDate(result.end!, DateTime(2020, 7 , 6, 16, 30));
     });
-    testSingleCase(en.casual, "9:00 PST", DateTime(2020, 7 - 1, 6),
+    testSingleCase(en.casual, "9:00 PST", DateTime(2020, 7 , 6),
         (ParsedResult result, String text) {
           expect(result.text, "9:00 PST");
       expect(result.start.get(Component.hour), 9);
@@ -33,19 +33,19 @@ void main() {
   });
   test("Test - Quoted Expressions", () {
     testSingleCase(en.casual, "Want to meet for dinner (5pm EST)?",
-        DateTime(2020, 7 - 1, 6), (ParsedResult result, String text) {
+        DateTime(2020, 7 , 6), (ParsedResult result, String text) {
           expect(result.text.contains("5pm EST"), true);
     });
-    testSingleCase(en.casual, "between '3:30-4:30pm'", DateTime(2020, 7 - 1, 6),
+    testSingleCase(en.casual, "between '3:30-4:30pm'", DateTime(2020, 7 , 6),
         (ParsedResult result, String text) {
       expect(result.text.contains("3:30-4:30pm"), true);
-      expectToBeDate(result.start, DateTime(2020, 7 - 1, 6, 15, 30));
-      expectToBeDate(result.end!, DateTime(2020, 7 - 1, 6, 16, 30));
+      expectToBeDate(result.start, DateTime(2020, 7 , 6, 15, 30));
+      expectToBeDate(result.end!, DateTime(2020, 7 , 6, 16, 30));
     });
     testSingleCase(en.casual, "The date is '2014-04-18'",
         (ParsedResult result, String text) {
       expect(result.text.contains("2014-04-18"), true);
-      expectToBeDate(result.start, DateTime(2014, 4 - 1, 18, 12));
+      expectToBeDate(result.start, DateTime(2014, 4 , 18, 12));
     });
   });
   test("Test - Strict Mode", () {
@@ -53,11 +53,11 @@ void main() {
   });
   test("Test - Built-in English variants", () {
     testSingleCase(en.casual, "6/10/2018", (ParsedResult result, String text) {
-      expectToBeDate(result.start, DateTime(2018, 6 - 1, 10, 12));
+      expectToBeDate(result.start, DateTime(2018, 6 , 10, 12));
     });
     // testSingleCase(en.casual.en.GB, "6/10/2018",
     //     (ParsedResult result, String text) {
-    //   expectToBeDate(result.start,DateTime(2018, 10 - 1, 6, 12));
+    //   expectToBeDate(result.start,DateTime(2018, 10 , 6, 12));
     // });
   });
   test("Test - Random text", () {
@@ -95,11 +95,11 @@ void main() {
     testSingleCase(en.casual, "9:00 AM to 5:00 PM, Tuesday, 20 May 2013",
         (ParsedResult result, String text) {
           expect(result.text, "9:00 AM to 5:00 PM, Tuesday, 20 May 2013");
-      expectToBeDate(result.start, DateTime(2013, 4, 20, 9, 0));
-      expectToBeDate(result.end!, DateTime(2013, 4, 20, 17, 0));
+      expectToBeDate(result.start, DateTime(2013, 5, 20, 9, 0));
+      expectToBeDate(result.end!, DateTime(2013, 5, 20, 17, 0));
     });
     testSingleCase(
-        en.casual, "Monday afternoon to last night", DateTime(2017, 7 - 1, 7),
+        en.casual, "Monday afternoon to last night", DateTime(2017, 7 , 7),
         (ParsedResult result, String text) {
           expect(result.text, "Monday afternoon to last night");
       expect(result.start.get(Component.day), 3);
@@ -107,14 +107,14 @@ void main() {
       expect(result.end!.get(Component.day), 7);
       expect(result.end!.get(Component.month), 7);
     });
-    testSingleCase(en.casual, "03-27-2022, 02:00 AM", DateTime(2017, 7 - 1, 7),
+    testSingleCase(en.casual, "03-27-2022, 02:00 AM", DateTime(2017, 7 , 7),
         (ParsedResult result, String text) {
           expect(result.text, "03-27-2022, 02:00 AM");
       expect(result.start.get(Component.day), 27);
       expect(result.start.get(Component.month), 3);
       expect(result.start.get(Component.year), 2022);
       expect(result.start.get(Component.hour), 2);
-      expect(result.start.get(Component.meridiem), Meridiem.AM);
+      expect(result.start.get(Component.meridiem), Meridiem.AM.index);
     });
   });
   test("Test - Wikipedia Texts", () {
@@ -145,7 +145,7 @@ void main() {
   test("Test - Parse multiple date results", () {
     const text =
         "I will see you at 2:30. If not I will see you somewhere between 3:30-4:30pm";
-    final results = en.casual.parse(text, DateTime(2020, 7 - 1, 6));
+    final results = en.casual.parse(text, DateTime(2020, 7 , 6));
     expect(results.length, 2);
     {
       final result = results[0];
@@ -171,7 +171,7 @@ void main() {
         .where((element) => element is! ENTimeExpressionParser)
         .toList();
     custom.parse("Thursday 9AM");
-    testSingleCase(custom, "Thursday 9AM", DateTime(2020, 11 - 1, 29),
+    testSingleCase(custom, "Thursday 9AM", DateTime(2020, 11 , 29),
         (ParsedResult result, String text) {
       expect(result.text, "Thursday");
       expect(result.start.get(Component.year), 2020);

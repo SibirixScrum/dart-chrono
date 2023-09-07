@@ -250,7 +250,7 @@ import '../test_util.dart';
       expect(result.start.isCertain(Component.month), true);
       expect(result.start.isCertain(Component.year), true);
       expect(result.start.isCertain(Component.weekday), true);
-      expectToBeDate(result.start , DateTime(2014, 12 - 1, 7, 12));
+      expectToBeDate(result.start , DateTime(2014, 12 , 7, 12));
     });
      testSingleCase(en.casual, "Sunday 12/7/2014", DateTime(2012, 7, 9),
         (ParsedResult result, String text) {
@@ -265,12 +265,12 @@ import '../test_util.dart';
       expect(result.start.isCertain(Component.month), true);
       expect(result.start.isCertain(Component.year), true);
       expect(result.start.isCertain(Component.weekday), true);
-      expectToBeDate(result.start , DateTime(2014, 12 - 1, 7, 12));
+      expectToBeDate(result.start , DateTime(2014, 12 , 7, 12));
     });
    });
    test("Test - Weekday range", () {
      testSingleCase(
-        en.casual, "Friday to Monday", DateTime(2023, 4 - 1, 9),
+        en.casual, "Friday to Monday", DateTime(2023, 4 , 9),
         (ParsedResult result, String text) {
       expect(result.start.get(Component.year), 2023);
       expect(result.start.get(Component.month), 4);
@@ -282,7 +282,7 @@ import '../test_util.dart';
       expect(result.end!.get(Component.weekday), 1);
     });
      testSingleCase(
-        en.casual, "Monday to Friday", DateTime(2023, 4 - 1, 9),
+        en.casual, "Monday to Friday", DateTime(2023, 4 , 9),
         (ParsedResult result, String text) {
       expect(result.start.get(Component.year), 2023);
       expect(result.start.get(Component.month), 4);
@@ -316,7 +316,7 @@ import '../test_util.dart';
      testSingleCase(
         en.casual,
         "this Friday to this Monday",
-        DateTime(2016, 8 - 1, 4),
+        DateTime(2016, 8 , 4),
         {"forwardDate": true}, (ParsedResult result, String text) {
       expect(result.index, 0);
       expect(result.text, "this Friday to this Monday");
@@ -329,7 +329,7 @@ import '../test_util.dart';
       expect(result.start.isCertain(Component.month), false);
       expect(result.start.isCertain(Component.year), false);
       expect(result.start.isCertain(Component.weekday), true);
-      expectToBeDate(result.start , DateTime(2016, 8 - 1, 5, 12));
+      expectToBeDate(result.start , DateTime(2016, 8 , 5, 12));
       expect(result.end == null, isFalse);
       expect(result.end!.get(Component.year), 2016);
       expect(result.end!.get(Component.month), 8);
@@ -339,7 +339,7 @@ import '../test_util.dart';
       expect(result.end!.isCertain(Component.month), false);
       expect(result.end!.isCertain(Component.year), false);
       expect(result.end!.isCertain(Component.weekday), true);
-      expectToBeDate(result.end! , DateTime(2016, 8 - 1, 8, 12));
+      expectToBeDate(result.end! , DateTime(2016, 8 , 8, 12));
     });
      testSingleCase(
         en.casual,
@@ -357,7 +357,7 @@ import '../test_util.dart';
       expect(result.start.isCertain(Component.month), false);
       expect(result.start.isCertain(Component.year), false);
       expect(result.start.isCertain(Component.weekday), true);
-      expectToBeDate(result.start , DateTime(2021, 8 - 1, 22, 6));
+      expectToBeDate(result.start , DateTime(2021, 8 , 22, 6));
     });
      testSingleCase(
         en.casual,

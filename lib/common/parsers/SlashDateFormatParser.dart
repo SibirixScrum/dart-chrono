@@ -62,11 +62,13 @@ class SlashDateFormatParser implements Parser {
       }
     }
     final index = match.index + match[OPENING_GROUP].length;
+    final a = match[0].length -
+        match[OPENING_GROUP].length -
+        match[ENDING_GROUP].length;
     final text = match.matches[0]!.substring(
         match[OPENING_GROUP].length,
-        match[0].length -
-            match[OPENING_GROUP].length -
-            match[ENDING_GROUP].length);
+        match[0].length +
+            match[OPENING_GROUP].length - 1);
     // '1.12', '1.12.12' is more like a version numbers
     if (RegExp(r'^\d\.\d$').firstMatch(text) != null ||
         RegExp(r'^\d\.\d{1,2}\.\d{1,2}\s*$').firstMatch(text) != null) {
