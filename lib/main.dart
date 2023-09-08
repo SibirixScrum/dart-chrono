@@ -28,7 +28,7 @@ void main() async {
 
 
 
-  final b = en.parse( "The event is today - next friday", DateTime(2012, 8, 4, 12));
+  final b = en.parse( "From December to May", DateTime(2023, 4 , 9));
   // print(new DateTime(2017, 11, 19, 12).weekday);
 
   // final a = chrono.parse("18.02.2024");

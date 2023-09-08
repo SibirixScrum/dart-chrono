@@ -13,7 +13,7 @@ import '../test_util.dart';
       expect(result.start.get(Component.month), 2);
       expect(result.start.get(Component.day), 7);
       final resultDate = result.start.date();
-      final expectDate = DateTime(2013, 1, 7, 12);
+      final expectDate = DateTime(2013, 2, 7, 12);
       expect(
           expectDate.millisecondsSinceEpoch, resultDate.millisecondsSinceEpoch);
     });
@@ -28,7 +28,7 @@ import '../test_util.dart';
       expect(result.start.get(Component.second), 30);
       expect(result.start.get(Component.timezoneOffset), -330);
       expect(result.text, "1994-11-05T08:15:30-05:30");
-      expectToBeDate(result.start, DateTime(784043130000));
+      expectToBeDate(result.start, DateTime.fromMillisecondsSinceEpoch(784043130000));
     });
      testSingleCase(en.casual, "1994-11-05T13:15:30", DateTime(2012, 7, 8),
         (ParsedResult result, String text) {
@@ -41,7 +41,7 @@ import '../test_util.dart';
       expect(result.start.get(Component.second), 30);
       expect(result.start.get(Component.timezoneOffset), 0);
       expect(result.text, "1994-11-05T13:15:30");
-      expectToBeDate(result.start, DateTime(784041330000));
+      expectToBeDate(result.start, DateTime.fromMillisecondsSinceEpoch(784041330000));
     });
      testSingleCase(en.casual, "2015-07-31T12:00:00", DateTime(2012, 7, 8),
         (ParsedResult result, String text) {
@@ -54,7 +54,7 @@ import '../test_util.dart';
       expect(result.start.get(Component.second), 0);
       expect(result.start.get(Component.timezoneOffset), 0);
       expect(result.text, "2015-07-31T12:00:00");
-      expectToBeDate(result.start, DateTime(1438344000000));
+      expectToBeDate(result.start, DateTime.fromMillisecondsSinceEpoch(1438344000000));
     });
      testSingleCase(en.casual, "1994-11-05T13:15:30Z", DateTime(2012, 7, 8),
         (ParsedResult result, String text) {
@@ -67,7 +67,7 @@ import '../test_util.dart';
       expect(result.start.get(Component.second), 30);
       expect(result.start.get(Component.timezoneOffset), 0);
       expect(result.text, "1994-11-05T13:15:30Z");
-      expectToBeDate(result.start, DateTime(784041330000));
+      expectToBeDate(result.start, DateTime.fromMillisecondsSinceEpoch(784041330000));
     });
      testSingleCase(en.casual, "1994-11-05T13:15:30Z", DateTime(2012, 7, 8),
         (ParsedResult result, String text) {
@@ -80,7 +80,7 @@ import '../test_util.dart';
       expect(result.start.get(Component.second), 30);
       expect(result.start.get(Component.timezoneOffset), 0);
       expect(result.text, "1994-11-05T13:15:30Z");
-      expectToBeDate(result.start, DateTime(784041330000));
+      expectToBeDate(result.start, DateTime.fromMillisecondsSinceEpoch(784041330000));
     });
      testSingleCase(en.casual, "- 1994-11-05T13:15:30Z", DateTime(2012, 7, 8),
         (ParsedResult result, String text) {
@@ -94,7 +94,7 @@ import '../test_util.dart';
       expect(result.start.get(Component.timezoneOffset), 0);
       expect(result.index, 2);
       expect(result.text, "1994-11-05T13:15:30Z");
-      expectToBeDate(result.start, DateTime(784041330000));
+      expectToBeDate(result.start, DateTime.fromMillisecondsSinceEpoch(784041330000));
     });
      testSingleCase(
          en.strict, "2016-05-07T23:45:00.487+01:00", DateTime(2012, 7, 8),
@@ -108,7 +108,7 @@ import '../test_util.dart';
       expect(result.start.get(Component.second), 0);
       expect(result.start.get(Component.timezoneOffset), 60);
       expect(result.text, "2016-05-07T23:45:00.487+01:00");
-      expectToBeDate(result.start, DateTime(1462661100487));
+      expectToBeDate(result.start, DateTime.fromMillisecondsSinceEpoch(1462661100487));
     });
    });
  }

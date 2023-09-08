@@ -146,25 +146,25 @@ import '../test_util.dart';
    });
    test("Test - Month with farward date option", () {
     testSingleCase(en.casual, "in December", DateTime(2023, 4 , 9),
-        {"forwardDate": true}, (ParsedResult result, String text) {
+        ParsingOption(forwardDate:true), (ParsedResult result, String text) {
       expect(result.start.get(Component.year), 2023);
       expect(result.start.get(Component.month), 12);
     });
     testSingleCase(
-        en.casual, "in May", DateTime(2023, 4 , 9), {"forwardDate": true},
+        en.casual, "in May", DateTime(2023, 4 , 9), ParsingOption(forwardDate:true),
         (ParsedResult result, String text) {
       expect(result.start.get(Component.year), 2023);
       expect(result.start.get(Component.month), 5);
     });
     testSingleCase(en.casual, "From May to December", DateTime(2023, 4 , 9),
-        {"forwardDate": true}, (ParsedResult result, String text) {
+        ParsingOption(forwardDate:true), (ParsedResult result, String text) {
       expect(result.start.get(Component.year), 2023);
       expect(result.start.get(Component.month), 5);
       expect(result.end!.get(Component.year), 2023);
       expect(result.end!.get(Component.month), 12);
     });
     testSingleCase(en.casual, "From December to May", DateTime(2023, 4 , 9),
-        {"forwardDate": true}, (ParsedResult result, String text) {
+        ParsingOption(forwardDate:true), (ParsedResult result, String text) {
       expect(result.start.get(Component.year), 2023);
       expect(result.start.get(Component.month), 12);
       expect(result.end!.get(Component.year), 2024);

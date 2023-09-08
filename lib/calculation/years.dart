@@ -24,7 +24,7 @@ num findYearClosestToRef(DateTime refDate, num day, num month) {
   dateMoment = dateMoment.copyWith(
       year: refMoment.year); // dateMoment.year(refMoment.year());
   final nextYear = dateMoment.copyWith(year: dateMoment.year + 1);
-  final lastYear = dateMoment.copyWith(year: dateMoment.year + 1);
+  final lastYear = dateMoment.copyWith(year: dateMoment.year - 1);
   if ((nextYear.millisecondsSinceEpoch - refMoment.millisecondsSinceEpoch)
           .abs() <
       (dateMoment.millisecondsSinceEpoch - refMoment.millisecondsSinceEpoch)
