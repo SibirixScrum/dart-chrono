@@ -56,7 +56,7 @@ num getDaysToWeekday(DateTime refDate, Weekday weekday,
       // If the week's weekday already passed (weekday < refWeekday), we simply count forward to next week
 
       // (similar to 'this'). Otherwise, count forward to this week, then add another 7 days.
-      if (weekday.index + 1 < refWeekday && weekday != Weekday.SUNDAY) {
+      if (weekday.index < refWeekday && weekday != Weekday.SUNDAY) {
         return getDaysForwardToWeekday(refDate, weekday);
       } else {
         return getDaysForwardToWeekday(refDate, weekday) + 7;
