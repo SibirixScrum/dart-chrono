@@ -283,13 +283,13 @@ class ParsingComponents implements ParsedComponents {
         intFragments["second"] != null) {
       assignSimilarTime(components, date);
       assignSimilarDate(components, date);
-      if (reference.timezoneOffset is Undefined) {
+      if (reference.timezoneOffset !=null) {
         components.assign(Component.timezoneOffset,
             reference.instant.timeZoneOffset.inMinutes);
       }
     } else {
       implySimilarTime(components, date);
-      if (reference.timezoneOffset is Undefined) {
+      if (reference.timezoneOffset !=null) {
         components.imply(Component.timezoneOffset,
             reference.instant.timeZoneOffset.inMinutes);
       }
