@@ -239,7 +239,7 @@ import '../test_util.dart';
     expect(result.start.get(Component.day), 7);
     expect(result.start.get(Component.hour), 13);
     expect(result.start.get(Component.timezoneOffset),
-        refDate.timeZoneOffset.inMinutes * -1);
+        refDate.timeZoneOffset.inMinutes );
     expect(result.start.isCertain(Component.year), true);
     expect(result.start.isCertain(Component.month), true);
     expect(result.start.isCertain(Component.day), true);

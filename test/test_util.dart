@@ -64,7 +64,7 @@ testSingleCase(Chrono chrono, String text,
 }
 
 testWithExpectedDate(Chrono chrono, String text, DateTime expectedDate) {
-  testSingleCase(chrono, text, (ParsedResult result) {
+  testSingleCase(chrono, text, (ParsedResult result, String text) {
     expectToBeDate(result.start, expectedDate);
   });
 }

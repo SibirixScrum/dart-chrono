@@ -58,7 +58,7 @@ import '../test_util.dart';
       expectToBeDate(result.start,DateTime(2012, 8 , 10, 12));
     });
      testSingleCase(
-        en.casual, "The Deadline is Tuesday, 10 January", DateTime(2012, 7, 10),
+        en.casual, "The Deadline is Tuesday, 10 January", DateTime(2012, 8, 10),
         (ParsedResult result, String text) {
       expect(result.index, 16);
       expect(result.text, "Tuesday, 10 January");
@@ -70,7 +70,7 @@ import '../test_util.dart';
       expectToBeDate(result.start,DateTime(2013, 1 , 10, 12));
     });
      testSingleCase(
-        en.casual, "The Deadline is Tue, 10 January", DateTime(2012, 7, 10),
+        en.casual, "The Deadline is Tue, 10 January", DateTime(2012, 8, 10),
         (ParsedResult result, String text) {
       expect(result.index, 16);
       expect(result.text, "Tue, 10 January");
@@ -335,7 +335,7 @@ import '../test_util.dart';
         en.casual,
         "22-23 Feb at 7pm",
         DateTime(2016, 3 , 15),
-        {"forwardDate": true}, (ParsedResult result, String text) {
+         ParsingOption(forwardDate:true), (ParsedResult result, String text) {
       expect(result.start.get(Component.year), 2017);
       expect(result.start.get(Component.month), 2);
       expect(result.start.get(Component.day), 22);

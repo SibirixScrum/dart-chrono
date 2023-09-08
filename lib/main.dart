@@ -28,7 +28,7 @@ void main() async {
 
 
 
-  final b = en.parse( "From December to May", DateTime(2023, 4 , 9));
+  final b = en.parse( "The Deadline is Tuesday, 10 January", DateTime(2012, 7, 10));
   // print(new DateTime(2017, 11, 19, 12).weekday);
 
   // final a = chrono.parse("18.02.2024");
