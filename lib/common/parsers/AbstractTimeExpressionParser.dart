@@ -1,3 +1,4 @@
+import "package:chrono/ported/ParseInt.dart";
 import "package:chrono/ported/RegExpMatchArray.dart";
 import "package:chrono/ported/StringUtils.dart";
 
@@ -151,7 +152,7 @@ abstract class AbstractTimeExpressionParser implements Parser {
         // Skip single digit minute e.g. "at 1.1 xx"
         return null;
       }
-      minute = int.parse(match[MINUTE_GROUP]);
+      minute = parseIntTs(match[MINUTE_GROUP]);
     }
     if (minute >= 60) {
       return null;
@@ -189,13 +190,13 @@ abstract class AbstractTimeExpressionParser implements Parser {
     }
     // ----- Millisecond
     if (match[MILLI_SECOND_GROUP].isNotEmpty) {
-      final millisecond = int.parse(match[MILLI_SECOND_GROUP].substring(0, 3));
+      final millisecond = parseIntTs(match[MILLI_SECOND_GROUP].substring(0, 3));
       if (millisecond >= 1000) return null;
       components.assign(Component.millisecond, millisecond);
     }
     // ----- Second
     if (match[SECOND_GROUP].isNotEmpty) {
-      final second = int.parse(match[SECOND_GROUP]);
+      final second = parseIntTs(match[SECOND_GROUP]);
       if (second >= 60) return null;
       components.assign(Component.second, second);
     }
@@ -207,22 +208,22 @@ abstract class AbstractTimeExpressionParser implements Parser {
     final components = context.createParsingComponents();
     // ----- Millisecond
     if (match[MILLI_SECOND_GROUP].isNotEmpty) {
-      final millisecond = int.parse(match[MILLI_SECOND_GROUP].substring(0, 3));
+      final millisecond = parseIntTs(match[MILLI_SECOND_GROUP].substring(0, 3));
       if (millisecond >= 1000) return null;
       components.assign(Component.millisecond, millisecond);
     }
     // ----- Second
     if (match[SECOND_GROUP].isNotEmpty) {
-      final second = int.parse(match[SECOND_GROUP]);
+      final second = parseIntTs(match[SECOND_GROUP]);
       if (second >= 60) return null;
       components.assign(Component.second, second);
     }
-    var hour = int.parse(match[HOUR_GROUP]);
+    var hour = parseIntTs(match[HOUR_GROUP]);
     var minute = 0;
     var meridiem = -1;
     // ----- Minute
     if (match[MINUTE_GROUP].isNotEmpty) {
-      minute = int.parse(match[MINUTE_GROUP]);
+      minute = parseIntTs(match[MINUTE_GROUP]);
     } else if (hour > 100) {
       minute = hour % 100;
       hour = (hour / 100).floor();
@@ -329,9 +330,8 @@ abstract class AbstractTimeExpressionParser implements Parser {
         return null;
       }
       // If it ends only with numbers above 24, e.g. "at 25"
-      final extractedHour = endingNumbers[0] +
-          (endingNumbers[1].isDigit() ? endingNumbers[1] : '');
-      final endingNumberVal = int.parse(extractedHour);
+
+      final endingNumberVal = parseIntTs(endingNumbers);
       if (endingNumberVal > 24) {
         return null;
       }
@@ -361,13 +361,10 @@ abstract class AbstractTimeExpressionParser implements Parser {
         return null;
       }
       // If it ends only with numbers above 24, e.g. "at 25"
-      final extractedEndingHour = endingNumbers[0] +
-          (endingNumbers[1].isDigit() ? endingNumbers[1] : '');
-      final endingNumberVal = int.parse(extractedEndingHour);
 
-      final extractedStartingHour = startingNumbers[0] +
-          (startingNumbers[1].isDigit() ? startingNumbers[1] : '');
-      final startingNumberVal = int.parse(extractedStartingHour);
+      final endingNumberVal = parseIntTs(endingNumbers);
+
+      final startingNumberVal = parseIntTs(startingNumbers);
       if (endingNumberVal > 24 || startingNumberVal > 24) {
         return null;
       }

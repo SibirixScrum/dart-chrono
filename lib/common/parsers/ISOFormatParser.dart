@@ -1,3 +1,4 @@
+import "package:chrono/ported/ParseInt.dart";
 import "package:chrono/ported/RegExpMatchArray.dart";
 import "package:chrono/types.dart";
 
@@ -54,25 +55,25 @@ class ISOFormatParser extends AbstractParserWithWordBoundaryChecking {
 
   innerExtract(ParsingContext context, RegExpMatchArray match) {
     final Map<Component,num> components = {};
-    components[Component.year] = int.parse(match[YEAR_NUMBER_GROUP]);
-    components[Component.month] = int.parse(match[MONTH_NUMBER_GROUP]);
-    components[Component.day] = int.parse(match[DATE_NUMBER_GROUP]);
+    components[Component.year] = parseIntTs(match[YEAR_NUMBER_GROUP]);
+    components[Component.month] = parseIntTs(match[MONTH_NUMBER_GROUP]);
+    components[Component.day] = parseIntTs(match[DATE_NUMBER_GROUP]);
     if (match[HOUR_NUMBER_GROUP].isNotEmpty ) {
-      components[Component.hour] = int.parse(match[HOUR_NUMBER_GROUP]);
-      components[Component.minute] = int.parse(match[MINUTE_NUMBER_GROUP]);
+      components[Component.hour] = parseIntTs(match[HOUR_NUMBER_GROUP]);
+      components[Component.minute] = parseIntTs(match[MINUTE_NUMBER_GROUP]);
       if (match[SECOND_NUMBER_GROUP].isNotEmpty) {
-        components[Component.second] = int.parse(match[SECOND_NUMBER_GROUP]);
+        components[Component.second] = parseIntTs(match[SECOND_NUMBER_GROUP]);
       }
       if (match[MILLISECOND_NUMBER_GROUP].isNotEmpty) {
-        components[Component.millisecond] = int.parse(match[MILLISECOND_NUMBER_GROUP]);
+        components[Component.millisecond] = parseIntTs(match[MILLISECOND_NUMBER_GROUP]);
       }
       if (match[TZD_HOUR_OFFSET_GROUP].isEmpty) {
         components[Component.timezoneOffset] = 0;
       } else {
-        final hourOffset = int.parse(match[TZD_HOUR_OFFSET_GROUP]);
+        final hourOffset = parseIntTs(match[TZD_HOUR_OFFSET_GROUP]);
         var minuteOffset = 0;
         if (match[TZD_MINUTE_OFFSET_GROUP].isNotEmpty) {
-          minuteOffset = int.parse(match[TZD_MINUTE_OFFSET_GROUP]);
+          minuteOffset = parseIntTs(match[TZD_MINUTE_OFFSET_GROUP]);
         }
         var offset = hourOffset * 60;
         if (offset < 0) {

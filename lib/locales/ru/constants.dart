@@ -1,3 +1,4 @@
+import "package:chrono/ported/ParseInt.dart";
 import "package:chrono/ported/RegExpMatchArray.dart";
 
 import "../../calculation/years.dart" show findMostLikelyADYear;
@@ -327,7 +328,7 @@ int parseOrdinalNumberPattern(String match) {
     return ORDINAL_WORD_DICTIONARY[num]!;
   }
   final extractedNumber = num.replaceAll(new RegExp(r'[^0-9]'),'');
-  return int.parse(extractedNumber);
+  return parseIntTs(extractedNumber);
 }
 
 //-----------------------------
@@ -354,7 +355,7 @@ num parseYear(String match) {
     if(match.contains(" ")) {
       match = match.substring(0, match.indexOf(" "));
     }
-    return -int.parse(match);
+    return -parseIntTs(match);
   }
   if (new RegExp(r'(н. э.|н.э.)', caseSensitive: false).firstMatch(match) !=
       null) {
@@ -364,12 +365,12 @@ num parseYear(String match) {
     if(match.contains(" ")) {
       match = match.substring(0, match.indexOf(" "));
     }
-    return int.parse(match);
+    return parseIntTs(match);
   }
   if(match.contains(" ")) {
     match = match.substring(0, match.indexOf(" "));
   }
-  final rawYearNumber = int.parse(match);
+  final rawYearNumber = parseIntTs(match);
   return findMostLikelyADYear(rawYearNumber);
 }
 

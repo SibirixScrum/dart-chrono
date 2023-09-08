@@ -6,7 +6,7 @@ import '../test_util.dart';
 
  void main() {
    test("Test - Later Expression", () {
-     testSingleCase(en.casual, "2 days later", DateTime(2012, 7, 10, 12),
+     testSingleCase(en.casual, "2 days later", DateTime(2012, 8, 10, 12),
         (ParsedResult result, String text) {
       expect(result.start == null, isFalse);
       expect(result.start.get(Component.year), 2012);
@@ -18,7 +18,7 @@ import '../test_util.dart';
       expect(result.start.isCertain(Component.month), true);
       expectToBeDate(result.start,DateTime(2012, 8 , 12, 12));
     });
-     testSingleCase(en.casual, "5 minutes later", DateTime(2012, 7, 10, 10, 0),
+     testSingleCase(en.casual, "5 minutes later", DateTime(2012, 8, 10, 10, 0),
         (ParsedResult result, String text) {
       expect(result.start == null, isFalse);
       expect(result.start.get(Component.year), 2012);
@@ -63,7 +63,7 @@ import '../test_util.dart';
    });
    test("Test - From now Expression", () {
      testSingleCase(
-        en.casual, "5 days from now, we did something", DateTime(2012, 7, 10),
+        en.casual, "5 days from now, we did something", DateTime(2012, 8, 10),
         (ParsedResult result, String text) {
       expect(result.start == null, isFalse);
       expect(result.start.get(Component.year), 2012);
@@ -74,7 +74,7 @@ import '../test_util.dart';
       expectToBeDate(result.start,DateTime(2012, 8 , 15));
     });
      testSingleCase(
-        en.casual, "10 days from now, we did something", DateTime(2012, 7, 10),
+        en.casual, "10 days from now, we did something", DateTime(2012, 8, 10),
         (ParsedResult result, String text) {
       expect(result.start == null, isFalse);
       expect(result.start.get(Component.year), 2012);
@@ -91,7 +91,7 @@ import '../test_util.dart';
       expect(result.text, "15 minute from now");
       expect(result.start.get(Component.hour), 12);
       expect(result.start.get(Component.minute), 29);
-      expect(result.start.get(Component.meridiem), Meridiem.PM);
+      expect(result.start.get(Component.meridiem), Meridiem.PM.index);
       expectToBeDate(result.start,DateTime(2012, 7, 10, 12, 29));
     });
      testSingleCase(
@@ -101,7 +101,7 @@ import '../test_util.dart';
       expect(result.text, "15 minutes earlier");
       expect(result.start.get(Component.hour), 11);
       expect(result.start.get(Component.minute), 59);
-      expect(result.start.get(Component.meridiem), Meridiem.AM);
+      expect(result.start.get(Component.meridiem), Meridiem.AM.index);
       expectToBeDate(result.start,DateTime(2012, 7, 10, 11, 59));
     });
      testSingleCase(en.casual, "15 minute out", DateTime(2012, 7, 10, 12, 14),
@@ -110,7 +110,7 @@ import '../test_util.dart';
       expect(result.text, "15 minute out");
       expect(result.start.get(Component.hour), 12);
       expect(result.start.get(Component.minute), 29);
-      expect(result.start.get(Component.meridiem), Meridiem.PM);
+      expect(result.start.get(Component.meridiem), Meridiem.PM.index);
       expectToBeDate(result.start,DateTime(2012, 7, 10, 12, 29));
     });
      testSingleCase(
@@ -131,7 +131,7 @@ import '../test_util.dart';
       expect(result.start.get(Component.day), 11);
       expect(result.start.get(Component.hour), 0);
       expect(result.start.get(Component.minute), 14);
-      expect(result.start.get(Component.meridiem), Meridiem.AM);
+      expect(result.start.get(Component.meridiem), Meridiem.AM.index);
     });
      testSingleCase(
         en.casual, "   half an hour from now", DateTime(2012, 7, 10, 12, 14),
@@ -140,7 +140,7 @@ import '../test_util.dart';
       expect(result.text, "half an hour from now");
       expect(result.start.get(Component.hour), 12);
       expect(result.start.get(Component.minute), 44);
-      expect(result.start.get(Component.meridiem), Meridiem.PM);
+      expect(result.start.get(Component.meridiem), Meridiem.PM.index);
       expectToBeDate(result.start,DateTime(2012, 7, 10, 12, 44));
     });
      testSingleCase(en.casual, "12 hours from now I did something",
@@ -171,7 +171,7 @@ import '../test_util.dart';
       expectToBeDate(result.start,DateTime(2012, 7, 10, 12, 14, 3));
     });
      testSingleCase(
-        en.casual, "5 Days from now, we did something", DateTime(2012, 7, 10),
+        en.casual, "5 Days from now, we did something", DateTime(2012, 8, 10),
         (ParsedResult result, String text) {
       expect(result.start == null, isFalse);
       expect(result.start.get(Component.year), 2012);
@@ -191,7 +191,7 @@ import '../test_util.dart';
       expectToBeDate(result.start,DateTime(2012, 7, 10, 12, 44));
     });
      testSingleCase(
-        en.casual, "A days from now, we did something", DateTime(2012, 7, 10),
+        en.casual, "A days from now, we did something", DateTime(2012, 8, 10),
         (ParsedResult result, String text) {
       expect(result.start == null, isFalse);
       expect(result.start.get(Component.year), 2012);
@@ -221,7 +221,7 @@ import '../test_util.dart';
         (ParsedResult result, String text) {
       expect(result.index, 0);
       expect(result.text, "in 1 mon");
-      expect(result.start.get(Component.month), 8 + 1);
+      expect(result.start.get(Component.month), 8);
       expectToBeDate(result.start,DateTime(2012, 8, 10, 12, 14));
     });
      testSingleCase(en.casual, "in 1.5 hours", DateTime(2012, 7, 10, 12, 40),
@@ -249,7 +249,7 @@ import '../test_util.dart';
       expect(result.text, "the min after");
       expect(result.start.get(Component.hour), 12);
       expect(result.start.get(Component.minute), 15);
-      expect(result.start.get(Component.meridiem), Meridiem.PM);
+      expect(result.start.get(Component.meridiem), Meridiem.PM.index);
       expectToBeDate(result.start,DateTime(2012, 7, 10, 12, 15));
     });
      testSingleCase(
@@ -273,26 +273,26 @@ import '../test_util.dart';
      testUnexpectedResult(en.strict, "15s later");
    });
    test("Test - After with reference", () {
-     testSingleCase(en.casual, "2 day after today", DateTime(2012, 7, 10),
+     testSingleCase(en.casual, "2 day after today", DateTime(2012, 8, 10),
         (ParsedResult result, String text) {
       expect(result.start.get(Component.year), 2012);
       expect(result.start.get(Component.month), 8);
       expect(result.start.get(Component.day), 12);
     });
-     testSingleCase(en.casual, "the day after tomorrow", DateTime(2012, 7, 10),
+     testSingleCase(en.casual, "the day after tomorrow", DateTime(2012, 8, 10),
         (ParsedResult result, String text) {
       expect(result.start.get(Component.year), 2012);
       expect(result.start.get(Component.month), 8);
       expect(result.start.get(Component.day), 12);
     });
-     testSingleCase(en.casual, "2 day after tomorrow", DateTime(2012, 7, 10),
+     testSingleCase(en.casual, "2 day after tomorrow", DateTime(2012, 8, 10),
         (ParsedResult result, String text) {
       expect(result.text, "2 day after tomorrow");
       expect(result.start.get(Component.year), 2012);
       expect(result.start.get(Component.month), 8);
       expect(result.start.get(Component.day), 13);
     });
-     testSingleCase(en.casual, "a week after tomorrow", DateTime(2012, 7, 10),
+     testSingleCase(en.casual, "a week after tomorrow", DateTime(2012, 8, 10),
         (ParsedResult result, String text) {
       expect(result.text, "a week after tomorrow");
       expect(result.start.get(Component.year), 2012);

@@ -1,3 +1,4 @@
+import "package:chrono/ported/ParseInt.dart";
 import "package:chrono/ported/RegExpMatchArray.dart";
 import "package:chrono/types.dart";
 
@@ -22,8 +23,8 @@ class ENSlashMonthFormatParser extends AbstractParserWithWordBoundaryChecking {
 
   ParsingComponents innerExtract(
       ParsingContext context, RegExpMatchArray match) {
-    final year = int.parse(match[YEAR_GROUP]);
-    final month = int.parse(match[MONTH_GROUP]);
+    final year = parseIntTs(match[YEAR_GROUP]);
+    final month = parseIntTs(match[MONTH_GROUP]);
     return context
         .createParsingComponents()
         .imply(Component.day, 1)

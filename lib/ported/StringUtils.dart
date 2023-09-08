@@ -9,11 +9,11 @@ String? or(String? a, String? b) {
 }
 
 extension StringUtils on String {
-  bool isDigit() {
+  bool isDigitOrSign() {
     if (length > 1) {
       return false;
     } else {
-      return RegExp(r'^[0-9]+$').hasMatch(this);
+      return RegExp(r'^[0-9-+]+$').hasMatch(this);
     }
   }
 }

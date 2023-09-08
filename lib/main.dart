@@ -1,6 +1,7 @@
 import 'package:chrono/chrono.dart';
 import 'package:chrono/locales/ru/index.dart' as ru;
 import 'package:chrono/locales/en/index.dart' as en;
+import 'package:chrono/ported/ParseInt.dart';
 import 'package:chrono/ported/RegExpMatchArray.dart';
 import 'package:chrono/types.dart';
 
@@ -25,10 +26,12 @@ void main() async {
   //
   // final d = RegExp(r'^\d*(\.\d*)?$').exec("2014 12 28");
 
+  final c = parseIntTs("192.9");
+  final d = parseIntTs("192");
 
 
 
-  final b = en.parse( "The Deadline is Tuesday, 10 January", DateTime(2012, 7, 10));
+  final b = en.parse( "3w later", DateTime(2012, 7 , 10, 10, 0));
   // print(new DateTime(2017, 11, 19, 12).weekday);
 
   // final a = chrono.parse("18.02.2024");

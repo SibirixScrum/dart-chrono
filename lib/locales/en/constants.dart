@@ -1,3 +1,4 @@
+import "package:chrono/ported/ParseInt.dart";
 import "package:chrono/ported/RegExpMatchArray.dart";
 
 import "../../calculation/years.dart" show findMostLikelyADYear;
@@ -182,7 +183,7 @@ final Map<String, String> TIME_UNIT_DICTIONARY = {
   "d": "d",
   "day": "d",
   "days": "d",
-  "w": "w",
+  "w": "week",
   "week": "week",
   "weeks": "week",
   "mo": "month",
@@ -206,7 +207,7 @@ num parseNumberPattern(String match) {
   final num = match.toLowerCase();
   if (INTEGER_WORD_DICTIONARY[num] != null) {
     return INTEGER_WORD_DICTIONARY[num]!;
-  } else if (identical(num, "a") || identical(num, "an") || num == "the") {
+  } else if (num == "a" || num == "an" || num == "the") {
     return 1;
   } else if (num.match(new RegExp(r'few'))) {
     return 3;
@@ -231,7 +232,7 @@ int parseOrdinalNumberPattern(String match) {
   }
   num =
       num.replaceAll(new RegExp(r'(?:st|nd|rd|th)$', caseSensitive: false), "");
-  return int.parse(num);
+  return parseIntTs(num);
 }
 
 //-----------------------------
@@ -242,19 +243,19 @@ num parseYear(String match) {
   if (new RegExp(r'BE', caseSensitive: false).hasMatch(match)) {
     // Buddhist Era
     match = match.replaceAll(new RegExp(r'BE', caseSensitive: false), "");
-    return int.parse(match) - 543;
+    return parseIntTs(match) - 543;
   }
   if (new RegExp(r'BCE?', caseSensitive: false).hasMatch(match)) {
     // Before Christ, Before Common Era
     match = match.replaceAll(new RegExp(r'BCE?', caseSensitive: false), "");
-    return -int.parse(match);
+    return -parseIntTs(match);
   }
   if (new RegExp(r'(AD|CE)', caseSensitive: false).hasMatch(match)) {
     // Anno Domini, Common Era
     match = match.replaceAll(new RegExp(r'(AD|CE)', caseSensitive: false), "");
-    return int.parse(match);
+    return parseIntTs(match);
   }
-  final rawYearNumber = int.parse(match);
+  final rawYearNumber = parseIntTs(match);
   return findMostLikelyADYear(rawYearNumber);
 }
 

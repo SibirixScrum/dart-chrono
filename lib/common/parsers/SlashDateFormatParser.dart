@@ -1,3 +1,4 @@
+import "package:chrono/ported/ParseInt.dart";
 import "package:chrono/ported/RegExpMatchArray.dart";
 import "package:chrono/types.dart";
 
@@ -83,8 +84,8 @@ class SlashDateFormatParser implements Parser {
       return null;
     }
     final result = context.createParsingResult(index, text);
-    var month = int.parse(match.matches[this.groupNumberMonth]!);
-    var day = int.parse(match.matches[this.groupNumberDay]!);
+    var month = parseIntTs(match.matches[this.groupNumberMonth]!);
+    var day = parseIntTs(match.matches[this.groupNumberDay]!);
     if (month < 1 || month > 12) {
       if (month > 12) {
         if (day >= 1 && day <= 12 && month <= 31) {
@@ -102,7 +103,7 @@ class SlashDateFormatParser implements Parser {
     result.start.assign(Component.day, day);
     result.start.assign(Component.month, month);
     if (match[YEAR_GROUP].isNotEmpty) {
-      final rawYearNumber = int.parse(match[YEAR_GROUP]);
+      final rawYearNumber = parseIntTs(match[YEAR_GROUP]);
       final year = findMostLikelyADYear(rawYearNumber);
       result.start.assign(Component.year, year);
     } else {
