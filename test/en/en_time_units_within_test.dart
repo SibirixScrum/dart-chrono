@@ -7,7 +7,7 @@ import '../test_util.dart';
  void main() {
    test("Test - The normal within expression", () {
      testSingleCase(en.casual, "we have to make something in 5 days.",
-        DateTime(2012, 7, 10), (ParsedResult result, String text) {
+        DateTime(2012, 8, 10), (ParsedResult result, String text) {
       expect(result.index, 26);
       expect(result.text, "in 5 days");
       expect(result.start == null, isFalse);
@@ -17,7 +17,7 @@ import '../test_util.dart';
       expectToBeDate(result.start , DateTime(2012, 8 , 15));
     });
      testSingleCase(en.casual, "we have to make something in five days.",
-        DateTime(2012, 7, 10), (ParsedResult result, String text) {
+        DateTime(2012, 8, 10), (ParsedResult result, String text) {
       expect(result.index, 26);
       expect(result.text, "in five days");
       expect(result.start == null, isFalse);
@@ -27,7 +27,7 @@ import '../test_util.dart';
       expectToBeDate(result.start , DateTime(2012, 8 , 15));
     });
      testSingleCase(en.casual, "we have to make something within 10 day",
-        DateTime(2012, 7, 10), (ParsedResult result, String text) {
+        DateTime(2012, 8, 10), (ParsedResult result, String text) {
       expect(result.index, 26);
       expect(result.text, "within 10 day");
       expect(result.start == null, isFalse);
@@ -310,7 +310,7 @@ import '../test_util.dart';
         en.casual,
         "give it 2 months",
         DateTime(2016, 10 , 1, 14, 52),
-        {"forwardDate": true}, (ParsedResult result, String text) {
+         ParsingOption(forwardDate:true), (ParsedResult result, String text) {
       expect(result.text, "2 months");
       expect(result.start.get(Component.year), 2016);
       expect(result.start.get(Component.month), 12);

@@ -31,13 +31,14 @@ class ForwardDateRefiner implements Refiner {
       if (result.start.isOnlyWeekdayComponent() &&
           refMoment.isAfter(result.start.date())) {
         if (refMoment.weekday >= result.start.get(Component.weekday)!.toInt()) {
-          //todo хрен знает, что за refMoment.day(), думаю, что copywith
 
           // refMoment = refMoment.subtract(Duration(days: result.start.get(Component.weekday)!.toInt() - 1));
           final difference =
-              refMoment.weekday - result.start.get(Component.weekday)!.toInt();
-          refMoment = refMoment.add(Duration(
-              days: difference > 0 ? 7 - difference : 7 + difference.abs()));
+              refMoment.weekday % 7 - result.start.get(Component.weekday)!.toInt();
+          refMoment = refMoment.add(Duration(days: 7));
+          refMoment = refMoment.add(Duration(days: -difference));
+          // refMoment = refMoment.add(Duration(
+          //     days: difference > 0 ? 7 - difference : 7 + difference.abs()));
           // refMoment = refMoment.copyWith(
           //     day: result.start.get(Component.weekday)!.toInt() +
           //         7); // day(result.start.get(Component.weekday)!.toInt() + 7);

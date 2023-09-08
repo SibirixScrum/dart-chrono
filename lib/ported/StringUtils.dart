@@ -1,5 +1,5 @@
 String? or(String? a, String? b) {
-  if (a != null) {
+  if (a != null && a.isNotEmpty) {
     return a;
   } else if (b != null) {
     return b;

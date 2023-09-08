@@ -28,7 +28,7 @@ ParsingComponents createParsingComponentsAtWeekday(
  */
 num getDaysToWeekday(DateTime refDate, Weekday weekday,
     [dynamic /* | | */ modifier]) {
-  final refWeekday = refDate.weekday;
+  final refWeekday = refDate.weekday % 7;
   switch (modifier) {
     case "this":
       return getDaysForwardToWeekday(refDate, weekday);

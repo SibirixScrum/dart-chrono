@@ -63,9 +63,7 @@ class SlashDateFormatParser implements Parser {
       }
     }
     final index = match.index + match[OPENING_GROUP].length;
-    final a = match[0].length -
-        match[OPENING_GROUP].length -
-        match[ENDING_GROUP].length;
+
     final text = match.matches[0]!.substring(
         match[OPENING_GROUP].length,
         match[0].length -
