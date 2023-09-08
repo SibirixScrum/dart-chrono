@@ -1,6 +1,7 @@
 import 'package:chrono/chrono.dart';
 import 'package:chrono/locales/ru/index.dart' as ru;
 import 'package:chrono/locales/en/index.dart' as en;
+import 'package:chrono/ported/RegExpMatchArray.dart';
 import 'package:chrono/types.dart';
 
 void main() async {
@@ -20,8 +21,14 @@ void main() async {
   // });
   //
   // print(list);
+  // final c = "2014 12 28".replaceAll(" ", "").match(RegExp(r'^\d*(\.\d*)?$'));
+  //
+  // final d = RegExp(r'^\d*(\.\d*)?$').exec("2014 12 28");
 
-  final b = en.parse("Adam <Adam@supercalendar.com> написал(а):\nThe date is 02.07.2013");
+
+
+
+  final b = en.parse( "The event is today - next friday", DateTime(2012, 8, 4, 12));
   // print(new DateTime(2017, 11, 19, 12).weekday);
 
   // final a = chrono.parse("18.02.2024");

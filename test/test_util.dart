@@ -39,7 +39,18 @@ testSingleCase(Chrono chrono, String text,
     optionOrCheckResult.debug = debugHandler;
   }
   try {
-    final results = chrono.parse(text, refDateOrCheckResult as DateTime?,
+    // if(refDateOrCheckResult is ParsingReference){
+    //   final timezone = refDateOrCheckResult.timezone;
+    //   refDateOrCheckResult = refDateOrCheckResult.instant;
+    //   if(timezone is int){
+    //     if(timezone>0) {
+    //       (refDateOrCheckResult as DateTime?)?.add(Duration(minutes: timezone));
+    //     }else{
+    //       (refDateOrCheckResult as DateTime?)?.subtract(Duration(minutes: timezone));
+    //     }
+    //   }
+    // }
+    final results = chrono.parse(text, refDateOrCheckResult,
         optionOrCheckResult as ParsingOption?);
     expectToBeSingleOnText(results, text);
     if (checkResult != null) {

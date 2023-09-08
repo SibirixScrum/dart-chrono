@@ -1,4 +1,5 @@
 import "package:chrono/ported/RegExpMatchArray.dart";
+import "package:chrono/types.dart";
 
 import "../../../chrono.dart" show ParsingContext;
 import "../constants.dart" show MONTH_DICTIONARY;
@@ -30,7 +31,7 @@ class ENCasualYearMonthDayParser
     return PATTERN;
   }
 
-  innerExtract(ParsingContext context, RegExpMatchArray match) {
+  Map<Component,num>? innerExtract(ParsingContext context, RegExpMatchArray match) {
     final month = match[MONTH_NUMBER_GROUP].isNotEmpty
         ? int.parse(match[MONTH_NUMBER_GROUP])
         : MONTH_DICTIONARY[match[MONTH_NAME_GROUP].toLowerCase()];
@@ -39,6 +40,6 @@ class ENCasualYearMonthDayParser
     }
     final year = int.parse(match[YEAR_NUMBER_GROUP]);
     final day = int.parse(match[DATE_NUMBER_GROUP]);
-    return {"day": day, "month": month, "year": year};
+    return {Component.day: day, Component.month: month, Component.year: year};
   }
 }

@@ -20,7 +20,7 @@ import '../test_util.dart';
         (ParsedResult result, String text) {
       expect(result.index, 16);
       expect(result.text, "2012/8/10");
-      expectToBeDate(result.start,DateTime(2012, 7, 10, 12));
+      expectToBeDate(result.start,DateTime(2012, 8, 10, 12));
     });
     testSingleCase(en.strict, "2014/2/28",
         (ParsedResult result, String text) {

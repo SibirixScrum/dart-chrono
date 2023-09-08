@@ -38,7 +38,7 @@ num getDaysToWeekday(DateTime refDate, Weekday weekday,
       // From Sunday, the next Sunday is 7 days later.
 
       // Otherwise, next Mon is 1 days later, next Tues is 2 days later, and so on..., (return enum value)
-      if (refWeekday == Weekday.SUNDAY) {
+      if (refWeekday == Weekday.SUNDAY.index) {
         return weekday == Weekday.SUNDAY ? 7 : weekday.index;
       }
       // From Saturday, the next Saturday is 7 days later, the next Sunday is 8-days later.
@@ -46,7 +46,7 @@ num getDaysToWeekday(DateTime refDate, Weekday weekday,
       // Otherwise, next Mon is (1 + 1) days later, next Tues is (1 + 2) days later, and so on...,
 
       // (return, 2 + [enum value] days)
-      if (refWeekday == Weekday.SATURDAY) {
+      if (refWeekday == Weekday.SATURDAY.index  ) {
         if (weekday == Weekday.SATURDAY) return 7;
         if (weekday == Weekday.SUNDAY) return 8;
         return 1 + weekday.index;

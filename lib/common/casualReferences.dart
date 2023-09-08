@@ -1,4 +1,4 @@
-import "../results.dart" show ParsingComponents, ReferenceWithTimezone;
+import "../results.dart" show ParsingComponents, ReferenceWithTimezone, Undefined;
 import "../types.dart" show Component, Meridiem;
 import "../utils/dayjs.dart"
     show
@@ -13,7 +13,7 @@ ParsingComponents now(ReferenceWithTimezone reference) {
   final component = new ParsingComponents(reference, {});
   assignSimilarDate(component, targetDate);
   assignSimilarTime(component, targetDate);
-  if (reference.timezoneOffset != null) {
+  if (reference.timezoneOffset is Undefined) {
     component.assign(
         Component.timezoneOffset, targetDate.timeZoneOffset.inMinutes);
   }

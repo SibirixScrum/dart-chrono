@@ -12,11 +12,7 @@ class UnlikelyFormatFilter extends Filter {
   }
 
   bool isValid(context, ParsingResult result) {
-    if (new RegExp(r'^\d*(\.\d*)?$')
-            .exec(result.text.replaceAll(" ", ""))
-            ?.matches
-            .isNotEmpty ??
-        false) {
+    if (RegExp(r'^\d*(\.\d*)?$').exec(result.text) != null) {
       context.debug(() {
         print('''Removing unlikely result \'${result.text}\'''');
       });

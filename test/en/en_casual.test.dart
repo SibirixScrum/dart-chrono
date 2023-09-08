@@ -13,24 +13,24 @@ import '../test_util.dart';
       expect(result.text, "now");
       expect(result.start == null, isFalse);
       expect(result.start.get(Component.year), 2012);
-      expect(result.start.get(Component.month), 8);
+      expect(result.start.get(Component.month), 7);
       expect(result.start.get(Component.day), 10);
       expect(result.start.get(Component.hour), 8);
       expect(result.start.get(Component.minute), 9);
       expect(result.start.get(Component.second), 10);
       expect(result.start.get(Component.millisecond), 11);
       expect(result.start.get(Component.timezoneOffset),
-          result.refDate.timeZoneOffset.inMinutes * -1);
+          result.refDate.timeZoneOffset.inMinutes );
       expectToBeDate(result.start,result.refDate);
       expectToBeDate(result.start,DateTime(2012, 7, 10, 8, 9, 10, 11));
     });
     testSingleCase(
         en.casual,
         "The Deadline is now, without implicit local timezone",
-        {"instant": DateTime(1637674343000), "timezone": null},
+        ParsingReferenceDummy(DateTime.fromMillisecondsSinceEpoch(1637674343000), null),
         (ParsedResult result, String text) {
       expect(result.text, "now");
-      expectToBeDate(result.start,DateTime(1637674343000));
+      expectToBeDate(result.start,DateTime.fromMillisecondsSinceEpoch (1637674343000));
       expect(result.start.isCertain(Component.timezoneOffset), false);
     });
     testSingleCase(en.casual, "The Deadline is today",
@@ -39,7 +39,7 @@ import '../test_util.dart';
       expect(result.text, "today");
       expect(result.start == null, isFalse);
       expect(result.start.get(Component.year), 2012);
-      expect(result.start.get(Component.month), 8);
+      expect(result.start.get(Component.month), 7);
       expect(result.start.get(Component.day), 10);
       expectToBeDate(result.start,DateTime(2012, 7, 10, 14, 12));
     });
@@ -49,7 +49,7 @@ import '../test_util.dart';
       expect(result.text, "Tomorrow");
       expect(result.start == null, isFalse);
       expect(result.start.get(Component.year), 2012);
-      expect(result.start.get(Component.month), 8);
+      expect(result.start.get(Component.month), 7);
       expect(result.start.get(Component.day), 11);
       expectToBeDate(result.start,DateTime(2012, 7, 11, 17, 10));
     });
@@ -64,7 +64,7 @@ import '../test_util.dart';
       expect(result.text, "yesterday");
       expect(result.start == null, isFalse);
       expect(result.start.get(Component.year), 2012);
-      expect(result.start.get(Component.month), 8);
+      expect(result.start.get(Component.month), 7);
       expect(result.start.get(Component.day), 9);
       expectToBeDate(result.start,DateTime(2012, 7, 9, 12));
     });
@@ -74,7 +74,7 @@ import '../test_util.dart';
       expect(result.text, "last night");
       expect(result.start == null, isFalse);
       expect(result.start.get(Component.year), 2012);
-      expect(result.start.get(Component.month), 8);
+      expect(result.start.get(Component.month), 7);
       expect(result.start.get(Component.day), 9);
       expect(result.start.get(Component.hour), 0);
       expectToBeDate(result.start,DateTime(2012, 7, 9, 0));
@@ -85,7 +85,7 @@ import '../test_util.dart';
       expect(result.text, "this morning");
       expect(result.start == null, isFalse);
       expect(result.start.get(Component.year), 2012);
-      expect(result.start.get(Component.month), 8);
+      expect(result.start.get(Component.month), 7);
       expect(result.start.get(Component.day), 10);
       expect(result.start.get(Component.hour), 6);
       expectToBeDate(result.start,DateTime(2012, 7, 10, 6));
@@ -96,7 +96,7 @@ import '../test_util.dart';
       expect(result.text, "this afternoon");
       expect(result.start == null, isFalse);
       expect(result.start.get(Component.year), 2012);
-      expect(result.start.get(Component.month), 8);
+      expect(result.start.get(Component.month), 7);
       expect(result.start.get(Component.day), 10);
       expect(result.start.get(Component.hour), 15);
       expectToBeDate(result.start,DateTime(2012, 7, 10, 15));
@@ -107,7 +107,7 @@ import '../test_util.dart';
       expect(result.text, "this evening");
       expect(result.start == null, isFalse);
       expect(result.start.get(Component.year), 2012);
-      expect(result.start.get(Component.month), 8);
+      expect(result.start.get(Component.month), 7);
       expect(result.start.get(Component.day), 10);
       expect(result.start.get(Component.hour), 20);
       expectToBeDate(result.start,DateTime(2012, 7, 10, 20));
@@ -116,7 +116,7 @@ import '../test_util.dart';
         DateTime(2012, 7, 10, 12), (ParsedResult result, String text) {
       expect(result.text, "midnight");
       expect(result.start.get(Component.year), 2012);
-      expect(result.start.get(Component.month), 8);
+      expect(result.start.get(Component.month), 7);
       expect(result.start.get(Component.day), 11);
       expect(result.start.get(Component.hour), 0);
     });
@@ -137,7 +137,7 @@ import '../test_util.dart';
         en.casual,
         "The Deadline was midnight ",
         DateTime(2012, 8 , 10, 1),
-        {"forwardDate": true}, (ParsedResult result, String text) {
+        ParsingOption(forwardDate : true), (ParsedResult result, String text) {
       expect(result.text, "midnight");
       expect(result.start.get(Component.year), 2012);
       expect(result.start.get(Component.month), 8);
@@ -154,7 +154,7 @@ import '../test_util.dart';
       expect(result.index, 16);
       expect(result.text, "today 5PM");
       expect(result.start.get(Component.year), 2012);
-      expect(result.start.get(Component.month), 8);
+      expect(result.start.get(Component.month), 7);
       expect(result.start.get(Component.day), 10);
       expect(result.start.get(Component.hour), 17);
       expectToBeDate(result.start,DateTime(2012, 7, 10, 17));
@@ -171,7 +171,7 @@ import '../test_util.dart';
   });
   test("Test - Casual date range", () {
     testSingleCase(en.casual, "The event is today - next friday",
-        DateTime(2012, 7, 4, 12), (ParsedResult result, String text) {
+        DateTime(2012, 8, 4, 12), (ParsedResult result, String text) {
       expect(result.index, 13);
       expect(result.text, "today - next friday");
       expect(result.start == null, isFalse);
@@ -179,16 +179,16 @@ import '../test_util.dart';
       expect(result.start.get(Component.month), 8);
       expect(result.start.get(Component.day), 4);
       expect(result.start.get(Component.hour), 12);
-      expectToBeDate(result.start,DateTime(2012, 7, 4, 12));
+      expectToBeDate(result.start,DateTime(2012, 8, 4, 12));
       expect(result.end == null, isFalse);
       expect(result.end!.get(Component.year), 2012);
       expect(result.end!.get(Component.month), 8);
       expect(result.end!.get(Component.day), 10);
       expect(result.end!.get(Component.hour), 12);
-      expectToBeDate(result.end!,DateTime(2012, 7, 10, 12));
+      expectToBeDate(result.end!,DateTime(2012, 8, 10, 12));
     });
     testSingleCase(en.casual, "The event is today - next friday",
-        DateTime(2012, 7, 10, 12), (ParsedResult result, String text) {
+        DateTime(2012, 8, 10, 12), (ParsedResult result, String text) {
       expect(result.index, 13);
       expect(result.text, "today - next friday");
       expect(result.start == null, isFalse);
@@ -196,13 +196,13 @@ import '../test_util.dart';
       expect(result.start.get(Component.month), 8);
       expect(result.start.get(Component.day), 10);
       expect(result.start.get(Component.hour), 12);
-      expectToBeDate(result.start,DateTime(2012, 7, 10, 12));
+      expectToBeDate(result.start,DateTime(2012, 8, 10, 12));
       expect(result.end == null, isFalse);
       expect(result.end!.get(Component.year), 2012);
       expect(result.end!.get(Component.month), 8);
       expect(result.end!.get(Component.day), 17);
       expect(result.end!.get(Component.hour), 12);
-      expectToBeDate(result.end!,DateTime(2012, 7, 17, 12));
+      expectToBeDate(result.end!,DateTime(2012, 8, 17, 12));
     });
   });
   test("Test - Casual time implication", () {
@@ -243,7 +243,7 @@ import '../test_util.dart';
       expect(result.start.get(Component.month), 1);
       expect(result.start.get(Component.day), 1);
       expect(result.start.get(Component.hour), 22);
-      expect(result.start.get(Component.meridiem), Meridiem.PM);
+      expect(result.start.get(Component.meridiem), Meridiem.PM.index);
     });
     testSingleCase(en.casual, "tonight 8pm", DateTime(2012, 1 , 1, 12),
         (ParsedResult result, String text) {
@@ -252,7 +252,7 @@ import '../test_util.dart';
       expect(result.start.get(Component.year), 2012);
       expect(result.start.get(Component.month), 1);
       expect(result.start.get(Component.day), 1);
-      expect(result.start.get(Component.meridiem), Meridiem.PM);
+      expect(result.start.get(Component.meridiem), Meridiem.PM.index);
     });
     testSingleCase(en.casual, "tonight at 8", DateTime(2012, 1 , 1, 12),
         (ParsedResult result, String text) {
@@ -261,7 +261,7 @@ import '../test_util.dart';
       expect(result.start.get(Component.year), 2012);
       expect(result.start.get(Component.month), 1);
       expect(result.start.get(Component.day), 1);
-      expect(result.start.get(Component.meridiem), Meridiem.PM);
+      expect(result.start.get(Component.meridiem), Meridiem.PM.index);
     });
     testSingleCase(
         en.casual, "tomorrow before 4pm", DateTime(2012, 1 , 1, 12),
@@ -271,7 +271,7 @@ import '../test_util.dart';
       expect(result.start.get(Component.year), 2012);
       expect(result.start.get(Component.month), 1);
       expect(result.start.get(Component.day), 2);
-      expect(result.start.get(Component.meridiem), Meridiem.PM);
+      expect(result.start.get(Component.meridiem), Meridiem.PM.index);
     });
     testSingleCase(
         en.casual, "tomorrow after 4pm", DateTime(2012, 1 , 1, 12),
@@ -281,7 +281,7 @@ import '../test_util.dart';
       expect(result.start.get(Component.year), 2012);
       expect(result.start.get(Component.month), 1);
       expect(result.start.get(Component.day), 2);
-      expect(result.start.get(Component.meridiem), Meridiem.PM);
+      expect(result.start.get(Component.meridiem), Meridiem.PM.index);
     });
     testSingleCase(en.casual, "thurs", (ParsedResult result, String text) {
       expect(result.text, text);

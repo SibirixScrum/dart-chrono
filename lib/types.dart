@@ -53,7 +53,7 @@ abstract class AmbiguousTimezoneMap {
  * and ambiguous mappings, where the offset will depend on whether the
  * time in question is during daylight savings time or not.
  */
-abstract class ParsingReference {
+class ParsingReference {
   /**
    * Reference date. The instant (JavaScript Date object) when the input is written or mention.
    * This effect date/time implication (e.g. weekday or time mentioning).
@@ -61,7 +61,7 @@ abstract class ParsingReference {
    */
   DateTime instant;
 
-  ParsingReference(this.instant);
+  ParsingReference(this.instant,[this.timezone]);
 
   /**
    * Reference timezone. The timezone where the input is written or mention.
@@ -70,6 +70,7 @@ abstract class ParsingReference {
    */
   dynamic /* String | num */ timezone;
 }
+
 
 /**
  * Parsed result or final output.

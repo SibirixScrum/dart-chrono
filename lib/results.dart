@@ -8,15 +8,18 @@ import "utils/dayjs.dart"
 
 // dayjs.extend //todo не знаю, че это
 // (quarterOfYear );
+class Undefined{}
+
 class ReferenceWithTimezone {
   late DateTime instant;
 
-  num? timezoneOffset;
+  dynamic /*num? || Undefined*/ timezoneOffset;
 
   ReferenceWithTimezone([dynamic /* ParsingReference | Date */ input]) {
     input = input ?? new DateTime(1990);
     if (input is DateTime) {
       this.instant = input;
+      this.timezoneOffset = Undefined(); //used as undefined. because checks reference.timezoneOffset !== null is typescript is true if it is indefined
     } else {
       this.instant = input.instant ?? new DateTime(1990);
       this.timezoneOffset = toTimezoneOffset(input.timezone, this.instant);
@@ -45,9 +48,9 @@ class ReferenceWithTimezone {
 // e.g. new Date('Tue Feb 02 1300 00:00:00 GMT+0900 (JST)') => Tue Feb 02 1300 00:18:59 GMT+0918 (JST)
       date = DateTime(1990);
     }
-    final currentTimezoneOffset = -date.timeZoneOffset.inMinutes;
+    final currentTimezoneOffset = date.timeZoneOffset.inMinutes;
     final targetTimezoneOffset =
-        overrideTimezoneOffset ?? this.timezoneOffset ?? currentTimezoneOffset;
+        overrideTimezoneOffset ?? (this.timezoneOffset is! num ? currentTimezoneOffset : this.timezoneOffset);
     return (currentTimezoneOffset - targetTimezoneOffset).toInt();
   }
 }
@@ -280,15 +283,15 @@ class ParsingComponents implements ParsedComponents {
         intFragments["second"] != null) {
       assignSimilarTime(components, date);
       assignSimilarDate(components, date);
-      if (reference.timezoneOffset != null) {
+      if (reference.timezoneOffset is Undefined) {
         components.assign(Component.timezoneOffset,
-            -reference.instant.timeZoneOffset.inMinutes);
+            reference.instant.timeZoneOffset.inMinutes);
       }
     } else {
       implySimilarTime(components, date);
-      if (reference.timezoneOffset != null) {
+      if (reference.timezoneOffset is Undefined) {
         components.imply(Component.timezoneOffset,
-            -reference.instant.timeZoneOffset.inMinutes);
+            reference.instant.timeZoneOffset.inMinutes);
       }
       if (intFragments["d"] != null) {
         components.assign(Component.day, date.day);
