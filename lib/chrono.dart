@@ -1,4 +1,5 @@
 import "package:chrono/ported/RegExpMatchArray.dart";
+import "package:chrono/ported/StringUtils.dart";
 
 import "debugging.dart" show AsyncDebugBlock, DebugHandler;
 import 'locales/ru/index.dart' as ru;
@@ -147,7 +148,7 @@ class Chrono {
       if (result == null) {
         // If fails, move on by 1
         try {
-          remainingText = originalText.substring(match.index + 1);
+          remainingText = originalText.substringTs(match.index + 1);
         } on RangeError {
           remainingText = '';
         }
@@ -170,7 +171,7 @@ class Chrono {
       context.debug(() => print(
           '''executeParser extracted (at index=${parsedIndex}) \'${parsedText}\''''));
       results.add(parsedResult);
-      remainingText = originalText.substring(parsedIndex + parsedText.length);
+      remainingText = originalText.substringTs(parsedIndex + parsedText.length);
       match = pattern.exec(remainingText);
     }
     return results;
@@ -210,7 +211,7 @@ class ParsingContext implements DebugHandler {
       dynamic /* dynamic | ParsingComponents */ endComponents]) {
     final text = textOrEndIndex is String
         ? textOrEndIndex
-        : this.text.substring(index.toInt(), textOrEndIndex);
+        : this.text.substringTs(index.toInt(), textOrEndIndex);
     final start = startComponents != null
         ? this.createParsingComponents(startComponents)
         : null;

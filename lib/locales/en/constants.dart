@@ -1,5 +1,6 @@
 import "package:chrono/ported/ParseInt.dart";
 import "package:chrono/ported/RegExpMatchArray.dart";
+import "package:chrono/ported/StringUtils.dart";
 
 import "../../calculation/years.dart" show findMostLikelyADYear;
 import "../../utils/pattern.dart" show matchAnyPattern, repeatedTimeunitPattern;
@@ -277,11 +278,11 @@ final TIME_UNITS_NO_ABBR_PATTERN = repeatedTimeunitPattern(
 
 TimeUnits parseTimeUnits(timeunitText) {
   final TimeUnits fragments = {};
-  var remainingText = timeunitText;
+  String remainingText = timeunitText;
   var match = SINGLE_TIME_UNIT_REGEX.exec(remainingText);
   while (match?.matches != null && match!.matches.isNotEmpty) {
     collectDateTimeFragment(fragments, match);
-    remainingText = remainingText.substring(match[0].length).trim();
+    remainingText = remainingText.substringTs(match[0].length).trim();
     match = SINGLE_TIME_UNIT_REGEX.exec(remainingText);
   }
   return fragments;

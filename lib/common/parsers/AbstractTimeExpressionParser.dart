@@ -96,10 +96,10 @@ abstract class AbstractTimeExpressionParser implements Parser {
       return null; //todo dummy ParsingResult instead of null
     }
     final index = match.index + match[1].length;
-    final text = match[0].substring(match[1].length);
+    final text = match[0].substringTs(match[1].length);
     final result = context.createParsingResult(index, text, startComponents);
     match.index += match[0].length;
-    final remainingText = context.text.substring(match.index);
+    final remainingText = context.text.substringTs(match.index);
     final followingPattern = this.getFollowingTimePatternThroughCache();
     final followingMatch = followingPattern.exec(remainingText);
     // Pattern "456-12", "2022-12" should not be time without proper context
@@ -190,7 +190,7 @@ abstract class AbstractTimeExpressionParser implements Parser {
     }
     // ----- Millisecond
     if (match[MILLI_SECOND_GROUP].isNotEmpty) {
-      final millisecond = parseIntTs(match[MILLI_SECOND_GROUP].substring(0, 3));
+      final millisecond = parseIntTs(match[MILLI_SECOND_GROUP].substringTs(0, 3));
       if (millisecond >= 1000) return null;
       components.assign(Component.millisecond, millisecond);
     }
@@ -208,7 +208,7 @@ abstract class AbstractTimeExpressionParser implements Parser {
     final components = context.createParsingComponents();
     // ----- Millisecond
     if (match[MILLI_SECOND_GROUP].isNotEmpty) {
-      final millisecond = parseIntTs(match[MILLI_SECOND_GROUP].substring(0, 3));
+      final millisecond = parseIntTs(match[MILLI_SECOND_GROUP].substringTs(0, 3));
       if (millisecond >= 1000) return null;
       components.assign(Component.millisecond, millisecond);
     }

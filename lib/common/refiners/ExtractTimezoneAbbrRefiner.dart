@@ -1,5 +1,6 @@
 // Map ABBR -> Offset in minute
 import "package:chrono/ported/RegExpMatchArray.dart";
+import "package:chrono/ported/StringUtils.dart";
 
 import "../../chrono.dart" show ParsingContext, Refiner;
 import "../../results.dart" show ParsingResult;
@@ -22,7 +23,7 @@ class ExtractTimezoneAbbrRefiner implements Refiner {
       ParsingContext context, List<ParsingResult> results) {
     final timezoneOverrides = context.option?.timezones ?? {};
     results.forEach((result) {
-      final suffix = context.text.substring(result.index + result.text.length);
+      final suffix = context.text.substringTs(result.index + result.text.length);
 
       final match = TIMEZONE_NAME_PATTERN.exec(suffix);
       if (match == null || match.matches.isEmpty) {

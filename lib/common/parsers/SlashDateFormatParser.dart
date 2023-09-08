@@ -1,5 +1,6 @@
 import "package:chrono/ported/ParseInt.dart";
 import "package:chrono/ported/RegExpMatchArray.dart";
+import "package:chrono/ported/StringUtils.dart";
 import "package:chrono/types.dart";
 
 import "../../calculation/years.dart"
@@ -64,7 +65,7 @@ class SlashDateFormatParser implements Parser {
     }
     final index = match.index + match[OPENING_GROUP].length;
 
-    final text = match.matches[0]!.substring(
+    final text = match.matches[0]!.substringTs(
         match[OPENING_GROUP].length,
         match[0].length -
             match[ENDING_GROUP].length);

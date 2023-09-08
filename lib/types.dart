@@ -28,7 +28,7 @@ class ParsingOption {
  * depending on the time of year — daylight savings time (DST), or non-DST. This interface
  * allows defining such timezones
  */
-abstract class AmbiguousTimezoneMap {
+class AmbiguousTimezoneMap {
   num timezoneOffsetDuringDst;
   num timezoneOffsetNonDst;
 
@@ -36,15 +36,19 @@ abstract class AmbiguousTimezoneMap {
    * Return the start date of DST for the given year.
    * timezone.ts contains helper methods for common such rules.
    */
-  DateTime dstStart(num year);
+  DateTime Function(num year) dstStart;
 
   /**
    * Return the end date of DST for the given year.
    * timezone.ts contains helper methods for common such rules.
    */
-  DateTime dstEnd(num year);
+  DateTime Function(num year) dstEnd;
 
-  AmbiguousTimezoneMap(this.timezoneOffsetDuringDst, this.timezoneOffsetNonDst);
+  AmbiguousTimezoneMap(
+      {required this.timezoneOffsetDuringDst,
+      required this.timezoneOffsetNonDst,
+      required this.dstStart,
+      required this.dstEnd});
 }
 
 /**

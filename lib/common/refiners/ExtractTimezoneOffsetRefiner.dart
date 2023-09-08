@@ -1,5 +1,6 @@
 import "package:chrono/ported/ParseInt.dart";
 import "package:chrono/ported/RegExpMatchArray.dart";
+import "package:chrono/ported/StringUtils.dart";
 import "package:chrono/types.dart";
 
 import "../../chrono.dart" show ParsingContext, Refiner;
@@ -19,7 +20,7 @@ class ExtractTimezoneOffsetRefiner implements Refiner {
       if (result.start.isCertain(Component.timezoneOffset)) {
         return;
       }
-      final suffix = context.text.substring(result.index + result.text.length);
+      final suffix = context.text.substringTs(result.index + result.text.length);
       final match = TIMEZONE_OFFSET_PATTERN.exec(suffix);
       if (match == null || match.matches.isEmpty) {
         return;

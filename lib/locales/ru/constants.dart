@@ -1,5 +1,6 @@
 import "package:chrono/ported/ParseInt.dart";
 import "package:chrono/ported/RegExpMatchArray.dart";
+import "package:chrono/ported/StringUtils.dart";
 
 import "../../calculation/years.dart" show findMostLikelyADYear;
 import "../../utils/pattern.dart" show matchAnyPattern, repeatedTimeunitPattern;
@@ -343,7 +344,7 @@ num parseYear(String match) {
     match = match.replaceAll(
         new RegExp(r'(год|года|г|г.)', caseSensitive: false), "");
     if(match.contains(" ")) {
-      match = match.substring(0, match.indexOf(" "));
+      match = match.substringTs(0, match.indexOf(" "));
     }
   }
   if (new RegExp(r'(до н.э.|до н. э.)', caseSensitive: false)
@@ -353,7 +354,7 @@ num parseYear(String match) {
     match = match.replaceAll(
         new RegExp(r'(до н.э.|до н. э.)', caseSensitive: false), "");
     if(match.contains(" ")) {
-      match = match.substring(0, match.indexOf(" "));
+      match = match.substringTs(0, match.indexOf(" "));
     }
     return -parseIntTs(match);
   }
@@ -363,12 +364,12 @@ num parseYear(String match) {
     match =
         match.replaceAll(new RegExp(r'(н. э.|н.э.)', caseSensitive: false), "");
     if(match.contains(" ")) {
-      match = match.substring(0, match.indexOf(" "));
+      match = match.substringTs(0, match.indexOf(" "));
     }
     return parseIntTs(match);
   }
   if(match.contains(" ")) {
-    match = match.substring(0, match.indexOf(" "));
+    match = match.substringTs(0, match.indexOf(" "));
   }
   final rawYearNumber = parseIntTs(match);
   return findMostLikelyADYear(rawYearNumber);
@@ -386,11 +387,11 @@ final TIME_UNITS_PATTERN = repeatedTimeunitPattern(
 
 TimeUnits parseTimeUnits(timeunitText) {
   final TimeUnits fragments = {};
-  var remainingText = timeunitText;
+  String remainingText = timeunitText;
   var match = SINGLE_TIME_UNIT_REGEX.exec(remainingText);
   while (match?.matches != null && match!.matches.isNotEmpty) {
     collectDateTimeFragment(fragments, match);
-    remainingText = remainingText.substring((match[0]).length).trim();
+    remainingText = remainingText.substringTs((match[0]).length).trim();
     match = SINGLE_TIME_UNIT_REGEX.exec(remainingText);
   }
   return fragments;

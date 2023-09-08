@@ -31,9 +31,7 @@ void main() async {
 
 
 
-  final b = en.parse(        "sunday morning",
-      DateTime.parse("2021-08-15T20:00"),
-      ParsingOption(forwardDate:true));
+  final b = en.parse("2022-03-26 23:00 CET");
   // print(new DateTime(2017, 11, 19, 12).weekday);
 
   // final a = chrono.parse("18.02.2024");

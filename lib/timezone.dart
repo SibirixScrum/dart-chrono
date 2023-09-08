@@ -1,4 +1,4 @@
-import "types.dart" show TimezoneAbbrMap, Weekday, Month;
+import "types.dart" show AmbiguousTimezoneMap, Month, TimezoneAbbrMap, Weekday;
 
 final TimezoneAbbrMap TIMEZONE_ABBR_MAP = {
   "ACDT": 630,
@@ -37,14 +37,20 @@ final TimezoneAbbrMap TIMEZONE_ABBR_MAP = {
   // Note: Many sources define CET as a constant UTC+1. In common usage, however,
 
   // CET usually refers to the time observed in most of Europe, be it standard time or daylight saving time.
-  "CET": {
-    "timezoneOffsetDuringDst": 2 * 60,
-    "timezoneOffsetNonDst": 60,
-    "dstStart": (num year) =>
-        getLastWeekdayOfMonth(year, Month.MARCH, Weekday.SUNDAY, 2),
-    "dstEnd": (num year) =>
-        getLastWeekdayOfMonth(year, Month.OCTOBER, Weekday.SUNDAY, 3)
-  },
+  "CET": AmbiguousTimezoneMap(
+    timezoneOffsetDuringDst: 2*60,
+    timezoneOffsetNonDst: 60,
+    dstStart: (num year) => getLastWeekdayOfMonth(year, Month.MARCH, Weekday.SUNDAY,2),
+    dstEnd: (num year) => getLastWeekdayOfMonth(year, Month.OCTOBER, Weekday.SUNDAY,3),
+  ),
+  // {//AmbiguousTimezoneMap()
+  //   "timezoneOffsetDuringDst": 2 * 60,
+  //   "timezoneOffsetNonDst": 60,
+  //   "dstStart": (num year) =>
+  //       getLastWeekdayOfMonth(year, Month.MARCH, Weekday.SUNDAY, 2),
+  //   "dstEnd": (num year) =>
+  //       getLastWeekdayOfMonth(year, Month.OCTOBER, Weekday.SUNDAY, 3)
+  // },
   "CHADT": 825,
   "CHAST": 765,
   "CKT": -600,
@@ -52,14 +58,20 @@ final TimezoneAbbrMap TIMEZONE_ABBR_MAP = {
   "CLT": -240,
   "COT": -300,
   "CST": -360,
-  "CT": {
-    "timezoneOffsetDuringDst": -5 * 60,
-    "timezoneOffsetNonDst": -6 * 60,
-    "dstStart": (num year) =>
-        getNthWeekdayOfMonth(year, Month.MARCH, Weekday.SUNDAY, 2, 2),
-    "dstEnd": (num year) =>
-        getNthWeekdayOfMonth(year, Month.NOVEMBER, Weekday.SUNDAY, 1, 2)
-  },
+  "CT": AmbiguousTimezoneMap(
+    timezoneOffsetDuringDst: -5*60,
+    timezoneOffsetNonDst: -6*60,
+    dstStart: (num year) => getNthWeekdayOfMonth(year, Month.MARCH, Weekday.SUNDAY,2,2),
+    dstEnd: (num year) => getNthWeekdayOfMonth(year, Month.NOVEMBER, Weekday.SUNDAY,1,2),
+  ),
+  // {
+  //   "timezoneOffsetDuringDst": -5 * 60,
+  //   "timezoneOffsetNonDst": -6 * 60,
+  //   "dstStart": (num year) =>
+  //       getNthWeekdayOfMonth(year, Month.MARCH, Weekday.SUNDAY, 2, 2),
+  //   "dstEnd": (num year) =>
+  //       getNthWeekdayOfMonth(year, Month.NOVEMBER, Weekday.SUNDAY, 1, 2)
+  // },
   "CVT": -60,
   "CXT": 420,
   "ChST": 600,
@@ -74,14 +86,21 @@ final TimezoneAbbrMap TIMEZONE_ABBR_MAP = {
   "EGST": 0,
   "EGT": -60,
   "EST": -300,
-  "ET": {
-    "timezoneOffsetDuringDst": -4 * 60,
-    "timezoneOffsetNonDst": -5 * 60,
-    "dstStart": (num year) =>
-        getNthWeekdayOfMonth(year, Month.MARCH, Weekday.SUNDAY, 2, 2),
-    "dstEnd": (num year) =>
-        getNthWeekdayOfMonth(year, Month.NOVEMBER, Weekday.SUNDAY, 1, 2)
-  },
+  "ET":
+  AmbiguousTimezoneMap(
+    timezoneOffsetDuringDst: -4*60,
+    timezoneOffsetNonDst: -5*60,
+    dstStart: (num year) => getNthWeekdayOfMonth(year, Month.MARCH, Weekday.SUNDAY,2,2),
+    dstEnd: (num year) => getNthWeekdayOfMonth(year, Month.NOVEMBER, Weekday.SUNDAY,1,2),
+  ),
+  // {
+  //   "timezoneOffsetDuringDst": -4 * 60,
+  //   "timezoneOffsetNonDst": -5 * 60,
+  //   "dstStart": (num year) =>
+  //       getNthWeekdayOfMonth(year, Month.MARCH, Weekday.SUNDAY, 2, 2),
+  //   "dstEnd": (num year) =>
+  //       getNthWeekdayOfMonth(year, Month.NOVEMBER, Weekday.SUNDAY, 1, 2)
+  // },
   "FJST": 780,
   "FJT": 720,
   "FKST": -180,
@@ -143,14 +162,20 @@ final TimezoneAbbrMap TIMEZONE_ABBR_MAP = {
   "MSD": 240,
   "MSK": 180,
   "MST": -420,
-  "MT": {
-    "timezoneOffsetDuringDst": -6 * 60,
-    "timezoneOffsetNonDst": -7 * 60,
-    "dstStart": (num year) =>
-        getNthWeekdayOfMonth(year, Month.MARCH, Weekday.SUNDAY, 2, 2),
-    "dstEnd": (num year) =>
-        getNthWeekdayOfMonth(year, Month.NOVEMBER, Weekday.SUNDAY, 1, 2)
-  },
+  "MT":AmbiguousTimezoneMap(
+    timezoneOffsetDuringDst: -6*60,
+    timezoneOffsetNonDst: -7*60,
+    dstStart: (num year) => getNthWeekdayOfMonth(year, Month.MARCH, Weekday.SUNDAY,2,2),
+    dstEnd: (num year) => getNthWeekdayOfMonth(year, Month.NOVEMBER, Weekday.SUNDAY,1,2),
+  ),
+  // {
+  //   "timezoneOffsetDuringDst": -6 * 60,
+  //   "timezoneOffsetNonDst": -7 * 60,
+  //   "dstStart": (num year) =>
+  //       getNthWeekdayOfMonth(year, Month.MARCH, Weekday.SUNDAY, 2, 2),
+  //   "dstEnd": (num year) =>
+  //       getNthWeekdayOfMonth(year, Month.NOVEMBER, Weekday.SUNDAY, 1, 2)
+  // },
   "MUT": 240,
   "MVT": 300,
   "MYT": 480,
@@ -178,14 +203,20 @@ final TimezoneAbbrMap TIMEZONE_ABBR_MAP = {
   "PMST": -180,
   "PONT": 660,
   "PST": -480,
-  "PT": {
-    "timezoneOffsetDuringDst": -7 * 60,
-    "timezoneOffsetNonDst": -8 * 60,
-    "dstStart": (num year) =>
-        getNthWeekdayOfMonth(year, Month.MARCH, Weekday.SUNDAY, 2, 2),
-    "dstEnd": (num year) =>
-        getNthWeekdayOfMonth(year, Month.NOVEMBER, Weekday.SUNDAY, 1, 2)
-  },
+  "PT": AmbiguousTimezoneMap(
+    timezoneOffsetDuringDst: -7*60,
+    timezoneOffsetNonDst: -8*60,
+    dstStart: (num year) => getNthWeekdayOfMonth(year, Month.MARCH, Weekday.SUNDAY,2,2),
+    dstEnd: (num year) => getNthWeekdayOfMonth(year, Month.NOVEMBER, Weekday.SUNDAY,1,2),
+  ),
+  // {
+  //   "timezoneOffsetDuringDst": -7 * 60,
+  //   "timezoneOffsetNonDst": -8 * 60,
+  //   "dstStart": (num year) =>
+  //       getNthWeekdayOfMonth(year, Month.MARCH, Weekday.SUNDAY, 2, 2),
+  //   "dstEnd": (num year) =>
+  //       getNthWeekdayOfMonth(year, Month.NOVEMBER, Weekday.SUNDAY, 1, 2)
+  // },
   "PWT": 540,
   "PYST": -180,
   "PYT": -240,
@@ -245,16 +276,16 @@ final TimezoneAbbrMap TIMEZONE_ABBR_MAP = {
  *         month and year, at the given hour of day
  */
 DateTime getNthWeekdayOfMonth(num year, Month month, Weekday weekday,
-    [n = ((1 | 2 as int) | 3 as int) | 4, hour = 0]) {
+    int n,[int hour = 0]) {
   var dayOfMonth = 0;
   var i = 0;
   while (i < n) {
     dayOfMonth++;
     final date =
-        new DateTime(year.toInt(), month.plus(-1).index + 1, dayOfMonth);
-    if (date.weekday == weekday.index) i++;
+        new DateTime(year.toInt(), month.index+1, dayOfMonth);
+    if (date.weekday%7 == weekday.index) i++;
   }
-  return new DateTime(year.toInt(), month.plus(-1).index + 1, dayOfMonth, hour);
+  return new DateTime(year.toInt(),  month.index+1, dayOfMonth, hour);
 }
 
 /**
@@ -273,8 +304,8 @@ DateTime getLastWeekdayOfMonth(num year, Month month, Weekday weekday,
 
   // and use the difference to determine how many days to subtract from the first of the next month.
   final oneIndexedWeekday = weekday.index == 0 ? 7 : weekday.index;
-  final date = new DateTime(year.toInt(), month.plus(-1).plus(1).index + 1, 1,
-      12); //todo -1 +1 со смыслом?
+  DateTime date = new DateTime(year.toInt(), month.index + 2, 1,
+      12);
   final firstWeekdayNextMonth = date.weekday == 0 ? 7 : date.weekday;
   var dayDiff;
   if (firstWeekdayNextMonth == oneIndexedWeekday)
@@ -283,8 +314,8 @@ DateTime getLastWeekdayOfMonth(num year, Month month, Weekday weekday,
     dayDiff = 7 + firstWeekdayNextMonth - oneIndexedWeekday;
   else
     dayDiff = firstWeekdayNextMonth - oneIndexedWeekday;
-  date.subtract(dayDiff);
-  return new DateTime(year.toInt(), month.plus(-1).index + 1, date.day, hour);
+  date = date.subtract(Duration(days: dayDiff));
+  return new DateTime(year.toInt(), month.index + 1, date.day, hour);
 }
 
 /**
@@ -324,9 +355,10 @@ dynamic /* num | null */ toTimezoneOffset(
     if (date == null) {
       return null;
     }
+    matchedTimezone as AmbiguousTimezoneMap;
     // Return DST offset if the refDate is during daylight savings
     if (date.isAfter(matchedTimezone.dstStart(date.year)) &&
-        date.isAfter(matchedTimezone.dstEnd(date.year))) {
+        !date.isAfter(matchedTimezone.dstEnd(date.year))) {
       return matchedTimezone.timezoneOffsetDuringDst;
     }
     // refDate is not during DST => return non-DST offset

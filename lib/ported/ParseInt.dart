@@ -10,5 +10,5 @@ import 'package:chrono/ported/StringUtils.dart';
     while(firstNonDigitIndex<len && str[firstNonDigitIndex].isDigitOrSign() ){
       firstNonDigitIndex++;
     }
-    return int.parse(str.substring(0, firstNonDigitIndex));
+    return int.parse(str.substringTs(0, firstNonDigitIndex));
   }

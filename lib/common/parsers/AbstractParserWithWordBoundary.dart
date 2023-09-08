@@ -1,4 +1,5 @@
 import "package:chrono/ported/RegExpMatchArray.dart";
+import "package:chrono/ported/StringUtils.dart";
 
 import "../../chrono.dart" show Parser, ParsingContext;
 
@@ -38,7 +39,7 @@ abstract class AbstractParserWithWordBoundaryChecking implements Parser {
   extract(ParsingContext context, RegExpMatchArray match) {
     final header = match[1];
     match.index = match.index + header.length;
-    match.matches[0] = match.matches[0]!.substring(header.length);
+    match.matches[0] = match.matches[0]!.substringTs(header.length);
     for (var i = 2; i < match.matches.length; i++) {
       match.matches[i - 1] = match.matches[i];
     }

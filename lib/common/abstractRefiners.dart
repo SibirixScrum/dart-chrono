@@ -1,3 +1,5 @@
+import "package:chrono/ported/StringUtils.dart";
+
 import "../chrono.dart" show ParsingContext, Refiner;
 import "../results.dart" show ParsingResult;
 
@@ -34,7 +36,7 @@ abstract class MergingRefiner implements Refiner {
     for (var i = 1; i < results.length; i++) {
       nextResult = results[i];
       final textBetween = context.text
-          .substring(curResult.index + curResult.text.length, nextResult.index);
+          .substringTs(curResult.index + curResult.text.length, nextResult.index);
       if (!this
           .shouldMergeResults(textBetween, curResult, nextResult, context)) {
         mergedResults.add(curResult);
