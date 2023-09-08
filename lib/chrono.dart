@@ -3,8 +3,8 @@ import "package:chrono/ported/RegExpMatchArray.dart";
 import "package:chrono/ported/StringUtils.dart";
 
 import "debugging.dart" show AsyncDebugBlock, DebugHandler;
-import 'locales/ru/index.dart' as ru;
-import 'locales/en/index.dart' as en;
+import 'locales/ru/index.dart' as ru_chrono;
+import 'locales/en/index.dart' as en_chrono;
 import "results.dart"
     show ReferenceWithTimezone, ParsingComponents, ParsingResult;
 import "types.dart"
@@ -41,7 +41,7 @@ abstract class Parser {
 }
 
 class CustomParser implements Parser {
-  Function(ParsingContext context, RegExpMatchArray match) extractor;
+  /* ParsingComponents | ParsingResult | dynamic | null */ Function(ParsingContext context, RegExpMatchArray match) extractor;
   RegExp Function(ParsingContext context) patternGetter;
 
   @override
@@ -51,7 +51,7 @@ class CustomParser implements Parser {
 
   @override
   RegExp pattern(ParsingContext context) {
-    return pattern(context);
+    return patternGetter(context);
   }
 
   CustomParser(this.extractor, this.patternGetter);
@@ -86,6 +86,10 @@ class CustomRefiner implements Refiner {
  * The Chrono object.
  */
 class Chrono {
+  static Chrono ru_casual = ru_chrono.casual;
+  static Chrono en_casual = en_chrono.casual;
+  static Chrono ru_strict = ru_chrono.strict;
+  static Chrono en_strict = en_chrono.strict;
   late List<Parser> parsers;
 
   late List<Refiner> refiners;
@@ -102,7 +106,7 @@ class Chrono {
    * Create a shallow copy of the Chrono object with the same configuration (`parsers` and `refiners`)
    */
   Chrono clone() {
-    return new Chrono(Configuration(parsers, refiners));
+    return new Chrono(Configuration(parsers.toList(), refiners.toList()));
   }
 
   /**
