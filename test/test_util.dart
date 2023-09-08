@@ -1,5 +1,6 @@
 import "package:chrono/chrono.dart";
 import "package:chrono/debugging.dart";
+import "package:chrono/results.dart";
 import "package:chrono/types.dart";
 import "package:flutter_test/flutter_test.dart";
 
@@ -97,11 +98,13 @@ expectToBeDate(ParsedComponents resultOrComponent, DateTime date) {
   // expect(re, isTrue,
   //     reason: 'resultOrComponent must be datetime');
   final actualDate = resultOrComponent.date();
+  final a = actualDate.timeZoneOffset.inMinutes;
+  final b = date.timeZoneOffset.inMinutes;
   final actualTime = actualDate.millisecondsSinceEpoch;
   final expectedTime = date.millisecondsSinceEpoch;
   expect(actualTime, expectedTime,
       reason:
-          "expected date must be $date, received: $actualDate $resultOrComponent");
+          "expected date must be $date, received: $actualDate $resultOrComponent}");
 }
 
 expectToBeSingleOnText(List<ParsedResult> results, text) {
@@ -115,12 +118,12 @@ expectToBeSingleOnText(List<ParsedResult> results, text) {
 
 class ParsingReferenceDummy implements ParsingReference {
   @override
-  DateTime instant;
+  DateTime? instant;
 
   @override
   var timezone;
 
-  ParsingReferenceDummy(this.instant, [this.timezone]);
+  ParsingReferenceDummy(this.instant, [this.timezone = const Undefined()]);
 }
 
 class ParsingOptionDummy implements ParsingOption {

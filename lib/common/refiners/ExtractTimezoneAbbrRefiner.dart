@@ -32,7 +32,7 @@ class ExtractTimezoneAbbrRefiner implements Refiner {
       final timezoneAbbr = match.matches[1]?.toUpperCase();
       final refDate = result.start.date() ??
           result.refDate ??
-          new DateTime(1990); //todo откуда нулл может быть?
+          DateTime.now(); //todo откуда нулл может быть?
       final Map<String, dynamic> tzOverrides = {};
       tzOverrides.addAll(timezoneOverrides);
       tzOverrides.addAll(this.timezoneOverrides);

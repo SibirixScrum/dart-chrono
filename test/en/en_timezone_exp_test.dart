@@ -249,38 +249,43 @@ import '../test_util.dart';
     testSingleCase(en.casual, "Jan 1st 2023 at 10:00 XYZ",
         (ParsedResult result, String text) {
       expect(result.text, "Jan 1st 2023 at 10:00");
-      expectToBeDate(result.start , DateTime(2023, 1 , 1, 10));
+      expectToBeDate(result.start, DateTime(2023, 1, 1, 10));
     });
     // Parse the correct tzoffset when XYZ is provided as a custom tz in parsingOptions
-    testSingleCase(
-        en.casual, "Jan 1st 2023 at 10:00 XYZ", DateTime(2023, 1, 1), {
-      "timezones": {"XYZ": -180}
-    }, (ParsedResult result, String text) {
+    testSingleCase(en.casual, "Jan 1st 2023 at 10:00 XYZ", DateTime(2023, 1, 1),
+        ParsingOption(timezones: {"XYZ": -180}),
+        (ParsedResult result, String text) {
       expect(result.text, "Jan 1st 2023 at 10:00 XYZ");
       expect(result.start.get(Component.timezoneOffset), -180);
     });
     // Parse the correct tzoffset when XYZ is provided as a custom ambiguous tz in parsingOptions
-    final parseXYZAsAmbiguousTz = {
-      "timezoneOffsetDuringDst": -120,
-      "timezoneOffsetNonDst": -180,
-      "dstStart": (num year) =>
+    final parseXYZAsAmbiguousTz = AmbiguousTimezoneMap(
+      timezoneOffsetDuringDst: -2 * 60,
+      timezoneOffsetNonDst: -3 * 60,
+      dstStart: (num year) =>
           getLastWeekdayOfMonth(year, Month.MARCH, Weekday.SUNDAY, 2),
-      "dstEnd": (num year) =>
-          getLastWeekdayOfMonth(year, Month.OCTOBER, Weekday.SUNDAY, 3)
-    };
+      dstEnd: (num year) =>
+          getLastWeekdayOfMonth(year, Month.NOVEMBER, Weekday.SUNDAY, 3),
+    );
+    // {
+    //   "timezoneOffsetDuringDst": -120,
+    //   "timezoneOffsetNonDst": -180,
+    //   "dstStart": (num year) =>
+    //       getLastWeekdayOfMonth(year, Month.MARCH, Weekday.SUNDAY, 2),
+    //   "dstEnd": (num year) =>
+    //       getLastWeekdayOfMonth(year, Month.OCTOBER, Weekday.SUNDAY, 3)
+    // };
     // Parsing a non-DST date
-    testSingleCase(
-        en.casual, "Jan 1st 2023 at 10:00 XYZ", DateTime(2023, 1, 1), {
-      "timezones": {"XYZ": parseXYZAsAmbiguousTz}
-    }, (ParsedResult result, String text) {
+    testSingleCase(en.casual, "Jan 1st 2023 at 10:00 XYZ", DateTime(2023, 1, 1),
+        ParsingOption(timezones: {"XYZ": parseXYZAsAmbiguousTz}),
+        (ParsedResult result, String text) {
       expect(result.text, "Jan 1st 2023 at 10:00 XYZ");
       expect(result.start.get(Component.timezoneOffset), -180);
     });
     // Parsing a DST date
-    testSingleCase(
-        en.casual, "Jun 1st 2023 at 10:00 XYZ", DateTime(2023, 1, 1), {
-      "timezones": {"XYZ": parseXYZAsAmbiguousTz}
-    }, (ParsedResult result, String text) {
+    testSingleCase(en.casual, "Jun 1st 2023 at 10:00 XYZ", DateTime(2023, 1, 1),
+        ParsingOption(timezones: {"XYZ": parseXYZAsAmbiguousTz}),
+        (ParsedResult result, String text) {
       expect(result.text, "Jun 1st 2023 at 10:00 XYZ");
       expect(result.start.get(Component.timezoneOffset), -120);
     });
@@ -323,11 +328,11 @@ import '../test_util.dart';
     final expectedInstant =
           DateTime.parse("2020-11-29T14:24:13+0900");
     testSingleCase(
-        en.casual, "in 1 hour GMT", { "instant": refInstant, "timezone": "JST"}, (
-        result, text) {
-     // expect(result.text , "in 1 hour");
-        expectToBeDate(result.start , expectedInstant);
-    });
+          en.casual, "in 1 hour GMT", ParsingReference(refInstant, "JST"),
+          (result, text) {
+        // expect(result.text , "in 1 hour");
+        expectToBeDate(result.start, expectedInstant);
+      });
    }
    {
     final refInstant =
@@ -335,31 +340,31 @@ import '../test_util.dart';
     final expectedInstant =
           DateTime.parse("2020-11-29T14:24:13+0900");
     testSingleCase(
-        en.casual, "in 1 hour GMT", { "instant": refInstant, "timezone": "BST"}, (
-        result, text) {
-     // expect(result.text , "in 1 hour");
-        expectToBeDate(result.start , expectedInstant);
-    });
+        en.casual, "in 1 hour GMT", ParsingReference(refInstant, "BST"),
+          (result, text) {
+        // expect(result.text , "in 1 hour");
+        expectToBeDate(result.start, expectedInstant);
+      });
    }
   });
   test("Test - Relative time (Now) is not effected by timezone setting", () {
-    final refInstant = DateTime(1637674343000);
-    testSingleCase(en.casual, "now", {"instant": refInstant},
+    final refInstant = DateTime.fromMillisecondsSinceEpoch(1637674343000);
+    testSingleCase(en.casual, "now", ParsingReference(refInstant),
         (ParsedResult result, String text) {
       expect(result.text, "now");
       expectToBeDate(result.start , refInstant);
     });
-    testSingleCase(en.casual, "now", {"instant": refInstant, "timezone": null},
+    testSingleCase(en.casual, "now", ParsingReference(refInstant,null),
         (ParsedResult result, String text) {
       expect(result.text, "now");
       expectToBeDate(result.start , refInstant);
     });
-    testSingleCase(en.casual, "now", {"instant": refInstant, "timezone": "BST"},
+    testSingleCase(en.casual, "now", ParsingReference(refInstant,"BST"),
         (ParsedResult result, String text) {
       expect(result.text, "now");
       expectToBeDate(result.start , refInstant);
     });
-   testSingleCase(en.casual, "now", {"instant": refInstant, "timezone": "JST"},
+   testSingleCase(en.casual, "now", ParsingReference(refInstant,"JST"),
         (ParsedResult result, String text) {
       expect(result.text, "now");
       expectToBeDate(result.start , refInstant);
@@ -367,27 +372,27 @@ import '../test_util.dart';
   });
   test(
       "Test - Relative time (2 hour later) is not effected by timezone setting", () {
-    final refInstant = DateTime(1637674343000);
-    final expectedInstant = DateTime(1637674343000 + 2 * 60 * 60 * 1000);
-    testSingleCase(en.casual, "2 hour later", {"instant": refInstant},
+    final refInstant = DateTime.fromMillisecondsSinceEpoch(1637674343000);
+    final expectedInstant = DateTime.fromMillisecondsSinceEpoch(1637674343000 + 2 * 60 * 60 * 1000);
+    testSingleCase(en.casual, "2 hour later", ParsingReference(refInstant),
         (ParsedResult result, String text) {
       expect(result.text, "2 hour later");
       expectToBeDate(result.start , expectedInstant);
     });
     testSingleCase(
-        en.casual, "2 hour later", {"instant": refInstant, "timezone": null},
+        en.casual, "2 hour later", ParsingReference(refInstant,null),
         (ParsedResult result, String text) {
       expect(result.text, "2 hour later");
       expectToBeDate(result.start , expectedInstant);
     });
     testSingleCase(
-        en.casual, "2 hour later", {"instant": refInstant, "timezone": "BST"},
+        en.casual, "2 hour later", ParsingReference(refInstant,"BST"),
         (ParsedResult result, String text) {
       expect(result.text, "2 hour later");
       expectToBeDate(result.start , expectedInstant);
     });
    testSingleCase(
-        en.casual, "2 hour later", {"instant": refInstant, "timezone": "JST"},
+        en.casual, "2 hour later",ParsingReference(refInstant,"JST"),
         (ParsedResult result, String text) {
       expect(result.text, "2 hour later");
       expectToBeDate(result.start , expectedInstant);
@@ -398,7 +403,7 @@ import '../test_util.dart';
     testSingleCase(en.casual, "in 1 day get eggs and milk", refDate,
         (ParsedResult result, String text) {
       expect(result.text, "in 1 day");
-      expect(result.start.get(Component.timezoneOffset), -refDate.timeZoneOffset.inMinutes);
+      expect(result.start.get(Component.timezoneOffset), refDate.timeZoneOffset.inMinutes);
     });
     testSingleCase(en.casual, "in 1 day GET", refDate,
         (ParsedResult result, String text) {

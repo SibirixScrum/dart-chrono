@@ -22,6 +22,6 @@ import '../test_util.dart';
       final results = en.casual.parse(str);
       expect(results.length, 0);
     });
-     expect(time<1000,true);
+     expect(time<1000,true,reason: "time must be less than 1000: $time");
    });
  }

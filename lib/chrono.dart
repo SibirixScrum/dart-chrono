@@ -1,8 +1,10 @@
+import "package:chrono/locales/en/configuration.dart";
 import "package:chrono/ported/RegExpMatchArray.dart";
 import "package:chrono/ported/StringUtils.dart";
 
 import "debugging.dart" show AsyncDebugBlock, DebugHandler;
 import 'locales/ru/index.dart' as ru;
+import 'locales/en/index.dart' as en;
 import "results.dart"
     show ReferenceWithTimezone, ParsingComponents, ParsingResult;
 import "types.dart"
@@ -91,7 +93,7 @@ class Chrono {
   // var defaultConfig = ;
 
   Chrono([Configuration? configuration]) {
-    configuration = configuration ?? ru.createCasualConfiguration();
+    configuration = configuration ?? ENDefaultConfiguration.createCasualConfiguration();
     parsers = configuration.parsers;
     refiners = configuration.refiners;
   }

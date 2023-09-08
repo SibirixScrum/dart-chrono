@@ -31,11 +31,12 @@ void main() async {
 
 
 
-  final b = en.parse("2022-03-26 23:00 CET");
+  final b = en.casual.parse ("2021-06-06T19:00:00",   ParsingReference(null,"JST")); //,ParsingReference(DateTime.parse("2021-06-09T07:00:00-0500"),"CDT"));
   // print(new DateTime(2017, 11, 19, 12).weekday);
 
   // final a = chrono.parse("18.02.2024");
   print("\n${b.length} \n${b[0].refDate} \n${b[0].end} \n${b[0].start} \n${b[0].text}");
+  print("${b[0].start.date()}");
   // runApp(const MyApp());
 }
 //

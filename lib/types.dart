@@ -1,5 +1,7 @@
 
 
+import 'package:chrono/results.dart';
+
 class ParsingOption {
   /**
    * To parse only forward dates (the results should be after the reference date).
@@ -63,9 +65,9 @@ class ParsingReference {
    * This effect date/time implication (e.g. weekday or time mentioning).
    * (default = now)
    */
-  DateTime instant;
+  DateTime? instant;
 
-  ParsingReference(this.instant,[this.timezone]);
+  ParsingReference(this.instant,[this.timezone  = const Undefined()]);
 
   /**
    * Reference timezone. The timezone where the input is written or mention.

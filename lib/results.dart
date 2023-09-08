@@ -8,7 +8,9 @@ import "utils/dayjs.dart"
 
 // dayjs.extend //todo не знаю, че это
 // (quarterOfYear );
-class Undefined{}
+class Undefined{
+  const Undefined();
+}
 
 class ReferenceWithTimezone {
   late DateTime instant;
@@ -16,13 +18,13 @@ class ReferenceWithTimezone {
   dynamic /*num? || Undefined*/ timezoneOffset;
 
   ReferenceWithTimezone([dynamic /* ParsingReference | Date */ input]) {
-    input = input ?? new DateTime(1990);
+    input = input ?? new DateTime.now();
     if (input is DateTime) {
       this.instant = input;
       this.timezoneOffset = Undefined(); //used as undefined. because checks reference.timezoneOffset !== null is typescript is true if it is indefined
-    } else {
-      this.instant = input.instant ?? new DateTime(1990);
-      this.timezoneOffset = toTimezoneOffset(input.timezone, this.instant);
+    } else if (input is ParsingReference){
+      this.instant = input.instant ?? DateTime.now();
+      this.timezoneOffset = toTimezoneOffset(input.timezone is Undefined ? input.instant?.timeZoneOffset.inMinutes : input.timezone, this.instant);
     }
   }
 
@@ -46,13 +48,18 @@ class ReferenceWithTimezone {
 // Javascript date timezone calculation got effect when the time epoch < 0
 
 // e.g. new Date('Tue Feb 02 1300 00:00:00 GMT+0900 (JST)') => Tue Feb 02 1300 00:18:59 GMT+0918 (JST)
-      date = DateTime(1990);
+      date = DateTime.now();
     }
     final currentTimezoneOffset = date.timeZoneOffset.inMinutes;
     final targetTimezoneOffset =
         overrideTimezoneOffset ?? (this.timezoneOffset is! num ? currentTimezoneOffset : this.timezoneOffset);
     return (currentTimezoneOffset - targetTimezoneOffset).toInt();
   }
+  @override
+  String toString(){
+    return "$instant, offset: $timezoneOffset";
+  }
+
 }
 
 class ParsingComponents implements ParsedComponents {
@@ -183,16 +190,17 @@ class ParsingComponents implements ParsedComponents {
   }
 
   DateTime dateWithoutTimezoneAdjustment() {
+    final now = DateTime.now();
     final date = new DateTime(
-        this.get(Component.year)?.toInt() ?? 1990,
+        this.get(Component.year)?.toInt() ?? now.year,
         this.get(Component.month) != null
             ? this.get(Component.month)!.toInt()
-            : 1,
-        this.get(Component.day)?.toInt() ?? 1,
-        this.get(Component.hour)?.toInt() ?? 0,
-        this.get(Component.minute)?.toInt() ?? 0,
-        this.get(Component.second)?.toInt() ?? 0,
-        this.get(Component.millisecond)?.toInt() ?? 0);
+            : now.month,
+        this.get(Component.day)?.toInt() ?? now.day,
+        this.get(Component.hour)?.toInt() ?? now.hour,
+        this.get(Component.minute)?.toInt() ?? now.minute,
+        this.get(Component.second)?.toInt() ?? now.second,
+        this.get(Component.millisecond)?.toInt() ?? now.millisecond);
     // date.setFullYear(this.get(Component.year));
     return date;
   }
