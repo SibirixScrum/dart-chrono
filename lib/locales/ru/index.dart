@@ -32,10 +32,12 @@ import "../../types.dart"
  * Chrono object configured for parsing *casual* Russian
  */
 final casual = new Chrono(createCasualConfiguration());
+
 /**
  * Chrono object configured for parsing *strict* Russian
  */
 final strict = new Chrono(createConfiguration(true));
+
 /**
  * A shortcut for ru.casual.parse()
  */
@@ -46,7 +48,7 @@ List<ParsedResult> parse(String text, [DateTime? ref, ParsingOption? option]) {
 /**
  * A shortcut for ru.casual.parseDate()
  */
-DateTime parseDate(String text, [DateTime? ref, ParsingOption? option]) {
+DateTime? parseDate(String text, [DateTime? ref, ParsingOption? option]) {
   return casual.parseDate(text, ref, option);
 }
 

@@ -26,6 +26,6 @@ List <ParsedResult> parse(String text,
 /**
  * A shortcut for en.casual.parseDate()
  */
-DateTime parseDate(String text, [ DateTime? ref, ParsingOption? option ]) {
+DateTime? parseDate(String text, [ DateTime? ref, ParsingOption? option ]) {
  return casual.parseDate(text, ref, option);
 }

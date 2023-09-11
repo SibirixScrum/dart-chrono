@@ -26,8 +26,7 @@ void main() async {
   //
   // final d = RegExp(r'^\d*(\.\d*)?$').exec("2014 12 28");
 
-  final c = parseIntTs("192.9");
-  final d = parseIntTs("192");
+
 
 
 

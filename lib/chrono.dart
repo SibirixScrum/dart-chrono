@@ -3,8 +3,8 @@ import "package:chrono/ported/RegExpMatchArray.dart";
 import "package:chrono/ported/StringUtils.dart";
 
 import "debugging.dart" show AsyncDebugBlock, DebugHandler;
-import 'locales/ru/index.dart' as ru_chrono;
 import 'locales/en/index.dart' as en_chrono;
+import 'locales/ru/index.dart' as ru_chrono;
 import "results.dart"
     show ReferenceWithTimezone, ParsingComponents, ParsingResult;
 import "types.dart"
@@ -86,10 +86,8 @@ class CustomRefiner implements Refiner {
  * The Chrono object.
  */
 class Chrono {
-  static Chrono ru_casual = ru_chrono.casual;
-  static Chrono en_casual = en_chrono.casual;
-  static Chrono ru_strict = ru_chrono.strict;
-  static Chrono en_strict = en_chrono.strict;
+  static final ru = Ru();
+  static final en = En();
   late List<Parser> parsers;
 
   late List<Refiner> refiners;
@@ -97,7 +95,8 @@ class Chrono {
   // var defaultConfig = ;
 
   Chrono([Configuration? configuration]) {
-    configuration = configuration ?? ENDefaultConfiguration.createCasualConfiguration();
+    configuration =
+        configuration ?? ENDefaultConfiguration.createCasualConfiguration();
     parsers = configuration.parsers;
     refiners = configuration.refiners;
   }
@@ -113,7 +112,7 @@ class Chrono {
    * A shortcut for calling {@Link parse | parse() } then transform the result into Javascript's Date object
    *
    */
-  dynamic /* Date | null */ parseDate(String text,
+  DateTime? parseDate(String text,
       [dynamic /* ParsingReference | Date */ referenceDate,
       ParsingOption? option]) {
     final results = this.parse(text, referenceDate, option);
@@ -240,4 +239,14 @@ class ParsingContext implements DebugHandler {
       }
     };
   }
+}
+
+class Ru {
+  final casual = ru_chrono.casual;
+  final strict = ru_chrono.strict;
+}
+
+class En {
+  static final casual = en_chrono.casual;
+  static final strict = en_chrono.strict;
 }
