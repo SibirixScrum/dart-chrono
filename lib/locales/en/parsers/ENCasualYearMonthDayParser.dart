@@ -15,7 +15,7 @@ import "../../../common/parsers/AbstractParserWithWordBoundary.dart"
     - YYYY-MM-DD
     - YYYY.MM.DD
 */
-final PATTERN = new RegExp(
+final PATTERN = RegExp(
     '''([0-9]{4})[\\.\\/\\s]''' +
         '''(?:(${ matchAnyPattern ( MONTH_DICTIONARY )})|([0-9]{1,2}))[\\.\\/\\s]''' +
         '''([0-9]{1,2})''' +
@@ -28,10 +28,12 @@ const DATE_NUMBER_GROUP = 4;
 
 class ENCasualYearMonthDayParser
     extends AbstractParserWithWordBoundaryChecking {
+  @override
   RegExp innerPattern(ParsingContext context) {
     return PATTERN;
   }
 
+  @override
   Map<Component,num>? innerExtract(ParsingContext context, RegExpMatchArray match) {
     final month = match[MONTH_NUMBER_GROUP].isNotEmpty
         ? parseIntTs(match[MONTH_NUMBER_GROUP])

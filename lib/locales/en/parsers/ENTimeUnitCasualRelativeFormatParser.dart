@@ -8,10 +8,10 @@ import "../../../common/parsers/AbstractParserWithWordBoundary.dart"
     show AbstractParserWithWordBoundaryChecking;
 import "../../../utils/timeunits.dart" show reverseTimeUnits;
 
-final PATTERN = new RegExp(
+final PATTERN = RegExp(
     '''(this|last|past|next|after|\\+|-)\\s*(${ TIME_UNITS_PATTERN})(?=\\W|\$)''',
     caseSensitive: false);
-final PATTERN_NO_ABBR = new RegExp(
+final PATTERN_NO_ABBR = RegExp(
     '''(this|last|past|next|after|\\+|-)\\s*(${ TIME_UNITS_NO_ABBR_PATTERN})(?=\\W|\$)''',
     caseSensitive: false);
 
@@ -22,10 +22,12 @@ class ENTimeUnitCasualRelativeFormatParser
       : super() {
     /* super call moved to initializer */;
   }
+  @override
   RegExp innerPattern(ParsingContext context) {
-    return this.allowAbbreviations ? PATTERN : PATTERN_NO_ABBR;
+    return allowAbbreviations ? PATTERN : PATTERN_NO_ABBR;
   }
 
+  @override
   ParsingComponents innerExtract(
       ParsingContext context, RegExpMatchArray match) {
     final prefix = match[1].toLowerCase();

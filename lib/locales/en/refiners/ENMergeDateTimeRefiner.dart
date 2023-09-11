@@ -7,7 +7,8 @@ import '../../../common/refiners/AbstractMergeDateTimeRefiner.dart';
  * - Tomorrow [after] 7am
  */
 class ENMergeDateTimeRefiner extends AbstractMergeDateTimeRefiner {
+  @override
   RegExp patternBetween() {
-    return new RegExp("^\\s*(T|at|after|before|on|of|,|-)?\\s*\$");
+    return RegExp("^\\s*(T|at|after|before|on|of|,|-)?\\s*\$");
   }
 }

@@ -34,6 +34,7 @@ class Configuration {
  * The matching and extracting is controlled and adjusted to avoid for overlapping results.
  */
 abstract class Parser {
+  const Parser();
   RegExp pattern(ParsingContext context);
 
   dynamic /* ParsingComponents | ParsingResult | dynamic | null */ extract(
@@ -105,7 +106,7 @@ class Chrono {
    * Create a shallow copy of the Chrono object with the same configuration (`parsers` and `refiners`)
    */
   Chrono clone() {
-    return new Chrono(Configuration(parsers.toList(), refiners.toList()));
+    return Chrono(Configuration(parsers.toList(), refiners.toList()));
   }
 
   /**
@@ -115,25 +116,25 @@ class Chrono {
   DateTime? parseDate(String text,
       [dynamic /* ParsingReference | Date */ referenceDate,
       ParsingOption? option]) {
-    final results = this.parse(text, referenceDate, option);
+    final results = parse(text, referenceDate, option);
     return results.length > 0 ? results[0].start.date() : null;
   }
 
   List<ParsedResult> parse(String text,
       [dynamic /* ParsingReference | Date */ referenceDate,
       ParsingOption? option]) {
-    final context = new ParsingContext(text, referenceDate, option);
+    final context = ParsingContext(text, referenceDate, option);
     List<ParsingResult> results = [];
-    this.parsers.forEach((parser) {
+    for (var parser in parsers) {
       final parsedResults = Chrono.executeParser(context, parser);
       results = results + parsedResults;
-    });
+    }
     results.sort((a, b) {
       return a.index - b.index;
     });
-    this.refiners.forEach((refiner) {
+    for (var refiner in refiners) {
       results = refiner.refine(context, results);
-    });
+    }
     return results;
   }
 
@@ -195,19 +196,17 @@ class ParsingContext implements DebugHandler {
    */
   late DateTime refDate;
 
-  ParsingContext(String text,
-      [dynamic /* ParsingReference | Date */ refDate, ParsingOption? option]) {
-    this.text = text;
-    this.reference = new ReferenceWithTimezone(refDate);
-    this.option = option;
-    this.refDate = this.reference.instant;
+  ParsingContext(this.text,
+      [dynamic /* ParsingReference | Date */ refDate, this.option]) {
+    reference = ReferenceWithTimezone(refDate);
+    this.refDate = reference.instant;
   }
 
   ParsingComponents createParsingComponents([dynamic? components]) {
     if (components is ParsingComponents) {
       return components;
     }
-    return new ParsingComponents(this.reference, components);
+    return ParsingComponents(reference, components);
   }
 
   ParsingResult createParsingResult(
@@ -218,22 +217,22 @@ class ParsingContext implements DebugHandler {
         ? textOrEndIndex
         : this.text.substringTs(index.toInt(), textOrEndIndex);
     final start = startComponents != null
-        ? this.createParsingComponents(startComponents)
+        ? createParsingComponents(startComponents)
         : null;
     final end = endComponents != null
-        ? this.createParsingComponents(endComponents)
+        ? createParsingComponents(endComponents)
         : null;
-    return new ParsingResult(this.reference, index.toInt(), text, start, end);
+    return ParsingResult(reference, index.toInt(), text, start, end);
   }
 
   @override
   get debug {
     return (AsyncDebugBlock block) {
-      if (this.option?.debug != null) {
-        if (this.option!.debug is Function) {
-          this.option!.debug(block);
+      if (option?.debug != null) {
+        if (option!.debug is Function) {
+          option!.debug(block);
         } else {
-          final DebugHandler handler = (this.option!.debug as DebugHandler);
+          final DebugHandler handler = (option!.debug as DebugHandler);
           handler.debug(block);
         }
       }

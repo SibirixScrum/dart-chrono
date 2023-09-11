@@ -9,7 +9,7 @@ import "../../../results.dart" show ParsingComponents;
 import "../../../utils/pattern.dart" show matchAnyPattern;
 import "../constants.dart" show TIME_UNIT_DICTIONARY;
 
-final PATTERN = new RegExp(
+final PATTERN = RegExp(
     '''(this|last|past|next|after\\s*this)\\s*(${matchAnyPattern(TIME_UNIT_DICTIONARY)})(?=\\s*)''' +
         "(?=\\W|\$)",
     caseSensitive: false);
@@ -18,10 +18,12 @@ const RELATIVE_WORD_GROUP = 2;
 
 class ENRelativeDateFormatParser
     extends AbstractParserWithWordBoundaryChecking {
+  @override
   RegExp innerPattern(ParsingContext context) {
     return PATTERN;
   }
 
+  @override
   ParsingComponents innerExtract(
       ParsingContext context, RegExpMatchArray match) {
     final modifier = match[MODIFIER_WORD_GROUP].toLowerCase();
@@ -42,18 +44,18 @@ class ENRelativeDateFormatParser
     final components = context.createParsingComponents();
     var date = context.reference.instant;
     // This week
-    if (unitWord.match(new RegExp(r'week', caseSensitive: false))) {
+    if (unitWord.match(RegExp(r'week', caseSensitive: false))) {
       date = date.subtract(
           Duration(days: date.weekday%7));
       components.imply(Component.day, date.day);
       components.imply(Component.month, date.month );
       components.imply(Component.year, date.year);
-    } else if (unitWord.match(new RegExp(r'month', caseSensitive: false))) {
+    } else if (unitWord.match(RegExp(r'month', caseSensitive: false))) {
       date = date.subtract(Duration(days: date.day-1));
       components.imply(Component.day, date.day);
       components.assign(Component.year, date.year);
       components.assign(Component.month, date.month );
-    } else if (unitWord.match(new RegExp(r'year', caseSensitive: false))) {
+    } else if (unitWord.match(RegExp(r'year', caseSensitive: false))) {
       date = date.subtract(Duration(days: date.day-1));
       date = date.copyWith(month: 1);
       components.imply(Component.day, date.day);

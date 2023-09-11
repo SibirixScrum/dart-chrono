@@ -9,7 +9,7 @@ import "../constants.dart" show YEAR_PATTERN, parseYear;
 import "../../../common/parsers/AbstractParserWithWordBoundary.dart"
     show AbstractParserWithWordBoundaryChecking;
 
-final PATTERN = new RegExp (
+final PATTERN = RegExp (
     '''((?:in)\\s*)?''' + '''(${ matchAnyPattern(MONTH_DICTIONARY)})''' +
         '''\\s*''' + '''(?:''' + '''[,-]?\\s*(${ YEAR_PATTERN})?''' + ")?" +
         "(?=[^\\s\\w]|\\s+[^0-9]|\\s+\$|\$)", caseSensitive: false);
@@ -27,10 +27,12 @@ const YEAR_GROUP = 3;
  * (in) Jan
  */
 class ENMonthNameParser extends AbstractParserWithWordBoundaryChecking {
+  @override
   RegExp innerPattern(ParsingContext context) {
     return PATTERN;
   }
 
+  @override
   innerExtract(ParsingContext context, RegExpMatchArray match) {
     final monthName = match [ MONTH_NAME_GROUP ].toLowerCase();
     // skip some unlikely words "jan", "mar", ..

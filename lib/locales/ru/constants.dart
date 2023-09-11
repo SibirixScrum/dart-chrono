@@ -6,13 +6,13 @@ import "../../calculation/years.dart" show findMostLikelyADYear;
 import "../../utils/pattern.dart" show matchAnyPattern, repeatedTimeunitPattern;
 import "../../utils/timeunits.dart" show TimeUnits;
 
-final REGEX_PARTS = {
+const REGEX_PARTS = {
   "leftBoundary": "([^\\p{L}\\p{N}_]|^)",
   "rightBoundary": "(?=[^\\p{L}\\p{N}_]|\$)",
   "flags": "iu"
 };
 
-final Map<String, num> WEEKDAY_DICTIONARY = {
+const Map<String, num> WEEKDAY_DICTIONARY = {
   "воскресенье": 0,
   "воскресенья": 0,
   "вск": 0,
@@ -45,7 +45,7 @@ final Map<String, num> WEEKDAY_DICTIONARY = {
   "сб": 6,
   "сб.": 6
 };
-final Map<String, int> FULL_MONTH_NAME_DICTIONARY = {
+const Map<String, int> FULL_MONTH_NAME_DICTIONARY = {
   "январь": 1,
   "января": 1,
   "январе": 1,
@@ -84,7 +84,7 @@ final Map<String, int> FULL_MONTH_NAME_DICTIONARY = {
   "декабре": 12,
 };
 
-final Map<String, int> MONTH_NAME_DICTIONARY = {
+const Map<String, int> MONTH_NAME_DICTIONARY = {
   "январь": 1,
   "января": 1,
   "январе": 1,
@@ -142,7 +142,7 @@ final Map<String, int> MONTH_NAME_DICTIONARY = {
 };
 
 //, янв ; 1 , "янв." ; 1 , фев ; 2 , "фев." ; 2 , мар ; 3 , "мар." ; 3 , апр ; 4 , "апр." ; 4 , авг ; 8 , "авг." ; 8 , сен ; 9 , "сен." ; 9 , окт ; 10 , "окт." ; 10 , ноя ; 11 , "ноя." ; 11 , дек ; 12 , "дек." ; 12 , ; ;
-final Map<String, int> INTEGER_WORD_DICTIONARY = {
+const Map<String, int> INTEGER_WORD_DICTIONARY = {
   "один": 1,
   "одна": 1,
   "одной": 1,
@@ -174,7 +174,7 @@ final Map<String, int> INTEGER_WORD_DICTIONARY = {
   "двенадцати": 12
 };
 
-final Map<String, int> ORDINAL_WORD_DICTIONARY = {
+const Map<String, int> ORDINAL_WORD_DICTIONARY = {
   "первое": 1,
   "первого": 1,
   "второе": 2,
@@ -239,7 +239,7 @@ final Map<String, int> ORDINAL_WORD_DICTIONARY = {
   "тридцать первого": 31
 };
 
-final Map<String, String /* OpUnitType | QUnitType */ > TIME_UNIT_DICTIONARY =
+const Map<String, String /* OpUnitType | QUnitType */ > TIME_UNIT_DICTIONARY =
     {
   "сек": "second",
   "секунда": "second",
@@ -328,7 +328,7 @@ int parseOrdinalNumberPattern(String match) {
   if (ORDINAL_WORD_DICTIONARY.containsKey(num)) {
     return ORDINAL_WORD_DICTIONARY[num]!;
   }
-  final extractedNumber = num.replaceAll(new RegExp(r'[^0-9]'),'');
+  final extractedNumber = num.replaceAll(RegExp(r'[^0-9]'),'');
   return parseIntTs(extractedNumber);
 }
 
@@ -339,30 +339,30 @@ final YEAR_PATTERN =
     '''(?:[1-9][0-9]{0,3}${year}\\s*(?:н.э.|до н.э.|н. э.|до н. э.)|[1-2][0-9]{3}${year}|[5-9][0-9]${year})''';
 
 num parseYear(String match) {
-  if (new RegExp(r'(год|года|г|г.)', caseSensitive: false).firstMatch(match) !=
+  if (RegExp(r'(год|года|г|г.)', caseSensitive: false).firstMatch(match) !=
       null) {
     match = match.replaceAll(
-        new RegExp(r'(год|года|г|г.)', caseSensitive: false), "");
+        RegExp(r'(год|года|г|г.)', caseSensitive: false), "");
     if(match.contains(" ")) {
       match = match.substringTs(0, match.indexOf(" "));
     }
   }
-  if (new RegExp(r'(до н.э.|до н. э.)', caseSensitive: false)
+  if (RegExp(r'(до н.э.|до н. э.)', caseSensitive: false)
           .firstMatch(match) !=
       null) {
     //Before Common Era
     match = match.replaceAll(
-        new RegExp(r'(до н.э.|до н. э.)', caseSensitive: false), "");
+        RegExp(r'(до н.э.|до н. э.)', caseSensitive: false), "");
     if(match.contains(" ")) {
       match = match.substringTs(0, match.indexOf(" "));
     }
     return -parseIntTs(match);
   }
-  if (new RegExp(r'(н. э.|н.э.)', caseSensitive: false).firstMatch(match) !=
+  if (RegExp(r'(н. э.|н.э.)', caseSensitive: false).firstMatch(match) !=
       null) {
     //Common Era
     match =
-        match.replaceAll(new RegExp(r'(н. э.|н.э.)', caseSensitive: false), "");
+        match.replaceAll(RegExp(r'(н. э.|н.э.)', caseSensitive: false), "");
     if(match.contains(" ")) {
       match = match.substringTs(0, match.indexOf(" "));
     }
@@ -380,7 +380,7 @@ final SINGLE_TIME_UNIT_PATTERN =
     '''(${NUMBER_PATTERN})\\s{0,3}(${matchAnyPattern(TIME_UNIT_DICTIONARY)})''';
 
 final SINGLE_TIME_UNIT_REGEX =
-    new RegExp(SINGLE_TIME_UNIT_PATTERN, caseSensitive: false);
+    RegExp(SINGLE_TIME_UNIT_PATTERN, caseSensitive: false);
 
 final TIME_UNITS_PATTERN = repeatedTimeunitPattern(
     '''(?:(?:около|примерно)\\s{0,3})?''', SINGLE_TIME_UNIT_PATTERN);

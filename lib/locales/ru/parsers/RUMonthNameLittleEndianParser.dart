@@ -14,19 +14,8 @@ import "../constants.dart"
     show ORDINAL_NUMBER_PATTERN, parseOrdinalNumberPattern;
 
 // prettier-ignore
-final PATTERN = new RegExp(
-    '''(?:с)?\\s*(${ORDINAL_NUMBER_PATTERN})''' +
-        '''(?:''' +
-        '''\\s{0,3}(?:по|-|–|до)?\\s{0,3}''' +
-        '''(${ORDINAL_NUMBER_PATTERN})''' +
-        ''')?''' +
-        '''(?:-|\\/|\\s{0,3}(?:of)?\\s{0,3})''' +
-        '''(${matchAnyPattern(MONTH_NAME_DICTIONARY)})''' +
-        '''(?:''' +
-        '''(?:-|\\/|,?\\s{0,3})''' +
-        '''(${YEAR_PATTERN}(?![^\\s]\\d))''' +
-        ''')?''' +
-        '''${REGEX_PARTS["rightBoundary"]}''',
+final PATTERN = RegExp(
+    '''(?:с)?\\s*(${ORDINAL_NUMBER_PATTERN})(?:\\s{0,3}(?:по|-|–|до)?\\s{0,3}(${ORDINAL_NUMBER_PATTERN}))?(?:-|\\/|\\s{0,3}(?:of)?\\s{0,3})(${matchAnyPattern(MONTH_NAME_DICTIONARY)})(?:(?:-|\\/|,?\\s{0,3})(${YEAR_PATTERN}(?![^\\s]\\d)))?${REGEX_PARTS["rightBoundary"]}''',
     caseSensitive: !REGEX_PARTS["flags"]!.contains("i"),
     dotAll: REGEX_PARTS["flags"]!.contains("d"),
     multiLine: REGEX_PARTS["flags"]!.contains("m"),
@@ -38,14 +27,17 @@ const YEAR_GROUP = 4;
 
 class RUMonthNameLittleEndianParser
     extends AbstractParserWithWordBoundaryChecking {
+  @override
   String patternLeftBoundary() {
     return REGEX_PARTS["leftBoundary"]!;
   }
 
+  @override
   RegExp innerPattern(ParsingContext context) {
     return PATTERN;
   }
 
+  @override
   ParsingResult? innerExtract(ParsingContext context, RegExpMatchArray match) {
     final result = context.createParsingResult(match.index, match[0]);
     final month =

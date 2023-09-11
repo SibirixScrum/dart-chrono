@@ -11,14 +11,8 @@ import "../../../results.dart" show ParsingComponents;
 import "../../../utils/pattern.dart" show matchAnyPattern;
 import "../constants.dart" show REGEX_PARTS, WEEKDAY_DICTIONARY;
 
-final PATTERN = new RegExp(
-    '''(?:(?:,|\\(|（)\\s*)?''' +
-        '''(?:в\\s*?)?''' +
-        '''(?:(эту|этот|прошлый|прошлую|следующий|следующую|следующего)\\s*)?''' +
-        '''(${matchAnyPattern(WEEKDAY_DICTIONARY)})''' +
-        '''(?:\\s*(?:,|\\)|）))?''' +
-        '''(?:\\s*на\\s*(этой|прошлой|следующей)\\s*неделе)?''' +
-        '''${REGEX_PARTS["rightBoundary"]}''',
+final PATTERN = RegExp(
+    '''(?:(?:,|\\(|（)\\s*)?(?:в\\s*?)?(?:(эту|этот|прошлый|прошлую|следующий|следующую|следующего)\\s*)?(${matchAnyPattern(WEEKDAY_DICTIONARY)})(?:\\s*(?:,|\\)|）))?(?:\\s*на\\s*(этой|прошлой|следующей)\\s*неделе)?${REGEX_PARTS["rightBoundary"]}''',
     caseSensitive: !REGEX_PARTS["flags"]!.contains("i"),
     dotAll: REGEX_PARTS["flags"]!.contains("d"),
     multiLine: REGEX_PARTS["flags"]!.contains("m"),
@@ -28,10 +22,12 @@ const WEEKDAY_GROUP = 2;
 const POSTFIX_GROUP = 3;
 
 class RUWeekdayParser extends AbstractParserWithWordBoundaryChecking {
+  @override
   String patternLeftBoundary() {
     return REGEX_PARTS["leftBoundary"]!;
   }
 
+  @override
   ParsingComponents innerExtract(
       ParsingContext context, RegExpMatchArray match) {
     final dayOfWeek = match[WEEKDAY_GROUP].toLowerCase();

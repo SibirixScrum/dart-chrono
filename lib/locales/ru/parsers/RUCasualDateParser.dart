@@ -6,7 +6,7 @@ import "../../../common/parsers/AbstractParserWithWordBoundary.dart"
     show AbstractParserWithWordBoundaryChecking;
 import "../constants.dart" show REGEX_PARTS;
 
-final PATTERN = new RegExp(
+final PATTERN = RegExp(
     '''(?:с|со)?\\s*(сегодня|вчера|завтра|послезавтра|послепослезавтра|позапозавчера|позавчера)${REGEX_PARTS["rightBoundary"]}''',
     caseSensitive: !REGEX_PARTS["flags"]!.contains("i"),
     dotAll: REGEX_PARTS["flags"]!.contains("d"),
@@ -14,14 +14,17 @@ final PATTERN = new RegExp(
     unicode: REGEX_PARTS["flags"]!.contains("u"));
 
 class RUCasualDateParser extends AbstractParserWithWordBoundaryChecking {
+  @override
   String patternLeftBoundary() {
     return REGEX_PARTS["leftBoundary"]!;
   }
 
+  @override
   RegExp innerPattern(ParsingContext context) {
     return PATTERN;
   }
 
+  @override
   dynamic /* ParsingComponents | ParsingResult */ innerExtract(
       ParsingContext context, RegExpMatchArray match) {
     final lowerText = match[1].toLowerCase();

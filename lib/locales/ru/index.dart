@@ -31,12 +31,12 @@ import "../../types.dart"
 /**
  * Chrono object configured for parsing *casual* Russian
  */
-final casual = new Chrono(createCasualConfiguration());
+final casual = Chrono(createCasualConfiguration());
 
 /**
  * Chrono object configured for parsing *strict* Russian
  */
-final strict = new Chrono(createConfiguration(true));
+final strict = Chrono(createConfiguration(true));
 
 /**
  * A shortcut for ru.casual.parse()
@@ -58,11 +58,11 @@ DateTime? parseDate(String text, [DateTime? ref, ParsingOption? option]) {
  */
 Configuration createCasualConfiguration() {
   final option = createConfiguration(false);
-  option.parsers.insert(0, new RUCasualDateParser());
-  option.parsers.insert(0, new RUCasualTimeParser());
-  option.parsers.insert(0, new RUMonthNameParser());
-  option.parsers.insert(0, new RURelativeDateFormatParser());
-  option.parsers.insert(0, new RUTimeUnitCasualRelativeFormatParser());
+  option.parsers.insert(0, RUCasualDateParser());
+  option.parsers.insert(0, RUCasualTimeParser());
+  option.parsers.insert(0, RUMonthNameParser());
+  option.parsers.insert(0, RURelativeDateFormatParser());
+  option.parsers.insert(0, RUTimeUnitCasualRelativeFormatParser());
   return option;
 }
 
@@ -74,15 +74,15 @@ Configuration createCasualConfiguration() {
 Configuration createConfiguration([strictMode = true]) {
   return includeCommonConfiguration(
       Configuration([
-        new SlashDateFormatParser(true),
-        new RUTimeUnitWithinFormatParser(),
-        new RUMonthNameLittleEndianParser(),
-        new RUWeekdayParser(),
-        new RUTimeExpressionParser(strictMode),
-        new RUTimeUnitAgoFormatParser()
+        SlashDateFormatParser(true),
+        RUTimeUnitWithinFormatParser(),
+        RUMonthNameLittleEndianParser(),
+        RUWeekdayParser(),
+        RUTimeExpressionParser(strictMode),
+        RUTimeUnitAgoFormatParser()
       ], [
-        new RUMergeDateTimeRefiner(),
-        new RUMergeDateRangeRefiner()
+        RUMergeDateTimeRefiner(),
+        RUMergeDateRangeRefiner()
       ]),
       strictMode);
 }

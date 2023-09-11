@@ -7,15 +7,17 @@ import "../../../common/parsers/AbstractParserWithWordBoundary.dart"
     show AbstractParserWithWordBoundaryChecking;
 import "../../../utils/dayjs.dart" show assignSimilarDate;
 
-final PATTERN = new RegExp(
+final PATTERN = RegExp(
     r'(now|today|tonight|tomorrow|tmr|tmrw|yesterday|last\s*night)(?=\W|$)',
     caseSensitive: false);
 
 class ENCasualDateParser extends AbstractParserWithWordBoundaryChecking {
+  @override
   RegExp innerPattern(ParsingContext context) {
     return PATTERN;
   }
 
+  @override
   dynamic /* ParsingComponents | ParsingResult */ innerExtract(
       ParsingContext context, RegExpMatchArray match) {
     var targetDate = context.refDate;
@@ -35,9 +37,9 @@ class ENCasualDateParser extends AbstractParserWithWordBoundaryChecking {
       case "tonight":
         return references.tonight(context.reference);
       default:
-        if (lowerText.match(new RegExp(r'last\s*night'))) {
+        if (lowerText.match(RegExp(r'last\s*night'))) {
           if (targetDate.hour > 6) {
-            targetDate = targetDate.subtract(Duration(days: 1));
+            targetDate = targetDate.subtract(const Duration(days: 1));
           }
           assignSimilarDate(component, targetDate);
           component.imply(Component.hour, 0);

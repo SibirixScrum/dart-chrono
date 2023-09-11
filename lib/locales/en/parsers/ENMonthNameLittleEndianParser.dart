@@ -13,7 +13,7 @@ import "../constants.dart"
     show ORDINAL_NUMBER_PATTERN, parseOrdinalNumberPattern;
 
 // prettier-ignore
-final PATTERN = new RegExp(
+final PATTERN = RegExp(
     '''(?:on\\s{0,3})?''' +
         '''(${ ORDINAL_NUMBER_PATTERN})''' +
         '''(?:''' +
@@ -35,10 +35,12 @@ const YEAR_GROUP = 4;
 
 class ENMonthNameLittleEndianParser
     extends AbstractParserWithWordBoundaryChecking {
+  @override
   RegExp innerPattern(ParsingContext context) {
     return PATTERN;
   }
 
+  @override
   ParsingResult? innerExtract(ParsingContext context, RegExpMatchArray match) {
     final result = context.createParsingResult(match.index, match[0]);
     final month = MONTH_DICTIONARY[match[MONTH_NAME_GROUP].toLowerCase()]!;

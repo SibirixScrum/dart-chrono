@@ -11,7 +11,7 @@ import "../../../common/parsers/AbstractParserWithWordBoundary.dart"
 import "../../../common/calculation/weekdays.dart"
     show createParsingComponentsAtWeekday;
 
-final PATTERN = new RegExp(
+final PATTERN = RegExp(
     "(?:(?:\\,|\\(|\\（)\\s*)?" +
         "(?:on\\s*?)?" +
         "(?:(this|last|past|next)\\s*)?" +

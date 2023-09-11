@@ -21,17 +21,17 @@ extension StringUtils on String {
 
     if(end!=null){
       if(start>end) {
-        return this.substringTs(end, start);
+        return substringTs(end, start);
       }
-      if(start>=this.length){
+      if(start>=length){
         return "";
       }
-      if(end>this.length){
-        return this.substring(start,this.length);
+      if(end>length){
+        return substring(start,length);
       }
-      return this.substring(start,end);
+      return substring(start,end);
     }else{
-      return this.substring(start,end);
+      return substring(start,end);
     }
   }
 }

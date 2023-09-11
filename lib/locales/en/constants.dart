@@ -6,7 +6,7 @@ import "../../calculation/years.dart" show findMostLikelyADYear;
 import "../../utils/pattern.dart" show matchAnyPattern, repeatedTimeunitPattern;
 import "../../utils/timeunits.dart" show TimeUnits;
 
-final Map<String, int> WEEKDAY_DICTIONARY = {
+const Map<String, int> WEEKDAY_DICTIONARY = {
   "sunday": 0,
   "sun": 0,
   "sun.": 0,
@@ -34,7 +34,7 @@ final Map<String, int> WEEKDAY_DICTIONARY = {
   "sat.": 6
 };
 
-final Map<String, int> FULL_MONTH_NAME_DICTIONARY = {
+const Map<String, int> FULL_MONTH_NAME_DICTIONARY = {
   "january": 1,
   "february": 2,
   "march": 3,
@@ -49,7 +49,7 @@ final Map<String, int> FULL_MONTH_NAME_DICTIONARY = {
   "december": 12
 };
 
-final Map<String, int> MONTH_DICTIONARY = {
+const Map<String, int> MONTH_DICTIONARY = {
   "january": 1,
   "february": 2,
   "march": 3,
@@ -88,7 +88,7 @@ final Map<String, int> MONTH_DICTIONARY = {
   "dec.": 12,
 };
 
-final Map<String, int> INTEGER_WORD_DICTIONARY = {
+const Map<String, int> INTEGER_WORD_DICTIONARY = {
   "one": 1,
   "two": 2,
   "three": 3,
@@ -103,7 +103,7 @@ final Map<String, int> INTEGER_WORD_DICTIONARY = {
   "twelve": 12
 };
 
-final Map<String, int> ORDINAL_WORD_DICTIONARY = {
+const Map<String, int> ORDINAL_WORD_DICTIONARY = {
   "first": 1,
   "second": 2,
   "third": 3,
@@ -147,7 +147,7 @@ final Map<String, int> ORDINAL_WORD_DICTIONARY = {
   "thirty-first": 31
 };
 
-final Map<String, String> TIME_UNIT_DICTIONARY_NO_ABBR = {
+const Map<String, String> TIME_UNIT_DICTIONARY_NO_ABBR = {
   "second": "second",
   "seconds": "second",
   "minute": "minute",
@@ -166,7 +166,7 @@ final Map<String, String> TIME_UNIT_DICTIONARY_NO_ABBR = {
   "years": "year"
 };
 
-final Map<String, String> TIME_UNIT_DICTIONARY = {
+const Map<String, String> TIME_UNIT_DICTIONARY = {
   "s": "second",
   "sec": "second",
   "second": "second",
@@ -210,13 +210,13 @@ num parseNumberPattern(String match) {
     return INTEGER_WORD_DICTIONARY[num]!;
   } else if (num == "a" || num == "an" || num == "the") {
     return 1;
-  } else if (num.match(new RegExp(r'few'))) {
+  } else if (num.match(RegExp(r'few'))) {
     return 3;
-  } else if (num.match(new RegExp(r'half'))) {
+  } else if (num.match(RegExp(r'half'))) {
     return 0.5;
-  } else if (num.match(new RegExp(r'couple'))) {
+  } else if (num.match(RegExp(r'couple'))) {
     return 2;
-  } else if (num.match(new RegExp(r'several'))) {
+  } else if (num.match(RegExp(r'several'))) {
     return 7;
   }
   return double.parse(num);
@@ -232,7 +232,7 @@ int parseOrdinalNumberPattern(String match) {
     return ORDINAL_WORD_DICTIONARY[num]!;
   }
   num =
-      num.replaceAll(new RegExp(r'(?:st|nd|rd|th)$', caseSensitive: false), "");
+      num.replaceAll(RegExp(r'(?:st|nd|rd|th)$', caseSensitive: false), "");
   return parseIntTs(num);
 }
 
@@ -241,19 +241,19 @@ final YEAR_PATTERN =
     '''(?:[1-9][0-9]{0,3}\\s{0,2}(?:BE|AD|BC|BCE|CE)|[1-2][0-9]{3}|[5-9][0-9])''';
 
 num parseYear(String match) {
-  if (new RegExp(r'BE', caseSensitive: false).hasMatch(match)) {
+  if (RegExp(r'BE', caseSensitive: false).hasMatch(match)) {
     // Buddhist Era
-    match = match.replaceAll(new RegExp(r'BE', caseSensitive: false), "");
+    match = match.replaceAll(RegExp(r'BE', caseSensitive: false), "");
     return parseIntTs(match) - 543;
   }
-  if (new RegExp(r'BCE?', caseSensitive: false).hasMatch(match)) {
+  if (RegExp(r'BCE?', caseSensitive: false).hasMatch(match)) {
     // Before Christ, Before Common Era
-    match = match.replaceAll(new RegExp(r'BCE?', caseSensitive: false), "");
+    match = match.replaceAll(RegExp(r'BCE?', caseSensitive: false), "");
     return -parseIntTs(match);
   }
-  if (new RegExp(r'(AD|CE)', caseSensitive: false).hasMatch(match)) {
+  if (RegExp(r'(AD|CE)', caseSensitive: false).hasMatch(match)) {
     // Anno Domini, Common Era
-    match = match.replaceAll(new RegExp(r'(AD|CE)', caseSensitive: false), "");
+    match = match.replaceAll(RegExp(r'(AD|CE)', caseSensitive: false), "");
     return parseIntTs(match);
   }
   final rawYearNumber = parseIntTs(match);
@@ -262,13 +262,13 @@ num parseYear(String match) {
 
 //-----------------------------
 final SINGLE_TIME_UNIT_PATTERN =
-    '''(${NUMBER_PATTERN})\\s{0,3}(${matchAnyPattern(TIME_UNIT_DICTIONARY)})''';
+    '''($NUMBER_PATTERN)\\s{0,3}(${matchAnyPattern(TIME_UNIT_DICTIONARY)})''';
 
 final SINGLE_TIME_UNIT_REGEX =
-    new RegExp(SINGLE_TIME_UNIT_PATTERN, caseSensitive: false);
+    RegExp(SINGLE_TIME_UNIT_PATTERN, caseSensitive: false);
 
 final SINGLE_TIME_UNIT_NO_ABBR_PATTERN =
-    '''(${NUMBER_PATTERN})\\s{0,3}(${matchAnyPattern(TIME_UNIT_DICTIONARY_NO_ABBR)})''';
+    '''($NUMBER_PATTERN)\\s{0,3}(${matchAnyPattern(TIME_UNIT_DICTIONARY_NO_ABBR)})''';
 
 final TIME_UNITS_PATTERN = repeatedTimeunitPattern(
     '''(?:(?:about|around)\\s{0,3})?''', SINGLE_TIME_UNIT_PATTERN);

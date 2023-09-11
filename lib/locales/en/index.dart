@@ -7,15 +7,15 @@ import 'package:chrono/types.dart';
 /**
  * Chrono object configured for parsing *casual* English
  */
-final casual = new Chrono (ENDefaultConfiguration.createCasualConfiguration(false));
+final casual = Chrono (ENDefaultConfiguration.createCasualConfiguration(false));
 /**
  * Chrono object configured for parsing *strict* English
  */
-final strict = new Chrono (ENDefaultConfiguration.createConfiguration(true, false));
+final strict = Chrono (ENDefaultConfiguration.createConfiguration(true, false));
 /**
  * Chrono object configured for parsing *UK-style* English
  */
-final GB = new Chrono (ENDefaultConfiguration.createConfiguration(false, true));
+final GB = Chrono (ENDefaultConfiguration.createConfiguration(false, true));
 /**
  * A shortcut for en.casual.parse()
  */

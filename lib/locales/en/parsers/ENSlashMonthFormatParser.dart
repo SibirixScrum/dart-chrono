@@ -7,7 +7,7 @@ import "../../../results.dart" show ParsingComponents;
 import "../../../common/parsers/AbstractParserWithWordBoundary.dart"
     show AbstractParserWithWordBoundaryChecking;
 
-final PATTERN = new RegExp("([0-9]|0[1-9]|1[012])/([0-9]{4})" + "", caseSensitive: false);
+final PATTERN = RegExp("([0-9]|0[1-9]|1[012])/([0-9]{4})" + "", caseSensitive: false);
 const MONTH_GROUP = 1;
 const YEAR_GROUP = 2;
 
@@ -17,10 +17,12 @@ const YEAR_GROUP = 2;
  * - 06/2005
  */
 class ENSlashMonthFormatParser extends AbstractParserWithWordBoundaryChecking {
+  @override
   RegExp innerPattern(ParsingContext context) {
     return PATTERN;
   }
 
+  @override
   ParsingComponents innerExtract(
       ParsingContext context, RegExpMatchArray match) {
     final year = parseIntTs(match[YEAR_GROUP]);

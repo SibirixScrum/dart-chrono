@@ -9,15 +9,15 @@ class BufferedDebugHandler implements DebugHandler {
   List<AsyncDebugBlock> buffer = [];
 
   List<dynamic> executeBufferedBlocks() {
-    final logs = this.buffer.map((block) => block());
-    this.buffer = [];
+    final logs = buffer.map((block) => block());
+    buffer = [];
     return logs.toList();
   }
 
   @override
   get debug {
     return (AsyncDebugBlock debugLog) {
-      this.buffer.add(debugLog);
+      buffer.add(debugLog);
     };
   }
 }

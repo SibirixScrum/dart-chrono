@@ -7,14 +7,14 @@ import "../../../results.dart" show ParsingComponents;
 import "../constants.dart"
     show TIME_UNITS_PATTERN, parseTimeUnits, TIME_UNITS_NO_ABBR_PATTERN;
 
-final PATTERN_WITHOUT_PREFIX = new RegExp(
+final PATTERN_WITHOUT_PREFIX = RegExp(
     '''(?:(?:about|around|roughly|approximately|just)\\s*(?:~\\s*)?)?(${TIME_UNITS_PATTERN})(?=\\W|\$)''',
     caseSensitive: false);
-final PATTERN_WITH_PREFIX = new RegExp(
+final PATTERN_WITH_PREFIX = RegExp(
     '''(?:within|in|for)\\s*''' +
         '''(?:(?:about|around|roughly|approximately|just)\\s*(?:~\\s*)?)?(${TIME_UNITS_PATTERN})(?=\\W|\$)''',
     caseSensitive: false);
-final PATTERN_WITH_PREFIX_STRICT = new RegExp(
+final PATTERN_WITH_PREFIX_STRICT = RegExp(
     '''(?:within|in|for)\\s*''' +
         '''(?:(?:about|around|roughly|approximately|just)\\s*(?:~\\s*)?)?(${TIME_UNITS_NO_ABBR_PATTERN})(?=\\W|\$)''',
     caseSensitive: false);

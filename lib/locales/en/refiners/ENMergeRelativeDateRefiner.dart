@@ -10,12 +10,12 @@ import "../../../results.dart"
 
 bool hasImpliedEarlierReferenceDate(ParsingResult result) {
   return result.text
-      .match(new RegExp(r'\s+(before|from)$', caseSensitive: false));
+      .match(RegExp(r'\s+(before|from)$', caseSensitive: false));
 }
 
 bool hasImpliedLaterReferenceDate(ParsingResult result) {
   return result.text
-      .match(new RegExp(r'\s+(after|since)$', caseSensitive: false));
+      .match(RegExp(r'\s+(after|since)$', caseSensitive: false));
 }
 
 /**
@@ -25,7 +25,7 @@ bool hasImpliedLaterReferenceDate(ParsingResult result) {
  */
 class ENMergeRelativeDateRefiner extends MergingRefiner {
   RegExp patternBetween() {
-    return new RegExp(r'^\s*$', caseSensitive: false);
+    return RegExp(r'^\s*$', caseSensitive: false);
   }
 
   @override
@@ -36,8 +36,8 @@ class ENMergeRelativeDateRefiner extends MergingRefiner {
       timeUnits = reverseTimeUnits(timeUnits);
     }
     final components = ParsingComponents.createRelativeFromReference(
-        new ReferenceWithTimezone(nextResult.start.date()), timeUnits);
-    return new ParsingResult(
+        ReferenceWithTimezone(nextResult.start.date()), timeUnits);
+    return ParsingResult(
         nextResult.reference,
         currentResult.index,
         '''${currentResult.text}${textBetween}${nextResult.text}''',
@@ -48,7 +48,7 @@ class ENMergeRelativeDateRefiner extends MergingRefiner {
   bool shouldMergeResults(String textBetween, ParsingResult currentResult,
       ParsingResult nextResult, ParsingContext context) {
     // Dates need to be next to each other to get merged
-    if (!textBetween.match(this.patternBetween())) {
+    if (!textBetween.match(patternBetween())) {
       return false;
     }
     // Check if any relative tokens were swallowed by the first date.

@@ -18,23 +18,23 @@ extension RegExpUtil on RegExp {
     // if(!this.hasMatch(str)){
     //   return null;
     // }
-    final firstMatch = this.firstMatch(str);
-    if (firstMatch == null) {
+
+    final matches = allMatches(str);
+
+    if (matches.isEmpty) {
       return null;
-    } else {
-      final index = firstMatch.start;
-      final matches = allMatches(str);
-      // print(matches.map((e) => e.groups(groupIndices)));
-      return RegExpMatchArray(
-          matches
-              .toList()
-              // .map((e) => e[0])
-              .expand((element) => element
-                  .groups(List.generate(element.groupCount+1, (index) => index)))
-              .toList(),
-          str,
-          index);
     }
+    final index = matches.first.start;
+    // print(matches.map((e) => e.groups(groupIndices)));
+    return RegExpMatchArray(
+        matches
+            .toList()
+            // .map((e) => e[0])
+            .expand((element) => element.groups(
+                List.generate(element.groupCount + 1, (index) => index)))
+            .toList(),
+        str,
+        index);
   }
 }
 

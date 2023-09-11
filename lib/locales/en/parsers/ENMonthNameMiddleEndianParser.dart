@@ -11,7 +11,7 @@ import "../constants.dart"
     show ORDINAL_NUMBER_PATTERN, parseOrdinalNumberPattern;
 import "../constants.dart" show YEAR_PATTERN, parseYear;
 
-final PATTERN = new RegExp(
+final PATTERN = RegExp(
     '''(${matchAnyPattern(MONTH_DICTIONARY)})''' +
         "(?:-|/|\\s*,?\\s*)" +
         '''(${ORDINAL_NUMBER_PATTERN})(?!\\s*(?:am|pm))\\s*''' +
@@ -42,10 +42,12 @@ const YEAR_GROUP = 4;
  */
 class ENMonthNameMiddleEndianParser
     extends AbstractParserWithWordBoundaryChecking {
+  @override
   RegExp innerPattern(ParsingContext context) {
     return PATTERN;
   }
 
+  @override
   innerExtract(ParsingContext context, RegExpMatchArray match) {
     final month = MONTH_DICTIONARY[match[MONTH_NAME_GROUP].toLowerCase()]!;
     final day = parseOrdinalNumberPattern(match[DATE_GROUP]);

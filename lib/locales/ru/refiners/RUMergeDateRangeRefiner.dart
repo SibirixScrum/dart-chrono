@@ -7,7 +7,8 @@ import 'package:chrono/common/refiners/AbstractMergeDateRangeRefiner.dart';
  * - c пятницы и до среды
  */
 class RUMergeDateRangeRefiner extends AbstractMergeDateRangeRefiner {
+  @override
   RegExp patternBetween() {
-    return new RegExp(r'^\s*(и до|и по|до|по|-)\s*$', caseSensitive: false);
+    return RegExp(r'^\s*(и до|и по|до|по|-)\s*$', caseSensitive: false);
   }
 }

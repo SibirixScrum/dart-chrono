@@ -12,22 +12,27 @@ class RUTimeExpressionParser extends AbstractTimeExpressionParser {
     /* super call moved to initializer */;
   }
 
+  @override
   String patternFlags() {
     return REGEX_PARTS["flags"]!;
   }
 
+  @override
   String primaryPatternLeftBoundary() {
     return '''(^|\\s|T|(?:[^\\p{L}\\p{N}_]))''';
   }
 
+  @override
   String followingPhase() {
     return '''\\s*(?:\\-|\\–|\\~|\\〜|до|и|по|\\?)\\s*''';
   }
 
+  @override
   String primaryPrefix() {
     return '''(?:(?:в|с)\\s*)??''';
   }
 
+  @override
   String primarySuffix() {
     return '''(?:\\s*(?:утра|вечера|после полудня))?(?!\\/)${REGEX_PARTS["rightBoundary"]}''';
   }

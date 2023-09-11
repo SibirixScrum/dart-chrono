@@ -11,18 +11,22 @@ class ENTimeExpressionParser extends AbstractTimeExpressionParser {
     /* super call moved to initializer */;
   }
 
+  @override
   String followingPhase() {
     return "\\s*(?:\\-|\\–|\\~|\\〜|to|until|through|till|\\?)\\s*";
   }
 
+  @override
   String primaryPrefix() {
     return "(?:(?:at|from)\\s*)??";
   }
 
+  @override
   String primarySuffix() {
     return "(?:\\s*(?:o\\W*clock|at\\s*night|in\\s*the\\s*(?:morning|afternoon)))?(?!/)(?=\\W|\$)";
   }
 
+  @override
   ParsingComponents? extractPrimaryTimeComponents(
       ParsingContext context, RegExpMatchArray match,
       [strict = false]) {

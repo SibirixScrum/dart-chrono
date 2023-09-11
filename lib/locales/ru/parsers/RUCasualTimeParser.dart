@@ -8,7 +8,7 @@ import "../../../common/parsers/AbstractParserWithWordBoundary.dart"
 import "../../../utils/dayjs.dart" show assignSimilarDate;
 import "../constants.dart" show REGEX_PARTS;
 
-final PATTERN = new RegExp(
+final PATTERN = RegExp(
     '''(сейчас|прошлым\\s*вечером|прошлой\\s*ночью|следующей\\s*ночью|сегодня\\s*ночью|этой\\s*ночью|ночью|этим утром|утром|утра|в\\s*полдень|вечером|вечера|в\\s*полночь)''' +
         '''${REGEX_PARTS["rightBoundary"]}''',
     caseSensitive: !REGEX_PARTS["flags"]!.contains("i"),
@@ -17,14 +17,17 @@ final PATTERN = new RegExp(
     unicode: REGEX_PARTS["flags"]!.contains("u"));
 
 class RUCasualTimeParser extends AbstractParserWithWordBoundaryChecking {
+  @override
   String patternLeftBoundary() {
     return REGEX_PARTS["leftBoundary"]!;
   }
 
+  @override
   RegExp innerPattern(ParsingContext context) {
     return PATTERN;
   }
 
+  @override
   innerExtract(ParsingContext context, RegExpMatchArray match) {
     var targetDate = context.refDate;
     final lowerText = match[0].toLowerCase();

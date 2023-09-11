@@ -7,7 +7,8 @@ import 'package:chrono/common/refiners/AbstractMergeDateTimeRefiner.dart';
  * - Завтра [,] 7:00
  */
 class RUMergeDateTimeRefiner extends AbstractMergeDateTimeRefiner {
+  @override
   RegExp patternBetween() {
-    return new RegExp('''^\\s*(T|в|,|-)?\\s*\$''');
+    return RegExp('''^\\s*(T|в|,|-)?\\s*\$''');
   }
 }

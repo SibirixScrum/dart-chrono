@@ -8,11 +8,11 @@ import "../../../common/parsers/AbstractParserWithWordBoundary.dart"
     show AbstractParserWithWordBoundaryChecking;
 import "../../../utils/timeunits.dart" show reverseTimeUnits;
 
-final PATTERN = new RegExp(
-    '''(${ TIME_UNITS_PATTERN})\\s{0,5}(?:ago|before|earlier)(?=\\W|\$)''',
+final PATTERN = RegExp(
+    '''($TIME_UNITS_PATTERN)\\s{0,5}(?:ago|before|earlier)(?=\\W|\$)''',
     caseSensitive: false);
-final STRICT_PATTERN = new RegExp(
-    '''(${ TIME_UNITS_NO_ABBR_PATTERN})\\s{0,5}(?:ago|before|earlier)(?=\\W|\$)''',
+final STRICT_PATTERN = RegExp(
+    '''($TIME_UNITS_NO_ABBR_PATTERN)\\s{0,5}(?:ago|before|earlier)(?=\\W|\$)''',
     caseSensitive: false);
 
 class ENTimeUnitAgoFormatParser extends AbstractParserWithWordBoundaryChecking {
@@ -20,10 +20,12 @@ class ENTimeUnitAgoFormatParser extends AbstractParserWithWordBoundaryChecking {
   ENTimeUnitAgoFormatParser(this.strictMode) : super() {
     /* super call moved to initializer */;
   }
+  @override
   RegExp innerPattern(ParsingContext context) {
-    return this.strictMode ? STRICT_PATTERN : PATTERN;
+    return strictMode ? STRICT_PATTERN : PATTERN;
   }
 
+  @override
   innerExtract(ParsingContext context, RegExpMatchArray match) {
     final timeUnits = parseTimeUnits(match[1]);
     final outputTimeUnits = reverseTimeUnits(timeUnits);

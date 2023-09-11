@@ -5,15 +5,17 @@ import "../../../common/parsers/AbstractParserWithWordBoundary.dart"
     show AbstractParserWithWordBoundaryChecking;
 import "../../../common/casualReferences.dart" as casualReferences;
 
-final PATTERN = new RegExp(
+final PATTERN = RegExp(
     r'(?:this)?\s{0,3}(morning|afternoon|evening|night|midnight|midday|noon)(?=\W|$)',
     caseSensitive: false);
 
 class ENCasualTimeParser extends AbstractParserWithWordBoundaryChecking {
+  @override
   innerPattern(ParsingContext context) {
     return PATTERN;
   }
 
+  @override
   innerExtract(ParsingContext context, RegExpMatchArray match) {
     switch (match[1].toLowerCase()) {
       case "afternoon":

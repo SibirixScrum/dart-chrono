@@ -11,8 +11,9 @@ import 'package:chrono/common/refiners/AbstractMergeDateRangeRefiner.dart';
  * - Wednesday [-] Friday
  */
 class ENMergeDateRangeRefiner extends AbstractMergeDateRangeRefiner {
+  @override
   RegExp patternBetween() {
-    return new RegExp(r'^\s*(to|-|–|until|through|till)\s*$',
+    return RegExp(r'^\s*(to|-|–|until|through|till)\s*$',
         caseSensitive: false);
   }
 }

@@ -20,11 +20,11 @@ class ReferenceWithTimezone {
   ReferenceWithTimezone([dynamic /* ParsingReference | Date */ input]) {
     input = input ?? new DateTime.now();
     if (input is DateTime) {
-      this.instant = input;
-      this.timezoneOffset = Undefined(); //used as undefined. because checks reference.timezoneOffset !== null is typescript is true if it is indefined
+      instant = input;
+      timezoneOffset = Undefined(); //used as undefined. because checks reference.timezoneOffset !== null is typescript is true if it is indefined
     } else if (input is ParsingReference){
-      this.instant = input.instant ?? DateTime.now();
-      this.timezoneOffset = toTimezoneOffset(input.timezone is Undefined ? input.instant?.timeZoneOffset.inMinutes : input.timezone, this.instant);
+      instant = input.instant ?? DateTime.now();
+      timezoneOffset = toTimezoneOffset(input.timezone is Undefined ? input.instant?.timeZoneOffset.inMinutes : input.timezone, instant);
     }
   }
 
@@ -33,8 +33,8 @@ class ReferenceWithTimezone {
    * The output's instant is NOT the reference's instant when the reference's and system's timezone are different.
    */
   getDateWithAdjustedTimezone() {
-    return DateTime.fromMillisecondsSinceEpoch(this.instant.millisecondsSinceEpoch +
-        getSystemTimezoneAdjustmentMinute(this.instant) * 60000);
+    return DateTime.fromMillisecondsSinceEpoch(instant.millisecondsSinceEpoch +
+        getSystemTimezoneAdjustmentMinute(instant) * 60000);
   }
 
   /**
@@ -52,7 +52,7 @@ class ReferenceWithTimezone {
     }
     final currentTimezoneOffset = date.timeZoneOffset.inMinutes;
     final targetTimezoneOffset =
-        overrideTimezoneOffset ?? (this.timezoneOffset is! num ? currentTimezoneOffset : this.timezoneOffset);
+        overrideTimezoneOffset ?? (timezoneOffset is! num ? currentTimezoneOffset : timezoneOffset);
     return (currentTimezoneOffset - targetTimezoneOffset).toInt();
   }
   @override
@@ -70,29 +70,29 @@ class ParsingComponents implements ParsedComponents {
   ReferenceWithTimezone reference;
 
   ParsingComponents(this.reference, Map<Component, num>? knownComponents) {
-    this.knownValues = {};
-    this.impliedValues = {};
+    knownValues = {};
+    impliedValues = {};
     if (knownComponents != null) {
       for (final key in knownComponents.keys) {
-        this.knownValues[key] = knownComponents[key]!;
+        knownValues[key] = knownComponents[key]!;
       }
     }
     final refDayJs = reference.instant;
-    this.imply(Component.day, refDayJs.day);
-    this.imply(Component.month, refDayJs.month);
-    this.imply(Component.year, refDayJs.year);
-    this.imply(Component.hour, 12);
-    this.imply(Component.minute, 0);
-    this.imply(Component.second, 0);
-    this.imply(Component.millisecond, 0);
+    imply(Component.day, refDayJs.day);
+    imply(Component.month, refDayJs.month);
+    imply(Component.year, refDayJs.year);
+    imply(Component.hour, 12);
+    imply(Component.minute, 0);
+    imply(Component.second, 0);
+    imply(Component.millisecond, 0);
   }
 
   num? get(Component component) {
     if (knownValues.keys.contains(component)) {
-      return this.knownValues[component];
+      return knownValues[component];
     }
     if (impliedValues.keys.contains(component)) {
-      return this.impliedValues[component];
+      return impliedValues[component];
     }
     return null;
   }
@@ -109,72 +109,72 @@ class ParsingComponents implements ParsedComponents {
     if (knownValues.keys.contains(component)) {
       return this;
     }
-    this.impliedValues[component] = value;
+    impliedValues[component] = value;
     return this;
   }
 
   ParsingComponents assign(Component component, num value) {
-    this.knownValues[component] = value;
-    this.impliedValues.remove(component);
+    knownValues[component] = value;
+    impliedValues.remove(component);
     return this;
   }
 
   delete(Component component) {
-    this.knownValues.remove(component);
+    knownValues.remove(component);
     ;
-    this.impliedValues.remove(component);
+    impliedValues.remove(component);
     ;
   }
 
   ParsingComponents clone() {
-    final component = new ParsingComponents(this.reference, null);
+    final component = new ParsingComponents(reference, null);
     component.knownValues = {};
     component.impliedValues = {};
-    for (final key in this.knownValues.keys) {
-      component.knownValues[key] = this.knownValues[key]!;
+    for (final key in knownValues.keys) {
+      component.knownValues[key] = knownValues[key]!;
     }
-    for (final key in this.impliedValues.keys) {
-      component.impliedValues[key] = this.impliedValues[key]!;
+    for (final key in impliedValues.keys) {
+      component.impliedValues[key] = impliedValues[key]!;
     }
     return component;
   }
 
   bool isOnlyDate() {
-    return !this.isCertain(Component.hour) &&
-        !this.isCertain(Component.minute) &&
-        !this.isCertain(Component.second);
+    return !isCertain(Component.hour) &&
+        !isCertain(Component.minute) &&
+        !isCertain(Component.second);
   }
 
   bool isOnlyTime() {
-    return !this.isCertain(Component.weekday) &&
-        !this.isCertain(Component.day) &&
-        !this.isCertain(Component.month);
+    return !isCertain(Component.weekday) &&
+        !isCertain(Component.day) &&
+        !isCertain(Component.month);
   }
 
   bool isOnlyWeekdayComponent() {
-    return this.isCertain(Component.weekday) &&
-        !this.isCertain(Component.day) &&
-        !this.isCertain(Component.month);
+    return isCertain(Component.weekday) &&
+        !isCertain(Component.day) &&
+        !isCertain(Component.month);
   }
 
   bool isDateWithUnknownYear() {
-    return this.isCertain(Component.month) && !this.isCertain(Component.year);
+    return isCertain(Component.month) && !isCertain(Component.year);
   }
 
   bool isValidDate() {
     final date = dateWithoutTimezoneAdjustment();
-    if (date.year != this.get(Component.year)) return false;
-    if (date.month != this.get(Component.month)!.toInt()) return false;
-    if (date.day != this.get(Component.day)) return false;
-    if (this.get(Component.hour) != null &&
-        date.hour != this.get(Component.hour)) return false;
-    if (this.get(Component.minute) != null &&
-        date.minute != this.get(Component.minute)) return false;
+    if (date.year != get(Component.year)) return false;
+    if (date.month != get(Component.month)!.toInt()) return false;
+    if (date.day != get(Component.day)) return false;
+    if (get(Component.hour) != null &&
+        date.hour != get(Component.hour)) return false;
+    if (get(Component.minute) != null &&
+        date.minute != get(Component.minute)) return false;
     return true;
   }
 
   toString() {
-    return '''[ParsingComponents {knownValues: ${this.knownValues}, impliedValues: ${this.impliedValues}}, reference: ${this.reference}]''';
+    return '''[ParsingComponents {knownValues: ${knownValues}, impliedValues: ${impliedValues}}, reference: ${reference}]''';
   }
 
   // dayjs() {
@@ -182,9 +182,9 @@ class ParsingComponents implements ParsedComponents {
   // }
 
   DateTime date() {
-    final date = this.dateWithoutTimezoneAdjustment();
-    final timezoneAdjustment = this.reference.getSystemTimezoneAdjustmentMinute(
-        date, this.get(Component.timezoneOffset));
+    final date = dateWithoutTimezoneAdjustment();
+    final timezoneAdjustment = reference.getSystemTimezoneAdjustmentMinute(
+        date, get(Component.timezoneOffset));
     return new DateTime.fromMillisecondsSinceEpoch(
         date.millisecondsSinceEpoch + timezoneAdjustment * 60000);
   }
@@ -192,15 +192,15 @@ class ParsingComponents implements ParsedComponents {
   DateTime dateWithoutTimezoneAdjustment() {
     final now = DateTime.now();
     final date = new DateTime(
-        this.get(Component.year)?.toInt() ?? now.year,
-        this.get(Component.month) != null
-            ? this.get(Component.month)!.toInt()
+        get(Component.year)?.toInt() ?? now.year,
+        get(Component.month) != null
+            ? get(Component.month)!.toInt()
             : now.month,
-        this.get(Component.day)?.toInt() ?? now.day,
-        this.get(Component.hour)?.toInt() ?? now.hour,
-        this.get(Component.minute)?.toInt() ?? now.minute,
-        this.get(Component.second)?.toInt() ?? now.second,
-        this.get(Component.millisecond)?.toInt() ?? now.millisecond);
+        get(Component.day)?.toInt() ?? now.day,
+        get(Component.hour)?.toInt() ?? now.hour,
+        get(Component.minute)?.toInt() ?? now.minute,
+        get(Component.second)?.toInt() ?? now.second,
+        get(Component.millisecond)?.toInt() ?? now.millisecond);
     // date.setFullYear(this.get(Component.year));
     return date;
   }
@@ -342,26 +342,26 @@ class ParsingResult implements ParsedResult {
 
   ParsingResult(this.reference, this.index, this.text,
       [ParsingComponents? start, ParsingComponents? end]) {
-    this.reference = reference;
-    this.refDate = reference.instant;
-    this.index = index;
-    this.text = text;
+    reference = reference;
+    refDate = reference.instant;
+    index = index;
+    text = text;
     this.start = start ?? new ParsingComponents(reference, null);
     this.end = end;
   }
 
   clone() {
-    final result = new ParsingResult(this.reference, this.index, this.text);
-    result.start = this.start.clone();
-    result.end = this.end != null ? this.end!.clone() : null;
+    final result = new ParsingResult(reference, index, text);
+    result.start = start.clone();
+    result.end = end != null ? end!.clone() : null;
     return result;
   }
 
   DateTime date() {
-    return this.start.date();
+    return start.date();
   }
 
   toString() {
-    return '''[ParsingResult {index: ${this.index}, text: \'${this.text}\', ...}]''';
+    return '''[ParsingResult {index: ${index}, text: \'${text}\', ...}]''';
   }
 }

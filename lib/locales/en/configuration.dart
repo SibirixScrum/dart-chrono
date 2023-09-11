@@ -26,11 +26,11 @@ class ENDefaultConfiguration {
    */
   static Configuration createCasualConfiguration([littleEndian = false]) {
     final option = createConfiguration(false, littleEndian);
-    option.parsers.insert(0, new ENCasualDateParser());
-    option.parsers.insert(0, new ENCasualTimeParser());
-    option.parsers.insert(0, new ENMonthNameParser());
-    option.parsers.insert(0, new ENRelativeDateFormatParser());
-    option.parsers.insert(0, new ENTimeUnitCasualRelativeFormatParser());
+    option.parsers.insert(0, ENCasualDateParser());
+    option.parsers.insert(0, ENCasualTimeParser());
+    option.parsers.insert(0, ENMonthNameParser());
+    option.parsers.insert(0, ENRelativeDateFormatParser());
+    option.parsers.insert(0, ENTimeUnitCasualRelativeFormatParser());
     return option;
   }
 
@@ -43,25 +43,25 @@ class ENDefaultConfiguration {
   static Configuration createConfiguration([strictMode = true, littleEndian = false]) {
     final options = includeCommonConfiguration(
         Configuration([
-          new SlashDateFormatParser(littleEndian),
-          new ENTimeUnitWithinFormatParser(strictMode),
-          new ENMonthNameLittleEndianParser(),
-          new ENMonthNameMiddleEndianParser(),
-          new ENWeekdayParser(),
-          new ENCasualYearMonthDayParser(),
-          new ENSlashMonthFormatParser(),
-          new ENTimeExpressionParser(strictMode),
-          new ENTimeUnitAgoFormatParser(strictMode),
-          new ENTimeUnitLaterFormatParser(strictMode)
+          SlashDateFormatParser(littleEndian),
+          ENTimeUnitWithinFormatParser(strictMode),
+          ENMonthNameLittleEndianParser(),
+          ENMonthNameMiddleEndianParser(),
+          ENWeekdayParser(),
+          ENCasualYearMonthDayParser(),
+          ENSlashMonthFormatParser(),
+          ENTimeExpressionParser(strictMode),
+          ENTimeUnitAgoFormatParser(strictMode),
+          ENTimeUnitLaterFormatParser(strictMode)
         ], [
-          new ENMergeRelativeDateRefiner(),
-          new ENMergeDateTimeRefiner()
+          ENMergeRelativeDateRefiner(),
+          ENMergeDateTimeRefiner()
         ]),
         strictMode);
     // Re-apply the date time refiner again after the timezone refinement and exclusion in common refiners.
-    options.refiners.add(new ENMergeDateTimeRefiner());
+    options.refiners.add(ENMergeDateTimeRefiner());
     // Keep the date range refiner at the end (after all other refinements).
-    options.refiners.add(new ENMergeDateRangeRefiner());
+    options.refiners.add(ENMergeDateRangeRefiner());
     return options;
   }
 }

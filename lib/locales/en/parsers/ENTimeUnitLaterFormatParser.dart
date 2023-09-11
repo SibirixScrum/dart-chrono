@@ -7,17 +7,12 @@ import "../../../results.dart" show ParsingComponents;
 import "../../../common/parsers/AbstractParserWithWordBoundary.dart"
     show AbstractParserWithWordBoundaryChecking;
 
-final PATTERN = new RegExp(
+final PATTERN = RegExp(
     '''(${ TIME_UNITS_PATTERN})\\s{0,5}(?:later|after|from now|henceforth|forward|out)''' +
         "(?=(?:\\W|\$))",
     caseSensitive: false);
-final STRICT_PATTERN = new RegExp(
-    "" +
-        "(" +
-        TIME_UNITS_NO_ABBR_PATTERN +
-        ")" +
-        "(later|from now)" +
-        "(?=(?:\\W|\$))",
+final STRICT_PATTERN = RegExp(
+    "($TIME_UNITS_NO_ABBR_PATTERN)(later|from now)(?=(?:\\W|\$))",
     caseSensitive: false);
 const GROUP_NUM_TIMEUNITS = 1;
 
@@ -27,10 +22,12 @@ class ENTimeUnitLaterFormatParser
   ENTimeUnitLaterFormatParser(this.strictMode) : super() {
     /* super call moved to initializer */;
   }
+  @override
   RegExp innerPattern(ParsingContext context) {
     return this.strictMode ? STRICT_PATTERN : PATTERN;
   }
 
+  @override
   innerExtract(ParsingContext context, RegExpMatchArray match) {
     final fragments = parseTimeUnits(match[GROUP_NUM_TIMEUNITS]);
     return ParsingComponents.createRelativeFromReference(

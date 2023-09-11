@@ -14,14 +14,8 @@ import "../constants.dart"
         REGEX_PARTS;
 import "../constants.dart" show YEAR_PATTERN, parseYear;
 
-final PATTERN = new RegExp(
-    '''((?:в)\\s*)?''' +
-        '''(${matchAnyPattern(MONTH_NAME_DICTIONARY)})''' +
-        '''\\s*''' +
-        '''(?:''' +
-        '''[,-]?\\s*(${YEAR_PATTERN})?''' +
-        ''')?''' +
-        '''(?=[^\\s\\w]|\\s+[^0-9]|\\s+\$|\$)''',
+final PATTERN = RegExp(
+    '''((?:в)\\s*)?(${matchAnyPattern(MONTH_NAME_DICTIONARY)})\\s*(?:[,-]?\\s*(${YEAR_PATTERN})?)?(?=[^\\s\\w]|\\s+[^0-9]|\\s+\$|\$)''',
     caseSensitive: !REGEX_PARTS["flags"]!.contains("i"),
     dotAll: REGEX_PARTS["flags"]!.contains("d"),
     multiLine: REGEX_PARTS["flags"]!.contains("m"),
@@ -36,14 +30,17 @@ const YEAR_GROUP = 3;
  * - Январь
  */
 class RUMonthNameParser extends AbstractParserWithWordBoundaryChecking {
+  @override
   String patternLeftBoundary() {
     return REGEX_PARTS["leftBoundary"]!;
   }
 
+  @override
   RegExp innerPattern(ParsingContext context) {
     return PATTERN;
   }
 
+  @override
   innerExtract(ParsingContext context, RegExpMatchArray match) {
     final monthName = match.matches[MONTH_NAME_GROUP]!.toLowerCase();
     // skip some unlikely words "янв", "фер", ..
