@@ -247,6 +247,6 @@ class Ru {
 }
 
 class En {
-  static final casual = en_chrono.casual;
-  static final strict = en_chrono.strict;
+  final casual = en_chrono.casual;
+  final strict = en_chrono.strict;
 }
