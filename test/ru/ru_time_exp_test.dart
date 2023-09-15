@@ -53,6 +53,18 @@ void main() {
       expectToBeDate(result.start, new DateTime(2016, 10, 1, 22));
       expectToBeDate(result.end, new DateTime(2016, 10, 1, 23));
     });
+    testSingleCase(ru.casual, "в 3 вечера", new DateTime(2016, 10, 1, 8),
+            (result, text) {
+          expect(result.index, 0);
+          expect(result.text, text);
+          expectToBeDate(result.start, new DateTime(2016, 10, 1, 15));
+        });
+    testSingleCase(ru.casual, "в 7 после полудня", new DateTime(2016, 10, 1, 8),
+            (result, text) {
+          expect(result.index, 0);
+          expect(result.text, text);
+          expectToBeDate(result.start, new DateTime(2016, 10, 1, 19));
+        });
   });
   test("Test - Parsing causal positive cases", () {
     testSingleCase(ru.casual, "в 1", (ParsedResult result, String text) {

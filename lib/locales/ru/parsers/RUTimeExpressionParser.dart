@@ -45,7 +45,7 @@ class RUTimeExpressionParser extends AbstractTimeExpressionParser {
     if (components != null) {
       if (match[0].endsWith("вечера")) {
         final hour = components.get(Component.hour)!.toInt();
-        if (hour >= 6 && hour < 12) {
+        if (hour >= 0 && hour < 12) {
           components.assign(
               Component.hour, components.get(Component.hour)!.toInt() + 12);
           components.assign(Component.meridiem, Meridiem.PM.index);
@@ -56,7 +56,7 @@ class RUTimeExpressionParser extends AbstractTimeExpressionParser {
       if (match[0].endsWith("после полудня")) {
         components.assign(Component.meridiem, Meridiem.PM.index);
         final hour = components.get(Component.hour)!.toInt();
-        if (hour >= 0 && hour <= 6) {
+        if (hour >= 0 && hour <= 12) {
           components.assign(
               Component.hour, components.get(Component.hour)!.toInt() + 12);
         }
