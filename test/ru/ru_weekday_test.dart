@@ -1,4 +1,5 @@
 import 'package:chrono/locales/ru/index.dart' as ru;
+import "package:chrono/ported/CustomValues.dart";
 import "package:chrono/types.dart";
 import "package:flutter_test/flutter_test.dart";
 
@@ -39,7 +40,7 @@ void main() {
         (ParsedResult result, String text) {
       expect(result.index, 8);
       expect(result.text, "в среду утром");
-      expectToBeDate(result.start, new DateTime(2015, 4, 15, 6));
+      expectToBeDate(result.start, new DateTime(2015, 4, 15, morningHour));
     });
   });
   test("Test - Weekday Overlap", () {

@@ -1,4 +1,5 @@
 import 'package:chrono/locales/ru/index.dart' as ru;
+import 'package:chrono/ported/CustomValues.dart';
 import 'package:chrono/types.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -68,14 +69,14 @@ void main() {
         (ParsedResult result, String text) {
       expect(result.index, 8);
       expect(result.text, "утром");
-      expectToBeDate(result.start, new DateTime(2012, 7, 10, 6, 0, 0, 0));
+      expectToBeDate(result.start, new DateTime(2012, 7, 10, morningHour, 0, 0, 0));
     });
     testSingleCase(ru.casual, "Дедлайн этим утром",
         new DateTime(2012, 7, 10, 8, 9, 10, 11),
         (ParsedResult result, String text) {
       expect(result.index, 8);
       expect(result.text, "этим утром");
-      expectToBeDate(result.start, new DateTime(2012, 7, 10, 6, 0, 0, 0));
+      expectToBeDate(result.start, new DateTime(2012, 7, 10, morningHour, 0, 0, 0));
     });
     testSingleCase(
         ru.casual, "Дедлайн в полдень", new DateTime(2012, 7, 10, 8, 9, 10, 11),
@@ -89,14 +90,14 @@ void main() {
         (ParsedResult result, String text) {
       expect(result.index, 8);
       expect(result.text, "прошлым вечером");
-      expectToBeDate(result.start, new DateTime(2012, 7, 9, 20, 0, 0, 0));
+      expectToBeDate(result.start, new DateTime(2012, 7, 9, eveningHour, 0, 0, 0));
     });
     testSingleCase(
         ru.casual, "Дедлайн вечером", new DateTime(2012, 7, 10, 8, 9, 10, 11),
         (ParsedResult result, String text) {
       expect(result.index, 8);
       expect(result.text, "вечером");
-      expectToBeDate(result.start, new DateTime(2012, 7, 10, 20, 0, 0, 0));
+      expectToBeDate(result.start, new DateTime(2012, 7, 10, eveningHour, 0, 0, 0));
     });
     testSingleCase(ru.casual, "Дедлайн прошлой ночью",
         new DateTime(2012, 7, 10, 8, 9, 10, 11),
@@ -147,14 +148,14 @@ void main() {
         (ParsedResult result, String text) {
       expect(result.index, 8);
       expect(result.text, "вчера вечером");
-      expectToBeDate(result.start, new DateTime(2012, 7, 9, 20));
+      expectToBeDate(result.start, new DateTime(2012, 7, 9, eveningHour));
     });
     testSingleCase(
         ru.casual, "Дедлайн завтра утром", new DateTime(2012, 8, 10, 14),
         (ParsedResult result, String text) {
       expect(result.index, 8);
       expect(result.text, "завтра утром");
-      expectToBeDate(result.start, new DateTime(2012, 8, 11, 6));
+      expectToBeDate(result.start, new DateTime(2012, 8, 11, morningHour));
     });
   });
   test("Test - Casual date range", () {

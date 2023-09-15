@@ -1,3 +1,5 @@
+import 'package:chrono/ported/CustomValues.dart';
+
 import "../results.dart" show ParsingComponents, ReferenceWithTimezone, Undefined;
 import "../types.dart" show Component, Meridiem;
 import "../utils/dayjs.dart"
@@ -75,7 +77,7 @@ ParsingComponents lastNight(ReferenceWithTimezone reference, [implyHour = 0]) {
   return component;
 }
 
-ParsingComponents evening(ReferenceWithTimezone reference, [implyHour = 20]) {
+ParsingComponents evening(ReferenceWithTimezone reference, [implyHour = eveningHour]) {
   final component = new ParsingComponents(reference, {});
   component.imply(Component.meridiem, Meridiem.PM.index);
   component.imply(Component.hour, implyHour);
@@ -83,7 +85,7 @@ ParsingComponents evening(ReferenceWithTimezone reference, [implyHour = 20]) {
 }
 
 ParsingComponents yesterdayEvening(ReferenceWithTimezone reference,
-    [implyHour = 20]) {
+    [implyHour = eveningHour]) {
   var targetDate = reference.instant;
   final component = new ParsingComponents(reference, {});
   targetDate = targetDate.subtract(Duration(days: 1));
@@ -109,7 +111,7 @@ ParsingComponents midnight(ReferenceWithTimezone reference) {
   return component;
 }
 
-ParsingComponents morning(ReferenceWithTimezone reference, [implyHour = 6]) {
+ParsingComponents morning(ReferenceWithTimezone reference, [implyHour = morningHour]) {
   final component = new ParsingComponents(reference, {});
   component.imply(Component.meridiem, Meridiem.AM.index);
   component.imply(Component.hour, implyHour);

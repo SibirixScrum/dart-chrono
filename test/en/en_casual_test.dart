@@ -1,4 +1,5 @@
 import 'package:chrono/locales/en/index.dart' as en;
+import 'package:chrono/ported/CustomValues.dart';
 import 'package:chrono/types.dart';
 import "package:flutter_test/flutter_test.dart";
 
@@ -87,8 +88,8 @@ import '../test_util.dart';
       expect(result.start.get(Component.year), 2012);
       expect(result.start.get(Component.month), 7);
       expect(result.start.get(Component.day), 10);
-      expect(result.start.get(Component.hour), 6);
-      expectToBeDate(result.start,DateTime(2012, 7, 10, 6));
+      expect(result.start.get(Component.hour), morningHour);
+      expectToBeDate(result.start,DateTime(2012, 7, 10,morningHour));
     });
     testSingleCase(en.casual, "The Deadline was this afternoon ",
         DateTime(2012, 7, 10, 12), (ParsedResult result, String text) {
@@ -109,8 +110,8 @@ import '../test_util.dart';
       expect(result.start.get(Component.year), 2012);
       expect(result.start.get(Component.month), 7);
       expect(result.start.get(Component.day), 10);
-      expect(result.start.get(Component.hour), 20);
-      expectToBeDate(result.start,DateTime(2012, 7, 10, 20));
+      expect(result.start.get(Component.hour), eveningHour);
+      expectToBeDate(result.start,DateTime(2012, 7, 10, eveningHour));
     });
     testSingleCase(en.casual, "The Deadline is midnight ",
         DateTime(2012, 7, 10, 12), (ParsedResult result, String text) {
@@ -213,7 +214,7 @@ import '../test_util.dart';
       expect(result.text, "today morning to tomorrow");
       expect(result.start.get(Component.month), 8);
       expect(result.start.get(Component.day), 4);
-      expect(result.start.get(Component.hour), 6);
+      expect(result.start.get(Component.hour), morningHour);
       expect(result.start.isCertain(Component.hour), false);
       expect(result.end!.get(Component.month), 8);
       expect(result.end!.get(Component.day), 5);
@@ -297,7 +298,7 @@ import '../test_util.dart';
       expect(result.start.get(Component.year), 2016);
       expect(result.start.get(Component.month), 10);
       expect(result.start.get(Component.day), 1);
-      expect(result.start.get(Component.hour), 20);
+      expect(result.start.get(Component.hour), eveningHour);
     });
     testSingleCase(en.casual, "yesterday afternoon", DateTime(2016, 10 , 1),
         (ParsedResult result, String text) {
@@ -313,7 +314,7 @@ import '../test_util.dart';
       expect(result.start.get(Component.year), 2016);
       expect(result.start.get(Component.month), 10);
       expect(result.start.get(Component.day), 2);
-      expect(result.start.get(Component.hour), 6);
+      expect(result.start.get(Component.hour), morningHour);
     });
     testSingleCase(
         en.casual, "this afternoon at 3", DateTime(2016, 10 , 1, 8),
@@ -342,9 +343,9 @@ import '../test_util.dart';
       expect(result.start.get(Component.year), 2020);
       expect(result.start.get(Component.month), 1);
       expect(result.start.get(Component.day), 1);
-      expect(result.start.get(Component.hour), 6);
+      expect(result.start.get(Component.hour), morningHour);
       expect(result.start.get(Component.timezoneOffset),0);
-      expectToBeDate(result.start,DateTime.parse ("2020-01-01T06:00:00.000Z"));
+      expectToBeDate(result.start,DateTime.parse ("2020-01-01T0${morningHour}:00:00.000Z"));
     });
     testSingleCase(en.casual, "Jan 1, 2020 Evening JST",
         (ParsedResult result, String text) {
@@ -352,10 +353,10 @@ import '../test_util.dart';
       expect(result.start.get(Component.year), 2020);
       expect(result.start.get(Component.month), 1);
       expect(result.start.get(Component.day), 1);
-      expect(result.start.get(Component.hour), 20);
+      expect(result.start.get(Component.hour), eveningHour);
       expect(result.start.get(Component.timezoneOffset),540);
       expectToBeDate(result.start,
-          DateTime.parse("2020-01-01T20:00:00+0900"));
+          DateTime.parse("2020-01-01T${eveningHour}:00:00+0900"));
     });
   });
   test("Test - Random negative text", () {

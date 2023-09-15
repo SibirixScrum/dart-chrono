@@ -1,4 +1,5 @@
 import 'package:chrono/locales/en/index.dart' as en;
+import 'package:chrono/ported/CustomValues.dart';
 import 'package:chrono/types.dart';
 import "package:flutter_test/flutter_test.dart";
 
@@ -231,8 +232,8 @@ import '../test_util.dart';
       expect(result.start.get(Component.month), 4);
       expect(result.start.get(Component.day), 21);
       expect(result.start.get(Component.weekday), 2);
-      expect(result.start.get(Component.hour), 6);
-      expectToBeDate(result.start , DateTime(2015, 4, 21, 6));
+      expect(result.start.get(Component.hour), morningHour);
+      expectToBeDate(result.start , DateTime(2015, 4, 21, morningHour));
     });
    });
    test("Test - Weekday Overlap", () {
@@ -357,7 +358,7 @@ import '../test_util.dart';
       expect(result.start.isCertain(Component.month), false);
       expect(result.start.isCertain(Component.year), false);
       expect(result.start.isCertain(Component.weekday), true);
-      expectToBeDate(result.start , DateTime(2021, 8 , 22, 6));
+      expectToBeDate(result.start , DateTime(2021, 8 , 22, morningHour));
     });
      testSingleCase(
         en.casual,
