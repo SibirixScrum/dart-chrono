@@ -45,7 +45,8 @@ class RUMonthNameParser extends AbstractParserWithWordBoundaryChecking {
     final monthName = match.matches[MONTH_NAME_GROUP]!.toLowerCase();
     // skip some unlikely words "янв", "фер", ..
     if (match[0].length <= 3 &&
-        !FULL_MONTH_NAME_DICTIONARY.containsKey(monthName)) {
+        !FULL_MONTH_NAME_DICTIONARY.containsKey(monthName) &&
+        !context.text.endsWith(match[0])) {
       return null;
     }
     final result =
