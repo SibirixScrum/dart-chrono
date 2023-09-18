@@ -109,11 +109,11 @@ void main() {
           expect(result.text, "в апр 99 в 13:40");
           expectToBeDate(result.start, new DateTime(1999,4,1,13,40));
         });
-    testSingleCase(ru.casual, "в апр 25 года  13:40", new DateTime(2023, 9, 18),
+    testSingleCase(ru.casual, "в апр 25 года 13:40", new DateTime(2023, 9, 18),
             (ParsedResult result, String text) {
           expect(result.index, 0);
-          expect(result.text, "в апр 25 13:40");
-          expectToBeDate(result.start, new DateTime(2020,4,1,13,40));
+          expect(result.text, "в апр 25 года 13:40");
+          expectToBeDate(result.start, new DateTime(2025,4,1,13,40));
         });
   });
 }
