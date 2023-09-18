@@ -43,9 +43,9 @@ class ForwardDateRefiner implements Refiner {
           //     day: result.start.get(Component.weekday)!.toInt() +
           //         7); // day(result.start.get(Component.weekday)!.toInt() + 7);
         } else {
-          refMoment = refMoment.copyWith(
-              day: (result.start.get(Component.weekday) as num)
-                  .toInt()); //refMoment.day((result.start.get(Component.weekday) as num));
+          final difference =
+              refMoment.weekday % 7 - result.start.get(Component.weekday)!.toInt();
+          refMoment = refMoment.add(Duration(days: -difference));
         }
         result.start.imply(Component.day, refMoment.day);
         result.start.imply(Component.month, refMoment.month);

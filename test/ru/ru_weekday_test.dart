@@ -59,5 +59,11 @@ void main() {
       expect(result.text, "В понедельник");
       expectToBeDate(result.start, new DateTime(2012, 8, 13, 12));
     });
+    testSingleCase(ru.casual, "пятница", new DateTime(2023, 9, 18),
+        ParsingOptionDummy(forwardDate: true), (ParsedResult result, String text) {
+          expect(result.index, 0);
+          expect(result.text, "пятница");
+          expectToBeDate(result.start, new DateTime(2023, 9, 22, 12));
+        });
   });
 }
