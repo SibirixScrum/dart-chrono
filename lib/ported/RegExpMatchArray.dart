@@ -27,12 +27,11 @@ extension RegExpUtil on RegExp {
     final index = matches.first.start;
     // print(matches.map((e) => e.groups(groupIndices)));
     return RegExpMatchArray(
-        matches
-            .toList()
+        matches.first.groups(List.generate(matches.first.groupCount+1, (index) => index))
             // .map((e) => e[0])
-            .expand((element) => element.groups(
+         /*   .expand((element) => element.groups(
                 List.generate(element.groupCount + 1, (index) => index)))
-            .toList(),
+            .toList()*/,
         str,
         index);
   }

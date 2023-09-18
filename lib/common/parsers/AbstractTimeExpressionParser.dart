@@ -4,7 +4,7 @@ import "package:chrono/ported/StringUtils.dart";
 
 import "../../chrono.dart" show Parser, ParsingContext;
 import "../../results.dart"
-    show ParsingComponents, ParsingResult, ReferenceWithTimezone;
+    show ParsingComponents, ParsingResult;
 import "../../types.dart" show Component, Meridiem;
 
 // prettier-ignore
@@ -75,11 +75,11 @@ abstract class AbstractTimeExpressionParser implements Parser {
   }
 
   String primarySuffix() {
-    return '''(?=\\W|\$)''';
+    return '''(?!/)(?=\\W|\$)''';
   }
 
   String followingSuffix() {
-    return '''(?=\\W|\$)''';
+    return '''(?!/)(?=\\W|\$)''';
   }
 
   RegExp pattern(ParsingContext context) {
@@ -105,14 +105,12 @@ abstract class AbstractTimeExpressionParser implements Parser {
     // Pattern "456-12", "2022-12" should not be time without proper context
     if (RegExp(r'^\d{3,4}').firstMatch(text) != null &&
         followingMatch != null &&
-        RegExp(r'^\s*([+-])\s*\d{2,4}$').firstMatch(followingMatch[0]) !=
-            null) {
+        followingMatch[0].match(RegExp(r'^\s*([+-])\s*\d{2,4}$'))) {
       return null;
     }
     if (followingMatch == null ||
         // Pattern "YY.YY -XXXX" is more like timezone offset
-        RegExp(r'^\s*([+-])\s*\d{3,4}$').firstMatch(followingMatch[0]) !=
-            null) {
+        followingMatch[0].match(RegExp(r'^\s*([+-])\s*\d{3,4}$'))) {
       return this.checkAndReturnWithoutFollowingPattern(result);
     }
     result.end =
