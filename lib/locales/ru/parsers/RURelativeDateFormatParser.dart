@@ -1,3 +1,4 @@
+import "package:chrono/ported/DateTime.dart";
 import "package:chrono/ported/RegExpMatchArray.dart";
 import "package:chrono/types.dart";
 
@@ -38,8 +39,13 @@ class RURelativeDateFormatParser
     if (modifier == "на следующей" || modifier == "в следующем") {
       final Map<String, int> timeUnits = {};
       timeUnits[timeunit] = 1;
+      final refWithFirstDayOfMonth = context.reference;
+      if(timeunit == "month" || timeunit == "year") {
+        refWithFirstDayOfMonth.instant =
+            refWithFirstDayOfMonth.instant.withLowerFieldsNullified(timeunit);
+      }
       return ParsingComponents.createRelativeFromReference(
-          context.reference, timeUnits);
+          refWithFirstDayOfMonth, timeUnits);
     }
     if (modifier == "в прошлом" || modifier == "на прошлой") {
       final Map<String, int> timeUnits = {};

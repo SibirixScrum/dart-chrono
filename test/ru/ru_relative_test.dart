@@ -61,7 +61,7 @@ void main() {
       expectToBeDate(result.start, new DateTime(2016, 10, 8, 12));
     });
     testSingleCase(
-        ru.casual, "в следующем месяце", new DateTime(2016, 10, 1, 12),
+        ru.casual, "в следующем месяце", new DateTime(2016, 10, 10, 12),
         (ParsedResult result, String text) {
       expect(result.index, 0);
       expect(result.text, text);
@@ -81,11 +81,11 @@ void main() {
       expect(result.text, text);
       expectToBeDate(result.start, new DateTime(2017, 1, 1, 12));
     });
-    testSingleCase(ru.casual, "в следующем году", new DateTime(2016, 10, 1, 12),
+    testSingleCase(ru.casual, "в следующем году", new DateTime(2016, 10, 10, 12),
         (ParsedResult result, String text) {
       expect(result.index, 0);
       expect(result.text, text);
-      expectToBeDate(result.start, new DateTime(2017, 10, 1, 12));
+      expectToBeDate(result.start, new DateTime(2017, 1, 1, 12));
     });
   });
 }
