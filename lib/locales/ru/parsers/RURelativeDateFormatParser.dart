@@ -44,6 +44,7 @@ class RURelativeDateFormatParser
     if (modifier == "в прошлом" || modifier == "на прошлой") {
       final Map<String, int> timeUnits = {};
       timeUnits[timeunit] = -1;
+      context.option = ParsingOption(forwardDate: false,timezones: context.option?.timezones,debug: context.option?.debug);
       return ParsingComponents.createRelativeFromReference(
           context.reference, timeUnits);
     }

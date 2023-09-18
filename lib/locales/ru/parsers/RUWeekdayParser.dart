@@ -58,7 +58,12 @@ class RUWeekdayParser extends AbstractParserWithWordBoundaryChecking {
         modifierWord == "этой" ||
         modifierWord == "это") {
       modifier = "this";
+      if(context.refDate.weekday == weekday){
+        context.option = ParsingOption(forwardDate: false,timezones: context.option?.timezones,debug: context.option?.debug);
+      }
     }
+    //if refDate = today -> disable forward date
+
     return createParsingComponentsAtWeekday(
         context.reference, Weekday.values[weekday!.toInt()], modifier);
   }
