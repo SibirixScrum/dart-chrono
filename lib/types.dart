@@ -96,7 +96,7 @@ abstract class ParsedResult {
   /**
    * Create a javascript date object (from the result.start).
    */
-  DateTime date();
+  DateTime date({List<Component>? strictOnComponent});
 }
 
 /**
@@ -121,7 +121,7 @@ abstract class ParsedComponents {
   /**
    *
    */
-  DateTime date();
+  DateTime date({List<Component>? strictOnComponent});
 }
 
 enum Component {

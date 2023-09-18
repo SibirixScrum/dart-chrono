@@ -18,13 +18,18 @@ class ReferenceWithTimezone {
   dynamic /*num? || Undefined*/ timezoneOffset;
 
   ReferenceWithTimezone([dynamic /* ParsingReference | Date */ input]) {
-    input = input ?? new DateTime.now();
+    input = input ?? DateTime.now();
     if (input is DateTime) {
       instant = input;
-      timezoneOffset = Undefined(); //used as undefined. because checks reference.timezoneOffset !== null is typescript is true if it is indefined
-    } else if (input is ParsingReference){
+      timezoneOffset =
+          Undefined(); //used as undefined. because checks reference.timezoneOffset !== null is typescript is true if it is indefined
+    } else if (input is ParsingReference) {
       instant = input.instant ?? DateTime.now();
-      timezoneOffset = toTimezoneOffset(input.timezone is Undefined ? input.instant?.timeZoneOffset.inMinutes : input.timezone, instant);
+      timezoneOffset = toTimezoneOffset(
+          input.timezone is Undefined
+              ? input.instant?.timeZoneOffset.inMinutes
+              : input.timezone,
+          instant);
     }
   }
 
@@ -87,6 +92,7 @@ class ParsingComponents implements ParsedComponents {
     imply(Component.millisecond, 0);
   }
 
+  @override
   num? get(Component component) {
     if (knownValues.keys.contains(component)) {
       return knownValues[component];
@@ -97,6 +103,7 @@ class ParsingComponents implements ParsedComponents {
     return null;
   }
 
+  @override
   bool isCertain(Component component) {
     return knownValues.keys.contains(component);
   }
@@ -127,7 +134,7 @@ class ParsingComponents implements ParsedComponents {
   }
 
   ParsingComponents clone() {
-    final component = new ParsingComponents(reference, null);
+    final component = ParsingComponents(reference, null);
     component.knownValues = {};
     component.impliedValues = {};
     for (final key in knownValues.keys) {
@@ -162,7 +169,7 @@ class ParsingComponents implements ParsedComponents {
   }
 
   bool isValidDate() {
-    final date = dateWithoutTimezoneAdjustment();
+    final date = dateWithoutTimezoneAdjustment(strictOnComponent: []);
     if (date.year != get(Component.year)) return false;
     if (date.month != get(Component.month)!.toInt()) return false;
     if (date.day != get(Component.day)) return false;
@@ -173,6 +180,7 @@ class ParsingComponents implements ParsedComponents {
     return true;
   }
 
+  @override
   toString() {
     return '''[ParsingComponents {knownValues: ${knownValues}, impliedValues: ${impliedValues}}, reference: ${reference}]''';
   }
@@ -181,28 +189,38 @@ class ParsingComponents implements ParsedComponents {
   //   return dayjs(this.date());
   // }
 
-  DateTime date() {
-    final date = dateWithoutTimezoneAdjustment();
+  @override
+  DateTime date({List<Component>? strictOnComponent}) {
+    strictOnComponent = strictOnComponent ?? [];
+    final date =
+        dateWithoutTimezoneAdjustment(strictOnComponent: strictOnComponent);
     final timezoneAdjustment = reference.getSystemTimezoneAdjustmentMinute(
         date, get(Component.timezoneOffset));
-    return new DateTime.fromMillisecondsSinceEpoch(
+    return DateTime.fromMillisecondsSinceEpoch(
         date.millisecondsSinceEpoch + timezoneAdjustment * 60000);
   }
 
-  DateTime dateWithoutTimezoneAdjustment() {
+  DateTime dateWithoutTimezoneAdjustment(
+      {required List<Component> strictOnComponent}) {
     final now = DateTime.now();
-    final date = new DateTime(
-        get(Component.year)?.toInt() ?? now.year,
-        get(Component.month) != null
-            ? get(Component.month)!.toInt()
-            : now.month,
-        get(Component.day)?.toInt() ?? now.day,
-        get(Component.hour)?.toInt() ?? now.hour,
-        get(Component.minute)?.toInt() ?? now.minute,
-        get(Component.second)?.toInt() ?? now.second,
-        get(Component.millisecond)?.toInt() ?? now.millisecond);
+    final date = DateTime(
+        strictOnComponent.contains(Component.year) ? getStrictValue(Component.year, 1990) : (get(Component.year)?.toInt() ?? now.year),
+        strictOnComponent.contains(Component.month) ? getStrictValue(Component.month, 1) : (get(Component.month)?.toInt() ?? now.year),
+        strictOnComponent.contains(Component.day) ? getStrictValue(Component.day, 1) : (get(Component.day)?.toInt() ?? now.year),
+        strictOnComponent.contains(Component.hour) ? getStrictValue(Component.hour, 0) : (get(Component.hour)?.toInt() ?? now.year),
+        strictOnComponent.contains(Component.minute) ? getStrictValue(Component.minute, 0) : (get(Component.minute)?.toInt() ?? now.year),
+        strictOnComponent.contains(Component.second) ? getStrictValue(Component.second, 0) : (get(Component.second)?.toInt() ?? now.year),
+        strictOnComponent.contains(Component.millisecond) ? getStrictValue(Component.millisecond, 0) : (get(Component.millisecond)?.toInt() ?? now.year),
+    );
     // date.setFullYear(this.get(Component.year));
     return date;
+  }
+  int getStrictValue(Component component,int defaultValue){
+    if(isCertain(component)){
+      return get(component)!.toInt();
+    }else{
+      return defaultValue;
+    }
   }
 
   static List<String> allFragmentKeys = [
@@ -285,13 +303,13 @@ class ParsingComponents implements ParsedComponents {
     ));
     // date = date.add(fragments[key].toInt(),key);
     // }
-    final components = new ParsingComponents(reference, null);
+    final components = ParsingComponents(reference, null);
     if (intFragments["hour"] != null ||
         intFragments["minute"] != null ||
         intFragments["second"] != null) {
       assignSimilarTime(components, date);
       assignSimilarDate(components, date);
-      if (reference.timezoneOffset !=null) {
+      if (reference.timezoneOffset != null) {
         components.assign(Component.timezoneOffset,
             reference.instant.timeZoneOffset.inMinutes);
       }
@@ -328,16 +346,21 @@ class ParsingComponents implements ParsedComponents {
 }
 
 class ParsingResult implements ParsedResult {
+  @override
   late DateTime refDate;
 
+  @override
   int index;
 
+  @override
   String text;
 
   ReferenceWithTimezone reference;
 
+  @override
   late ParsingComponents start;
 
+  @override
   ParsingComponents? end;
 
   ParsingResult(this.reference, this.index, this.text,
@@ -346,21 +369,23 @@ class ParsingResult implements ParsedResult {
     refDate = reference.instant;
     index = index;
     text = text;
-    this.start = start ?? new ParsingComponents(reference, null);
+    this.start = start ?? ParsingComponents(reference, null);
     this.end = end;
   }
 
   clone() {
-    final result = new ParsingResult(reference, index, text);
+    final result = ParsingResult(reference, index, text);
     result.start = start.clone();
     result.end = end != null ? end!.clone() : null;
     return result;
   }
 
-  DateTime date() {
-    return start.date();
+  @override
+  DateTime date({List<Component>? strictOnComponent}) {
+    return start.date(strictOnComponent: strictOnComponent);
   }
 
+  @override
   toString() {
     return '''[ParsingResult {index: ${index}, text: \'${text}\', ...}]''';
   }
