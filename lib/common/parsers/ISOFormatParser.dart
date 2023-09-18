@@ -64,8 +64,21 @@ class ISOFormatParser extends AbstractParserWithWordBoundaryChecking {
       year += 1900;
     }
     components[Component.year] = year;
-    components[Component.month] = parseIntTs(match[MONTH_NUMBER_GROUP]);
-    components[Component.day] = parseIntTs(match[DATE_NUMBER_GROUP]);
+    int month = parseIntTs(match[MONTH_NUMBER_GROUP]);
+    int day = parseIntTs(match[DATE_NUMBER_GROUP]);
+    if (month < 1 || month > 12) {
+      if (month > 12) {
+        if (day >= 1 && day <= 12 && month <= 31) {
+          final temp = month;
+          month = day;
+          day = temp;
+        } else {
+          return null;
+        }
+      }
+    }
+    components[Component.month] = month;
+    components[Component.day] = day;
     if (match[HOUR_NUMBER_GROUP].isNotEmpty) {
       components[Component.hour] = parseIntTs(match[HOUR_NUMBER_GROUP]);
       components[Component.minute] = parseIntTs(match[MINUTE_NUMBER_GROUP]);

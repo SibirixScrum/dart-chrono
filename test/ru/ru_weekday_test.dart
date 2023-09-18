@@ -110,4 +110,21 @@ void main() {
           expectToBeDate(result.start, new DateTime(2023, 9, 17, 12));
         });
   });
+  test("Test - time period",(){
+    testSingleCase(ru.casual, "с пн по вт", new DateTime(2023, 9, 18,13,50),
+        ParsingOptionDummy(forwardDate: true), (ParsedResult result, String text) {
+          expectToBeDate(result.start, new DateTime(2023, 9, 25, 12));
+          expectToBeDate(result.end!, new DateTime(2023, 9, 26, 12));
+        });
+    testSingleCase(ru.casual, "пн - вт", new DateTime(2023, 9, 18,13,50),
+        ParsingOptionDummy(forwardDate: true), (ParsedResult result, String text) {
+          expectToBeDate(result.start, new DateTime(2023, 9, 25, 12));
+          expectToBeDate(result.end!, new DateTime(2023, 9, 26, 12));
+        });
+    testSingleCase(ru.casual, "пн-вт", new DateTime(2023, 9, 18,13,50),
+        ParsingOptionDummy(forwardDate: true), (ParsedResult result, String text) {
+          expectToBeDate(result.start, new DateTime(2023, 9, 25, 12));
+          expectToBeDate(result.end!, new DateTime(2023, 9, 26, 12));
+        });
+  });
 }

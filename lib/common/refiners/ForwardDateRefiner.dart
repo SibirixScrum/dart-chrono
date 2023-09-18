@@ -56,13 +56,14 @@ class ForwardDateRefiner implements Refiner {
         if (result.end != null && result.end!.isOnlyWeekdayComponent()) {
           // Adjust date to the coming week
           if (refMoment.weekday > result.end!.get(Component.weekday)!.toInt()) {
-            refMoment = refMoment.copyWith(
-                day: result.end!.get(Component.weekday)!.toInt() +
-                    7); // refMoment.day(result.end!.get(Component.weekday)!.toInt() + 7); //todo added (Component.weekday)!
+            final difference =
+                refMoment.weekday % 7 - result.end!.get(Component.weekday)!.toInt();
+            refMoment = refMoment.add(Duration(days: 7));
+            refMoment = refMoment.add(Duration(days: -difference));
           } else {
-            refMoment = refMoment.copyWith(
-                day: (result.end!.get(Component.weekday) as num)
-                    .toInt()); //refMoment.day((result.end!.get(Component.weekday) as num));
+            final difference =
+                refMoment.weekday % 7 - result.end!.get(Component.weekday)!.toInt();
+            refMoment = refMoment.add(Duration(days: -difference));
           }
           result.end!.imply(Component.day, refMoment.day);
           result.end!.imply(Component.month, refMoment.month);
