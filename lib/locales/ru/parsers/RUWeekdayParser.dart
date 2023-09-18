@@ -12,7 +12,7 @@ import "../../../utils/pattern.dart" show matchAnyPattern;
 import "../constants.dart" show REGEX_PARTS, WEEKDAY_DICTIONARY;
 
 final PATTERN = RegExp(
-    '''(?:(?:,|\\(|（)\\s*)?(?:в\\s*?)?(?:(эту|этот|прошлый|прошлую|следующий|следующую|следующего)\\s*)?(${matchAnyPattern(WEEKDAY_DICTIONARY)})(?:\\s*(?:,|\\)|）))?(?:\\s*на\\s*(этой|прошлой|следующей)\\s*неделе)?${REGEX_PARTS["rightBoundary"]}''',
+    '''(?:(?:,|\\(|（)\\s*)?(?:в\\s*?)?(?:(эту|этот|это|этой|прошлый|прошлую|прошлой|прошлая|прошлое|прошлого|следующий|следующую|следующего|следующей|следующее|следующая)\\s*)?(${matchAnyPattern(WEEKDAY_DICTIONARY)})(?:\\s*(?:,|\\)|）))?(?:\\s*на\\s*(этой|прошлой|следующей)\\s*неделе)?${REGEX_PARTS["rightBoundary"]}''',
     caseSensitive: !REGEX_PARTS["flags"]!.contains("i"),
     dotAll: REGEX_PARTS["flags"]!.contains("d"),
     multiLine: REGEX_PARTS["flags"]!.contains("m"),
@@ -40,16 +40,23 @@ class RUWeekdayParser extends AbstractParserWithWordBoundaryChecking {
     var modifier = null;
     if (modifierWord == "прошлый" ||
         modifierWord == "прошлую" ||
-        modifierWord == "прошлой") {
+        modifierWord == "прошлой" ||
+        modifierWord == "прошлая" ||
+        modifierWord == "прошлое" ||
+        modifierWord == "прошлого") {
       modifier = "last";
+      context.option = ParsingOption(forwardDate: false,timezones: context.option?.timezones,debug: context.option?.debug);
     } else if (modifierWord == "следующий" ||
         modifierWord == "следующую" ||
         modifierWord == "следующей" ||
-        modifierWord == "следующего") {
+        modifierWord == "следующего" ||
+        modifierWord == "следующее" ||
+        modifierWord == "следующая" ) {
       modifier = "next";
     } else if (modifierWord == "этот" ||
         modifierWord == "эту" ||
-        modifierWord == "этой") {
+        modifierWord == "этой" ||
+        modifierWord == "это") {
       modifier = "this";
     }
     return createParsingComponentsAtWeekday(

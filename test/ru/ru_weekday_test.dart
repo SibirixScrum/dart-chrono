@@ -66,4 +66,48 @@ void main() {
           expectToBeDate(result.start, new DateTime(2023, 9, 22, 12));
         });
   });
+  test("Test - turn off forward date if 'last' keyword met",(){
+    testSingleCase(ru.casual, "прошлый пн", new DateTime(2023, 9, 18),
+        ParsingOptionDummy(forwardDate: true), (ParsedResult result, String text) {
+          expect(result.index, 0);
+          expect(result.text, "прошлый пн");
+          expectToBeDate(result.start, new DateTime(2023, 9, 11, 12));
+        });
+    testSingleCase(ru.casual, "прошлый вт", new DateTime(2023, 9, 18),
+        ParsingOptionDummy(forwardDate: true), (ParsedResult result, String text) {
+          expect(result.index, 0);
+          expect(result.text, "прошлый вт");
+          expectToBeDate(result.start, new DateTime(2023, 9, 12, 12));
+        });
+    testSingleCase(ru.casual, "прошлая ср", new DateTime(2023, 9, 18),
+        ParsingOptionDummy(forwardDate: true), (ParsedResult result, String text) {
+          expect(result.index, 0);
+          expect(result.text, "прошлая ср");
+          expectToBeDate(result.start, new DateTime(2023, 9, 13, 12));
+        });
+    testSingleCase(ru.casual, "прошлый чт", new DateTime(2023, 9, 18),
+        ParsingOptionDummy(forwardDate: true), (ParsedResult result, String text) {
+          expect(result.index, 0);
+          expect(result.text, "прошлый чт");
+          expectToBeDate(result.start, new DateTime(2023, 9, 14, 12));
+        });
+    testSingleCase(ru.casual, "прошлая пт", new DateTime(2023, 9, 18),
+        ParsingOptionDummy(forwardDate: true), (ParsedResult result, String text) {
+          expect(result.index, 0);
+          expect(result.text, "прошлая пт");
+          expectToBeDate(result.start, new DateTime(2023, 9, 15, 12));
+        });
+    testSingleCase(ru.casual, "прошлая сб", new DateTime(2023, 9, 18),
+        ParsingOptionDummy(forwardDate: true), (ParsedResult result, String text) {
+          expect(result.index, 0);
+          expect(result.text, "прошлая сб");
+          expectToBeDate(result.start, new DateTime(2023, 9, 16, 12));
+        });
+    testSingleCase(ru.casual, "прошлое вс", new DateTime(2023, 9, 18),
+        ParsingOptionDummy(forwardDate: true), (ParsedResult result, String text) {
+          expect(result.index, 0);
+          expect(result.text, "прошлое вс");
+          expectToBeDate(result.start, new DateTime(2023, 9, 17, 12));
+        });
+  });
 }
