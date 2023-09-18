@@ -70,4 +70,12 @@ void main() {
       expectToBeDate(result.start, new DateTime(1996, 8, 1, 12));
     });
   });
+  test("Test - year 20хх's parsing", () {
+    testSingleCase(ru.casual, "авг 30 года", new DateTime(2012, 7, 10),
+            (ParsedResult result, String text) {
+          expect(result.index, 0);
+          expect(result.text, "авг 30 года");
+          expectToBeDate(result.start, new DateTime(2030, 8, 1, 12));
+        });
+  });
 }

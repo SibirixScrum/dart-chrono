@@ -6,7 +6,7 @@
  */
 num findMostLikelyADYear(num yearNumber) {
   if (yearNumber < 100) {
-    if (yearNumber > 50) {
+    if (yearNumber >= 50) {
       yearNumber = yearNumber + 1900;
     } else {
       yearNumber = yearNumber + 2000;

@@ -334,9 +334,10 @@ int parseOrdinalNumberPattern(String match) {
 
 //-----------------------------
 const year = "(?:\\s+(?:году|года|год|г|г.))?";
+const yearNotNull = "(?:\\s+(?:году|года|год|г|г.))";
 
 final YEAR_PATTERN =
-    '''(?:[1-9][0-9]{0,3}${year}\\s*(?:н.э.|до н.э.|н. э.|до н. э.)|[1-2][0-9]{3}${year}|[5-9][0-9]${year})''';
+    '''(?:[1-9][0-9]{0,3}${year}\\s*(?:н.э.|до н.э.|н. э.|до н. э.)|[1-2][0-9]{3}${year}|[5-9][0-9]${year}|[0-9][0-9]${yearNotNull})''';
 
 num parseYear(String match) {
   if (RegExp(r'(год|года|г|г.)', caseSensitive: false).firstMatch(match) !=
