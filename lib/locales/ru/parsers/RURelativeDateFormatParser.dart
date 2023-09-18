@@ -52,7 +52,7 @@ class RURelativeDateFormatParser
     // This week
     if (timeunit.match(RegExp(r'week', caseSensitive: false))) {
       date = date.subtract(
-          Duration(days: date.weekday%7)); //  date = date.add(-date.get("d"), "d");
+          Duration(days: date.weekday-1)); //  date = date.add(-date.get("d"), "d");
       components.imply(Component.day, date.day);
       components.imply(Component.month, date.month );
       components.imply(Component.year, date.year);
