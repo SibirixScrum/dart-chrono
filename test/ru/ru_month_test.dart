@@ -101,7 +101,7 @@ void main() {
             (ParsedResult result, String text) {
           expect(result.index, 0);
           expect(result.text, "в апр 50 13:40");
-          expectToBeDate(result.start, new DateTime(1950,4,1,13,40));
+          expectToBeDate(result.start, new DateTime(2050,4,1,13,40));
         });
     testSingleCase(ru.casual, "в апр 99 в 13:40", new DateTime(2023, 9, 18),
             (ParsedResult result, String text) {
