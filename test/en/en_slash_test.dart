@@ -96,6 +96,15 @@ import '../test_util.dart';
       expect(result.text, "Friday 12-30-16");
       expectToBeDate(result.start,DateTime(2016, 12 , 30, 12));
     });
+   testSingleCase(en.strict, "80-12-31",
+           (ParsedResult result, String text) {
+         expectToBeDate(result.start,DateTime(1980, 12 , 31, 12));
+       });
+   testSingleCase(en.strict, "Friday 12-30-16",
+           (ParsedResult result, String text) {
+         expect(result.text, "Friday 12-30-16");
+         expectToBeDate(result.start,DateTime(2016, 12 , 30, 12));
+       });
   });
   // test("Test - Single Expression Little-Endian", () {
   //   testSingleCase(en.casual.en.GB, "8/10/2012", DateTime(2012, 7, 10),
@@ -169,6 +178,7 @@ import '../test_util.dart';
    testUnexpectedResult(en.casual, "06/-31/2022");
    testUnexpectedResult(en.casual, "18/13/2022");
    testUnexpectedResult(en.casual, "15/28/2022");
+   testUnexpectedResult(en.casual, "49-11-30");
   });
   test("Test - forward dates only option", () {
    testSingleCase(

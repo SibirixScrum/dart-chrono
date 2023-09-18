@@ -21,7 +21,7 @@ import "AbstractParserWithWordBoundary.dart"
 
 // prettier-ignore
 final PATTERN = new RegExp(
-    "([0-9]{4})\\-([0-9]{1,2})\\-([0-9]{1,2})" +
+    "([0-9]{2,4})\\-([0-9]{1,2})\\-([0-9]{1,2})" +
         "(?:T" +
         "([0-9]{1,2}):([0-9]{1,2})" +
         "(?:" +
@@ -54,18 +54,27 @@ class ISOFormatParser extends AbstractParserWithWordBoundaryChecking {
   // }
 
   innerExtract(ParsingContext context, RegExpMatchArray match) {
-    final Map<Component,num> components = {};
-    components[Component.year] = parseIntTs(match[YEAR_NUMBER_GROUP]);
+    final Map<Component, num> components = {};
+    int year = parseIntTs(match[YEAR_NUMBER_GROUP]);
+    if (year < 50 || year >= 100 && year <= 999) {
+      //most likely not year
+      return null;
+    }
+    if (year >= 50 && year <= 99) {
+      year += 1900;
+    }
+    components[Component.year] = year;
     components[Component.month] = parseIntTs(match[MONTH_NUMBER_GROUP]);
     components[Component.day] = parseIntTs(match[DATE_NUMBER_GROUP]);
-    if (match[HOUR_NUMBER_GROUP].isNotEmpty ) {
+    if (match[HOUR_NUMBER_GROUP].isNotEmpty) {
       components[Component.hour] = parseIntTs(match[HOUR_NUMBER_GROUP]);
       components[Component.minute] = parseIntTs(match[MINUTE_NUMBER_GROUP]);
       if (match[SECOND_NUMBER_GROUP].isNotEmpty) {
         components[Component.second] = parseIntTs(match[SECOND_NUMBER_GROUP]);
       }
       if (match[MILLISECOND_NUMBER_GROUP].isNotEmpty) {
-        components[Component.millisecond] = parseIntTs(match[MILLISECOND_NUMBER_GROUP]);
+        components[Component.millisecond] =
+            parseIntTs(match[MILLISECOND_NUMBER_GROUP]);
       }
       if (match[TZD_HOUR_OFFSET_GROUP].isEmpty) {
         components[Component.timezoneOffset] = 0;
