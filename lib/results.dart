@@ -218,7 +218,7 @@ class ParsingComponents implements ParsedComponents {
         strictOnComponent.contains(Component.year) ? getStrictValue(Component.year, 1990) : (get(Component.year)?.toInt() ?? now.year),
         strictOnComponent.contains(Component.month) ? getStrictValue(Component.month, 1) : (get(Component.month)?.toInt() ?? now.year),
         strictOnComponent.contains(Component.day) ? getStrictValue(Component.day, 1) : (get(Component.day)?.toInt() ?? now.year),
-        strictOnComponent.contains(Component.hour) ? getStrictValue(Component.hour, 0) : (get(Component.hour)?.toInt() ?? now.year),
+        strictOnComponent.contains(Component.hour) ? getStrictValue(Component.hour, isCertain(Component.casualReference) ? (get(Component.hour)?.toInt() ?? 0) : 0) : (get(Component.hour)?.toInt() ?? now.year),
         strictOnComponent.contains(Component.minute) ? getStrictValue(Component.minute, 0) : (get(Component.minute)?.toInt() ?? now.year),
         strictOnComponent.contains(Component.second) ? getStrictValue(Component.second, 0) : (get(Component.second)?.toInt() ?? now.year),
         strictOnComponent.contains(Component.millisecond) ? getStrictValue(Component.millisecond, 0) : (get(Component.millisecond)?.toInt() ?? now.year),

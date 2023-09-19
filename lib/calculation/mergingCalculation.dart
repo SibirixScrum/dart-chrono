@@ -62,6 +62,9 @@ ParsingComponents mergeDateTimeComponent(
         Component.second, timeComponent.get(Component.second)!);
     dateTimeComponent.imply(
         Component.millisecond, timeComponent.get(Component.millisecond)!);
+    if(timeComponent.isCertain(Component.casualReference)){
+      dateTimeComponent.assign(Component.casualReference, timeComponent.get(Component.casualReference)!);
+    }
   }
   if (timeComponent.isCertain(Component.timezoneOffset)) {
     dateTimeComponent.assign(
