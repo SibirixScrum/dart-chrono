@@ -137,6 +137,16 @@ enum Component {
   millisecond,
   meridiem,
   timezoneOffset,
+  casualReference // needed to distinguish "morning", which is "09:00", from implied and known value
+}
+
+enum CasualReference{
+  morning,
+  noon,
+  afternoon,
+  evening,
+  tonight,
+  midnight
 }
 
 enum Meridiem { AM, PM }

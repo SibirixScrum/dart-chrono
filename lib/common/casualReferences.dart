@@ -1,7 +1,7 @@
 import 'package:chrono/ported/CustomValues.dart';
 
 import "../results.dart" show ParsingComponents, ReferenceWithTimezone, Undefined;
-import "../types.dart" show Component, Meridiem;
+import "../types.dart" show CasualReference, Component, Meridiem;
 import "../utils/dayjs.dart"
     show
         assignSimilarDate,
@@ -81,6 +81,7 @@ ParsingComponents evening(ReferenceWithTimezone reference, [implyHour = eveningH
   final component = new ParsingComponents(reference, {});
   component.imply(Component.meridiem, Meridiem.PM.index);
   component.imply(Component.hour, implyHour);
+  component.assign(Component.casualReference, CasualReference.evening.index);
   return component;
 }
 
@@ -92,6 +93,7 @@ ParsingComponents yesterdayEvening(ReferenceWithTimezone reference,
   assignSimilarDate(component, targetDate);
   component.imply(Component.hour, implyHour);
   component.imply(Component.meridiem, Meridiem.PM.index);
+  component.assign(Component.casualReference, CasualReference.evening.index);
   return component;
 }
 
@@ -108,6 +110,7 @@ ParsingComponents midnight(ReferenceWithTimezone reference) {
   component.imply(Component.minute, 0);
   component.imply(Component.second, 0);
   component.imply(Component.millisecond, 0);
+  component.assign(Component.casualReference, CasualReference.midnight.index);
   return component;
 }
 
@@ -118,6 +121,7 @@ ParsingComponents morning(ReferenceWithTimezone reference, [implyHour = morningH
   component.imply(Component.minute, 0);
   component.imply(Component.second, 0);
   component.imply(Component.millisecond, 0);
+  component.assign(Component.casualReference, CasualReference.morning.index);
   return component;
 }
 
@@ -128,6 +132,7 @@ ParsingComponents afternoon(ReferenceWithTimezone reference, [implyHour = 15]) {
   component.imply(Component.minute, 0);
   component.imply(Component.second, 0);
   component.imply(Component.millisecond, 0);
+  component.assign(Component.casualReference, CasualReference.afternoon.index);
   return component;
 }
 
@@ -138,5 +143,6 @@ ParsingComponents noon(ReferenceWithTimezone reference) {
   component.imply(Component.minute, 0);
   component.imply(Component.second, 0);
   component.imply(Component.millisecond, 0);
+  component.assign(Component.casualReference, CasualReference.noon.index);
   return component;
 }

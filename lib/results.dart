@@ -149,7 +149,18 @@ class ParsingComponents implements ParsedComponents {
   bool isOnlyDate() {
     return !isCertain(Component.hour) &&
         !isCertain(Component.minute) &&
-        !isCertain(Component.second);
+        !isCertain(Component.second) &&
+        get(Component.casualReference) == null;
+  }
+
+  bool isOnlyCasualRef() {
+    return !isCertain(Component.weekday) &&
+        !isCertain(Component.day) &&
+        !isCertain(Component.month) &&
+        !isCertain(Component.hour) &&
+        !isCertain(Component.minute) &&
+        !isCertain(Component.second) &&
+        isCertain(Component.casualReference);
   }
 
   bool isOnlyTime() {

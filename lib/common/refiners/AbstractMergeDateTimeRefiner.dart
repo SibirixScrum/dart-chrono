@@ -14,9 +14,26 @@ abstract class AbstractMergeDateTimeRefiner extends MergingRefiner {
   @override
   ParsingResult mergeResults(String textBetween, ParsingResult currentResult,
       ParsingResult nextResult, ParsingContext context) {
-    final result = currentResult.start.isOnlyDate()
-        ? mergeDateTimeResult(currentResult, nextResult)
-        : mergeDateTimeResult(nextResult, currentResult);
+    late ParsingResult result;
+    if(currentResult.start.isOnlyDate() &&
+        nextResult.start.isOnlyTime()){
+      result = mergeDateTimeResult(currentResult, nextResult);
+    }else if(
+    nextResult.start.isOnlyDate() &&
+        currentResult.start.isOnlyTime()
+    ){
+      result = mergeDateTimeResult(nextResult, currentResult);
+    } else if(
+    currentResult.start.isOnlyCasualRef() &&
+        !nextResult.start.isOnlyCasualRef()
+    ){
+      result = mergeDateTimeResult(currentResult, nextResult);
+    }else if(
+    !currentResult.start.isOnlyCasualRef() &&
+        nextResult.start.isOnlyCasualRef()
+    ){
+      result = mergeDateTimeResult(nextResult, currentResult);
+    }
     result.index = currentResult.index;
     result.text = currentResult.text + textBetween + nextResult.text;
     return result;
@@ -28,7 +45,11 @@ abstract class AbstractMergeDateTimeRefiner extends MergingRefiner {
     return (((currentResult.start.isOnlyDate() &&
                 nextResult.start.isOnlyTime()) ||
             (nextResult.start.isOnlyDate() &&
-                currentResult.start.isOnlyTime())) &&
+                currentResult.start.isOnlyTime()) ||
+            (currentResult.start.isOnlyCasualRef() &&
+                !nextResult.start.isOnlyCasualRef()) ||
+            (!currentResult.start.isOnlyCasualRef() &&
+                nextResult.start.isOnlyCasualRef())) &&
         (patternBetween().exec(textBetween)?.matches.isNotEmpty ?? false));
   }
 

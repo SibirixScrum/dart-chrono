@@ -174,6 +174,23 @@ void main() {
       expectToBeDate(result.start, new DateTime(2012, 7, 10, 12));
       expectToBeDate(result.end!, new DateTime(2012, 7, 11, 12));
     });
+    testSingleCase(
+        ru.casual, "с утра пн до вечера вт", new DateTime(2023,9,19),
+            ParsingOption(forwardDate: true),
+            (ParsedResult result, String _) {
+          expect(result.index, 2);
+          expect(result.text, "утра пн до вечера вт");
+          expectToBeDate(result.start, new DateTime(2023,9,25,9));
+          expectToBeDate(result.end!, new DateTime(2023,9,26,18));
+        });
+    testSingleCase(
+        ru.casual, "с утра пн до вечера вт", new DateTime(2023,9,19),
+            (ParsedResult result, String _) {
+          expect(result.index, 2);
+          expect(result.text, "утра пн до вечера вт");
+          expectToBeDate(result.start, new DateTime(2023,9,18,9));
+          expectToBeDate(result.end!, new DateTime(2023,9,19,18));
+        });
   });
   test("Test - Random negative text", () {
     testUnexpectedResult(ru.casual, "несегодня");
