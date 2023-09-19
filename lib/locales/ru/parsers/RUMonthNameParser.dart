@@ -15,7 +15,7 @@ import "../constants.dart"
 import "../constants.dart" show YEAR_PATTERN, parseYear;
 
 final PATTERN = RegExp(
-    '''((?:в)\\s*)?(${matchAnyPattern(MONTH_NAME_DICTIONARY)})\\s*(?:[,-]?\\s*(${YEAR_PATTERN})?)?(?=[^\\s\\w]|\\s+.|\\s+\$|\$)''',
+    '''((?:в)\\s*)?(${matchAnyPattern(MONTH_NAME_DICTIONARY)})\\s*(?:[,-]?\\s*(${YEAR_PATTERN})?)?(?=[^\\s\\w]|\\s+[^0-9]|\\s+\$|\$)''',
     caseSensitive: !REGEX_PARTS["flags"]!.contains("i"),
     dotAll: REGEX_PARTS["flags"]!.contains("d"),
     multiLine: REGEX_PARTS["flags"]!.contains("m"),

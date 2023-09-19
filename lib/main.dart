@@ -25,14 +25,18 @@ void main() async {
   //
   // final d = RegExp(r'^\d*(\.\d*)?$').exec("2014 12 28");
   final now = DateTime.now().millisecondsSinceEpoch;
+  final option = ParsingOption(forwardDate: true);
+  final a = Chrono.ru.casual.parse("на этой неделе", null, option);
+  print(DateTime.now().millisecondsSinceEpoch - now);
+  a.forEach((element) {
+    print("${element.start.date(strictOnComponent: [Component.hour])}\n"
+        "${element.end?.date()}\n"
+        "${element.refDate}\n"
+        "${element.date(strictOnComponent: [Component.hour])}\n");
+  });
 
 
-  print(DateTime.now().millisecondsSinceEpoch- now);
-  print(ru.casual.parse("В течение двух минут В течение двух минут В течение двух минут В течение двух минут В течение двух минут В течение двух минут В течение двух минут В течение двух минут В течение двух минут В течение двух минут В течение двух минут В течение двух минут В течение двух минут В течение двух минут В течение двух минут В течение двух минут В течение двух минут В течение двух минут В течение двух минут В течение двух минут В течение двух минут"));
-  print(DateTime.now().millisecondsSinceEpoch- now);
-print("---------\n---------\n------------'n---------\n---------");
-  print(ru.casual.parse("В течение двух минут В течение двух минут В течение двух минут В течение двух минут В течение двух минут В течение двух минут В течение двух минут В течение двух минут В течение двух минут В течение двух минут В течение двух минут В течение двух минут В течение двух минут В течение двух минут В течение двух минут В течение двух минут В течение двух минут В течение двух минут В течение двух минут В течение двух минут В течение двух минут"));
-  print(DateTime.now().millisecondsSinceEpoch- now);
+  print(DateTime.now().millisecondsSinceEpoch - now);
 
 
   // runApp(const MyApp());

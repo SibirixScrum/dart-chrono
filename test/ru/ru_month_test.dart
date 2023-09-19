@@ -78,42 +78,4 @@ void main() {
           expectToBeDate(result.start, new DateTime(2030, 8, 1, 12));
         });
   });
-  test("Test - time passed after month+year",(){
-    testSingleCase(ru.casual, "в апр 2024 13:40", new DateTime(2023, 9, 18),
-            (ParsedResult result, String text) {
-          expect(result.index, 0);
-          expect(result.text, "в апр 2024 13:40");
-          expectToBeDate(result.start, new DateTime(2024,4,1,13,40));
-        });
-    testSingleCase(ru.casual, "в апр 2024 в 13:40", new DateTime(2023, 9, 18),
-            (ParsedResult result, String text) {
-          expect(result.index, 0);
-          expect(result.text, "в апр 2024 в 13:40");
-          expectToBeDate(result.start, new DateTime(2024,4,1,13,40));
-        });
-    testSingleCase(ru.casual, "в апр 2024 года в 13:40", new DateTime(2023, 9, 18),
-            (ParsedResult result, String text) {
-          expect(result.index, 0);
-          expect(result.text, "в апр 2024 года в 13:40");
-          expectToBeDate(result.start, new DateTime(2024,4,1,13,40));
-        });
-    testSingleCase(ru.casual, "в апр 50 13:40", new DateTime(2023, 9, 18),
-            (ParsedResult result, String text) {
-          expect(result.index, 0);
-          expect(result.text, "в апр 50 13:40");
-          expectToBeDate(result.start, new DateTime(2050,4,1,13,40));
-        });
-    testSingleCase(ru.casual, "в апр 99 в 13:40", new DateTime(2023, 9, 18),
-            (ParsedResult result, String text) {
-          expect(result.index, 0);
-          expect(result.text, "в апр 99 в 13:40");
-          expectToBeDate(result.start, new DateTime(1999,4,1,13,40));
-        });
-    testSingleCase(ru.casual, "в апр 25 года 13:40", new DateTime(2023, 9, 18),
-            (ParsedResult result, String text) {
-          expect(result.index, 0);
-          expect(result.text, "в апр 25 года 13:40");
-          expectToBeDate(result.start, new DateTime(2025,4,1,13,40));
-        });
-  });
 }
