@@ -231,7 +231,7 @@ void main() {
           expect(result.index, 2);
           expect(result.text, "утра пн до ночи ср");
           expectToBeDate(result.start, DateTime(2023, 9, 25, 9));
-          expectToBeDate(result.end!, DateTime(2023, 9, 27, 0));
+          expectToBeDate(result.end!, DateTime(2023, 9, 28, 0));
         });
     testSingleCase(ru.casual, "с вечера до ночи", DateTime(2023, 9, 19,14),
         ParsingOption(forwardDate: true),
@@ -241,13 +241,29 @@ void main() {
           expectToBeDate(result.start, DateTime(2023, 9, 19, 18));
           expectToBeDate(result.end!, DateTime(2023, 9, 20, 0));
         });
-    testSingleCase(ru.casual, "с вечера вт до ночи чт", DateTime(2023, 9, 19,14),
+    testSingleCase(ru.casual, "с вечера вт до ночи ср", DateTime(2023, 9, 19,14),
         ParsingOption(forwardDate: true),
             (ParsedResult result, String text) {
           expect(result.index, 2);
-          expect(result.text, "вечера вт до ночи чт");
+          expect(result.text, "вечера вт до ночи ср");
           expectToBeDate(result.start, DateTime(2023, 9, 19, 18));
           expectToBeDate(result.end!, DateTime(2023, 9, 21, 0));
+        });
+    testSingleCase(ru.casual, "с вечера вт до ночи вс", DateTime(2023, 9, 19,14),
+        ParsingOption(forwardDate: true),
+            (ParsedResult result, String text) {
+          expect(result.index, 2);
+          expect(result.text, "вечера вт до ночи вс");
+          expectToBeDate(result.start, DateTime(2023, 9, 19, 18));
+          expectToBeDate(result.end!, DateTime(2023, 9, 25, 0));
+        });
+    testSingleCase(ru.casual, "с вечера вт до ночи сб", DateTime(2023, 9, 19,14),
+        ParsingOption(forwardDate: true),
+            (ParsedResult result, String text) {
+          expect(result.index, 2);
+          expect(result.text, "вечера вт до ночи сб");
+          expectToBeDate(result.start, DateTime(2023, 9, 19, 18));
+          expectToBeDate(result.end!, DateTime(2023, 9, 24, 0));
         });
     testSingleCase(ru.casual, "с 19 вечера до 2 ночи", DateTime(2023, 9, 19,14),
         ParsingOption(forwardDate: true),

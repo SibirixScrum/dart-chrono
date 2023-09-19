@@ -1,5 +1,5 @@
 import "../results.dart" show ParsingComponents, ParsingResult;
-import "../types.dart" show Component, Meridiem;
+import "../types.dart" show CasualReference, Component, Meridiem;
 import "../utils/dayjs.dart" show assignSimilarDate, implySimilarDate;
 
 ParsingResult mergeDateTimeResult(
@@ -7,6 +7,7 @@ ParsingResult mergeDateTimeResult(
   final result = dateResult.clone() as ParsingResult;
   final beginDate = dateResult.start;
   final beginTime = timeResult.start;
+
   result.start = mergeDateTimeComponent(beginDate, beginTime);
   if (dateResult.end != null || timeResult.end != null) {
     final endDate = dateResult.end == null ? dateResult.start : dateResult.end;
@@ -62,8 +63,24 @@ ParsingComponents mergeDateTimeComponent(
         Component.second, timeComponent.get(Component.second)!);
     dateTimeComponent.imply(
         Component.millisecond, timeComponent.get(Component.millisecond)!);
-    if(timeComponent.isCertain(Component.casualReference)){
-      dateTimeComponent.assign(Component.casualReference, timeComponent.get(Component.casualReference)!);
+  }
+  if(timeComponent.isCertain(Component.casualReference)){
+    dateTimeComponent.assign(Component.casualReference, timeComponent.get(Component.casualReference)!);
+    if(timeComponent.get(Component.casualReference)! == CasualReference.night.index){
+      if(!dateTimeComponent.isCertain(Component.day)){
+        final day = dateComponent.get(Component.day);
+        if(day!=null) {
+          dateTimeComponent.imply(Component.day, day+1); // ночь 20 числа = 20 число 0:00
+        }
+      }
+      if(dateTimeComponent.isCertain(Component.weekday)){
+        dateTimeComponent.assign(Component.weekday, dateComponent.get(Component.weekday)! + 1);
+      }else{
+        final weekday = dateComponent.get(Component.weekday);
+        if(weekday!=null) {
+          dateTimeComponent.imply(Component.weekday, weekday+1);
+        }
+      }
     }
   }
   if (timeComponent.isCertain(Component.timezoneOffset)) {
