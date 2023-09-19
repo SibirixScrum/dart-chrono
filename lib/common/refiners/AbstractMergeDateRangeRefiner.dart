@@ -27,6 +27,9 @@ abstract class AbstractMergeDateRangeRefiner extends MergingRefiner {
         }
       });
     }
+    if(currentResult.start.isOnlyCasualRef() && nextResult.start.isOnlyCasualRef() && currentResult.start.date().isAfter(nextResult.start.date())){
+      nextResult.start.imply(Component.day, nextResult.start.get(Component.day)! + 1); // for "from evening to morning"
+    }
     if (currentResult.start.date().millisecondsSinceEpoch >
         nextResult.start.date().millisecondsSinceEpoch) {
       var fromMoment = currentResult.start.date();
@@ -57,7 +60,7 @@ abstract class AbstractMergeDateRangeRefiner extends MergingRefiner {
         currentResult = temp;
       }
     }
-    final result = currentResult.clone();
+    final ParsingResult result = currentResult.clone();
     result.start = currentResult.start;
     result.end = nextResult.start;
     result.index = currentResult.index < nextResult.index
