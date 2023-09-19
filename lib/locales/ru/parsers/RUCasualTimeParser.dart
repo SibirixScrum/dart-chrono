@@ -9,7 +9,7 @@ import "../../../utils/dayjs.dart" show assignSimilarDate;
 import "../constants.dart" show REGEX_PARTS;
 
 final PATTERN = RegExp(
-    '''(сейчас|прошлым\\s*вечером|прошлой\\s*ночью|следующей\\s*ночью|сегодня\\s*ночью|этой\\s*ночью|ночью|этим утром|утром|утра|в\\s*полдень|вечером|вечера|в\\s*полночь)''' +
+    '''(сейчас|прошлым\\s*вечером|прошлой\\s*ночью|следующей\\s*ночью|сегодня\\s*ночью|этой\\s*ночью|ночью|ночи|этим утром|утром|утра|в\\s*полдень|вечером|вечера|в\\s*полночь)''' +
         '''${REGEX_PARTS["rightBoundary"]}''',
     caseSensitive: !REGEX_PARTS["flags"]!.contains("i"),
     dotAll: REGEX_PARTS["flags"]!.contains("d"),
@@ -59,6 +59,9 @@ class RUCasualTimeParser extends AbstractParserWithWordBoundaryChecking {
     if (RegExp(r'в\s*полночь').firstMatch(lowerText) != null ||
         lowerText.endsWith("ночью")) {
       return references.midnight(context.reference);
+    }
+    if(lowerText.endsWith("ночи")){
+      return references.atNight(context.reference);
     }
     return component;
   }

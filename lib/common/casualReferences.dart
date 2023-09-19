@@ -77,6 +77,7 @@ ParsingComponents lastNight(ReferenceWithTimezone reference, [implyHour = 0]) {
   return component;
 }
 
+
 ParsingComponents evening(ReferenceWithTimezone reference, [implyHour = eveningHour]) {
   final component = new ParsingComponents(reference, {});
   component.imply(Component.meridiem, Meridiem.PM.index);
@@ -124,6 +125,17 @@ ParsingComponents morning(ReferenceWithTimezone reference, [implyHour = morningH
   component.assign(Component.casualReference, CasualReference.morning.index);
   return component;
 }
+ParsingComponents atNight(ReferenceWithTimezone reference, [implyHour = 0]) {
+  final component = new ParsingComponents(reference, {});
+  component.imply(Component.meridiem, Meridiem.AM.index);
+  component.imply(Component.hour, implyHour);
+  component.imply(Component.minute, 0);
+  component.imply(Component.second, 0);
+  component.imply(Component.millisecond, 0);
+  component.assign(Component.casualReference, CasualReference.night.index);
+  return component;
+}
+
 
 ParsingComponents afternoon(ReferenceWithTimezone reference, [implyHour = 15]) {
   final component = new ParsingComponents(reference, {});

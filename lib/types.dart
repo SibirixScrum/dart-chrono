@@ -146,7 +146,8 @@ enum CasualReference{
   afternoon,
   evening,
   tonight,
-  midnight
+  midnight,
+  night
 }
 
 enum Meridiem { AM, PM }

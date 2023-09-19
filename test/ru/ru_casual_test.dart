@@ -192,6 +192,80 @@ void main() {
           expectToBeDate(result.end!, new DateTime(2023,9,19,18));
         });
   });
+  test("Test - casual date range", () {
+    testSingleCase(ru.casual, "с вечера до утра", DateTime(2023, 9, 19,14),
+        ParsingOption(forwardDate: true),
+            (ParsedResult result, String text) {
+          expect(result.index, 2);
+          expect(result.text, "вечера до утра");
+          expectToBeDate(result.start, DateTime(2023, 9, 19, 18));
+          expectToBeDate(result.end!, DateTime(2023, 9, 20, 9));
+        });
+    testSingleCase(ru.casual, "с вечера пн до утра вт", DateTime(2023, 9, 19,14),
+        ParsingOption(forwardDate: true),
+            (ParsedResult result, String text) {
+          expect(result.index, 2);
+          expect(result.text, "вечера пн до утра вт");
+          expectToBeDate(result.start, DateTime(2023, 9, 25, 18));
+          expectToBeDate(result.end!, DateTime(2023, 9, 26, 9));
+        });
+    testSingleCase(ru.casual, "с 18 вечера до 9 утра", DateTime(2023, 9, 19,14),
+        ParsingOption(forwardDate: true),
+            (ParsedResult result, String text) {
+          expect(result.index, 0);
+          expect(result.text, "с 18 вечера до 9 утра");
+          expectToBeDate(result.start, DateTime(2023, 9, 19, 18));
+          expectToBeDate(result.end!, DateTime(2023, 9, 20, 9));
+        });
+    testSingleCase(ru.casual, "с утра до ночи", DateTime(2023, 9, 19,14),
+        ParsingOption(forwardDate: true),
+            (ParsedResult result, String text) {
+          expect(result.index, 2);
+          expect(result.text, "утра до ночи");
+          expectToBeDate(result.start, DateTime(2023, 9, 20, 9));
+          expectToBeDate(result.end!, DateTime(2023, 9, 21, 0));
+        });
+    testSingleCase(ru.casual, "с утра пн до ночи ср", DateTime(2023, 9, 19,14),
+        ParsingOption(forwardDate: true),
+            (ParsedResult result, String text) {
+          expect(result.index, 2);
+          expect(result.text, "утра пн до ночи ср");
+          expectToBeDate(result.start, DateTime(2023, 9, 25, 9));
+          expectToBeDate(result.end!, DateTime(2023, 9, 27, 0));
+        });
+    testSingleCase(ru.casual, "с вечера до ночи", DateTime(2023, 9, 19,14),
+        ParsingOption(forwardDate: true),
+            (ParsedResult result, String text) {
+          expect(result.index, 2);
+          expect(result.text, "вечера до ночи");
+          expectToBeDate(result.start, DateTime(2023, 9, 19, 18));
+          expectToBeDate(result.end!, DateTime(2023, 9, 20, 0));
+        });
+    testSingleCase(ru.casual, "с вечера вт до ночи чт", DateTime(2023, 9, 19,14),
+        ParsingOption(forwardDate: true),
+            (ParsedResult result, String text) {
+          expect(result.index, 2);
+          expect(result.text, "вечера вт до ночи чт");
+          expectToBeDate(result.start, DateTime(2023, 9, 19, 18));
+          expectToBeDate(result.end!, DateTime(2023, 9, 21, 0));
+        });
+    testSingleCase(ru.casual, "с 19 вечера до 2 ночи", DateTime(2023, 9, 19,14),
+        ParsingOption(forwardDate: true),
+            (ParsedResult result, String text) {
+          expect(result.index, 0);
+          expect(result.text, "с 19 вечера до 2 ночи");
+          expectToBeDate(result.start, DateTime(2023, 9, 19, 19));
+          expectToBeDate(result.end!, DateTime(2023, 9, 20, 2));
+        });
+    testSingleCase(ru.casual, "с ночи до утра", DateTime(2023, 9, 19,14),
+        ParsingOption(forwardDate: true),
+            (ParsedResult result, String text) {
+          expect(result.index, 2);
+          expect(result.text, "ночи до утра");
+          expectToBeDate(result.start, DateTime(2023, 9, 20, 0));
+          expectToBeDate(result.end!, DateTime(2023, 9, 20, 9));
+        });
+  });
   test("Test - Random negative text", () {
     testUnexpectedResult(ru.casual, "несегодня");
     testUnexpectedResult(ru.casual, "зявтра");
