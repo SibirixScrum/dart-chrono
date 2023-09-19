@@ -4,6 +4,7 @@
 import "package:chrono/chrono.dart";
 import "package:chrono/ported/RegExpMatchArray.dart";
 import "package:chrono/types.dart";
+import "package:chrono/utils/dayjs.dart";
 
 import "../../results.dart" show ParsingResult;
 import "../abstractRefiners.dart" show MergingRefiner;
@@ -35,14 +36,14 @@ abstract class AbstractMergeDateRangeRefiner extends MergingRefiner {
       var fromMoment = currentResult.start.date();
       var toMoment = nextResult.start.date();
       if (nextResult.start.isOnlyWeekdayComponent() &&
-          toMoment.add(Duration(days: 7)).isAfter(fromMoment)) {
-        toMoment = toMoment.add(Duration(days: 7));
+          toMoment.add(const Duration(days: 7)).isAfter(fromMoment)) {
+        toMoment = toMoment.add(const Duration(days: 7));
         nextResult.start.imply(Component.day, toMoment.day);
         nextResult.start.imply(Component.month, toMoment.month );
         nextResult.start.imply(Component.year, toMoment.year);
       } else if (currentResult.start.isOnlyWeekdayComponent() &&
-          fromMoment.subtract(Duration(days: 7)).isBefore(toMoment)) {
-        fromMoment = fromMoment.subtract(Duration(days: 7));
+          fromMoment.subtract(const Duration(days: 7)).isBefore(toMoment)) {
+        fromMoment = fromMoment.subtract(const Duration(days: 7));
         currentResult.start.imply(Component.day, fromMoment.day);
         currentResult.start.imply(Component.month, fromMoment.month);
         currentResult.start.imply(Component.year, fromMoment.year);
@@ -70,6 +71,16 @@ abstract class AbstractMergeDateRangeRefiner extends MergingRefiner {
       result.text = currentResult.text + textBetween + nextResult.text;
     } else {
       result.text = nextResult.text + textBetween + currentResult.text;
+    }
+    if(result.end!.get(Component.weekday) == result.start.get(Component.weekday)
+        && result.end!.get(Component.day) == result.start.get(Component.day)){
+      if(!result.end!.isCertain(Component.day)){
+        final day = result.end!.get(Component.day);
+        if(day!=null){
+          final incrementedDate = result.end!.date().add(const Duration(days: 7));
+          implySimilarDate(result.end!, incrementedDate);
+        }
+      }
     }
     return result;
   }

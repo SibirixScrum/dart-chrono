@@ -32,6 +32,22 @@ void main() {
           expectToBeDate(result.start, DateTime(2024, 3, 27, 12));
           expectToBeDate(result.end!, DateTime(2024, 5, 24, 12));
         });
+    testSingleCase(ru.casual, "пт-пт", DateTime(2023, 9, 19),
+        ParsingOption(forwardDate: true),
+            (ParsedResult result, String text) {
+          expect(result.index, 0);
+          expect(result.text, "пт-пт");
+          expectToBeDate(result.start, DateTime(2023, 9, 22, 12));
+          expectToBeDate(result.end!, DateTime(2023, 9, 29, 12));
+        });
+    testSingleCase(ru.casual, "пт-пт", DateTime(2023, 9, 28),
+        ParsingOption(forwardDate: true),
+            (ParsedResult result, String text) {
+          expect(result.index, 0);
+          expect(result.text, "пт-пт");
+          expectToBeDate(result.start, DateTime(2023, 9, 29, 12));
+          expectToBeDate(result.end!, DateTime(2023, 10, 6, 12));
+        });
 
   });
 }

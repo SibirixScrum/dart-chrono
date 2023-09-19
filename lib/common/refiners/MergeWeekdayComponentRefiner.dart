@@ -17,14 +17,14 @@ class MergeWeekdayComponentRefiner extends MergingRefiner {
   @override
   ParsingResult mergeResults(String textBetween, ParsingResult currentResult,
       ParsingResult nextResult, ParsingContext context) {
-    final newResult = nextResult.clone();
+    final ParsingResult newResult = nextResult.clone();
     newResult.index = currentResult.index;
     newResult.text = currentResult.text + textBetween + newResult.text;
     newResult.start
-        .assign(Component.weekday, currentResult.start.get(Component.weekday));
+        .assign(Component.weekday, currentResult.start.get(Component.weekday)!);
     if (newResult.end != null) {
-      newResult.end
-          .assign(Component.weekday, currentResult.start.get(Component.weekday));
+      newResult.end!
+          .assign(Component.weekday, currentResult.start.get(Component.weekday)!);
     }
     return newResult;
   }
