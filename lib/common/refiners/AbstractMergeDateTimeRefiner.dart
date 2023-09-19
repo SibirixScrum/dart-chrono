@@ -3,6 +3,7 @@
 */
 import "package:chrono/chrono.dart";
 import "package:chrono/ported/RegExpMatchArray.dart";
+import "package:chrono/types.dart";
 
 import "../../calculation/mergingCalculation.dart" show mergeDateTimeResult;
 import "../../results.dart" show ParsingResult;
@@ -32,6 +33,21 @@ abstract class AbstractMergeDateTimeRefiner extends MergingRefiner {
     !currentResult.start.isOnlyCasualRef() &&
         nextResult.start.isOnlyCasualRef()
     ){
+      if(currentResult.end!=null){
+        if(currentResult.end!.isCertain(Component.meridiem) &&
+        nextResult.start.get(Component.casualReference)! == CasualReference.morning.index
+        ){
+          currentResult.end!.assign(Component.meridiem, Meridiem.AM.index);
+          final hour = currentResult.end!.get(Component.hour);
+          if(hour != null && hour >= 12){
+            if(currentResult.end!.isCertain(Component.hour)) {
+              currentResult.end!.assign(Component.hour, hour - 12);
+            }else{
+              currentResult.end!.imply(Component.hour, hour - 12);
+            }
+          }
+        }
+      }
       result = mergeDateTimeResult(nextResult, currentResult);
     }
     result.index = currentResult.index;
