@@ -2,23 +2,23 @@
 
 This is a ported version of https://github.com/wanasit/chrono typescript library
 
-## usage
+# usage
 
-# vanilla version(same answers as original lib)
+## vanilla version(same answers as original lib)
 
   chrono:
     git:
       url: git@gitlab.dev.sibirix.ru:singularity/chrono.git
       ref: master
 
-# our custom version
+## our custom version
 
   chrono:
     git:
       url: git@gitlab.dev.sibirix.ru:singularity/chrono.git
       ref: singularity-chrono
 
-# parsing
+## parsing
 ```
 Chrono.en.parse("aug 18");
 ```
