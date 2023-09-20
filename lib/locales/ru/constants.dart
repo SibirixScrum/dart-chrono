@@ -302,7 +302,7 @@ const Map<String, String /* OpUnitType | QUnitType */ > TIME_UNIT_DICTIONARY =
 final NUMBER_PATTERN =
     '''(?:${matchAnyPattern(INTEGER_WORD_DICTIONARY)}|[0-9]+|[0-9]+\\.[0-9]+|пол|несколько|пар(?:ы|у)|\\s{0,3})''';
 
-num parseNumberPattern(String match) {
+num? parseNumberPattern(String match) {
   final num = match.toLowerCase();
   if (INTEGER_WORD_DICTIONARY.containsKey(num)) {
     return INTEGER_WORD_DICTIONARY[num]!;
@@ -316,7 +316,7 @@ num parseNumberPattern(String match) {
   } else if (num == "") {
     return 1;
   }
-  return double.parse(num);
+  return double.tryParse(num);
 }
 
 //-----------------------------
@@ -400,6 +400,7 @@ TimeUnits parseTimeUnits(timeunitText) {
 collectDateTimeFragment(fragments, match) {
   final num = parseNumberPattern(match[1]);
   final unit = TIME_UNIT_DICTIONARY[match[2].toLowerCase()];
-
-  fragments[unit] = num;
+  if(num!=null) {
+    fragments[unit] = num;
+  }
 }

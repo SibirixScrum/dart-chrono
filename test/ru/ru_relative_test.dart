@@ -10,7 +10,7 @@ void main() {
         (ParsedResult result, String text) {
       expect(result.index, 0);
       expect(result.text, text);
-      expectToBeDate(result.start, new DateTime(2017, 11, 19, 12));
+      expectToBeDate(result.start, new DateTime(2017, 11, 13, 12));
     });
     testSingleCase(ru.casual, "в этом месяце", new DateTime(2017, 11, 19, 12),
         (ParsedResult result, String text) {
