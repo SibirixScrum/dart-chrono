@@ -1,6 +1,7 @@
 # chrono
 
 This is a ported version of https://github.com/wanasit/chrono typescript library
+Caution: super slow in debug mode(idk why), but in release it is good
 
 # usage
 
