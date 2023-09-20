@@ -6,6 +6,7 @@
 import "package:chrono/common/parsers/SlashDateFormatParser.dart";
 import "package:chrono/locales/ru/parsers/RUCasualDateParser.dart";
 import "package:chrono/locales/ru/parsers/RUCasualTimeParser.dart";
+import "package:chrono/locales/ru/parsers/RUMonthCasualRefParser.dart";
 import "package:chrono/locales/ru/parsers/RUMonthNameLittleEndianParser.dart";
 import "package:chrono/locales/ru/parsers/RUMonthNameParser.dart";
 import "package:chrono/locales/ru/parsers/RURelativeDateFormatParser.dart";
@@ -79,7 +80,8 @@ Configuration createConfiguration([strictMode = true]) {
         RUMonthNameLittleEndianParser(),
         RUWeekdayParser(),
         RUTimeExpressionParser(strictMode),
-        RUTimeUnitAgoFormatParser()
+        RUTimeUnitAgoFormatParser(),
+        RUMonthCasualRefParser()
       ], [
         RUMergeDateTimeRefiner(),
         RUMergeDateRangeRefiner()
