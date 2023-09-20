@@ -1,16 +1,33 @@
 # chrono
 
-A new Flutter project.
+This is a ported version of https://github.com/wanasit/chrono typescript library
 
-## Getting Started
+## usage
 
-This project is a starting point for a Flutter application.
+vanilla version(same answers as original lib)
 
-A few resources to get you started if this is your first Flutter project:
+  chrono:
+    git:
+      url: git@gitlab.dev.sibirix.ru:singularity/chrono.git
+      ref: master
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+our custom version
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+  chrono:
+    git:
+      url: git@gitlab.dev.sibirix.ru:singularity/chrono.git
+      ref: singularity-chrono
+
+parsing
+
+Chrono.en.parse("aug 18");
+
+you can also pass PasringOption and ParsingReference
+
+Chrono.en.parse("aug 18", DateTime(2018,9,20), ParsingOption(forwardDate: true));
+
+that's it
+
+
+
+
