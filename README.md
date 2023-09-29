@@ -24,9 +24,17 @@ english, russian
 
 ## vanilla version(same answers as original lib)
 ```
+  chrono:
+    git:
+      url: https://github.com/SibirixScrum/dart-chrono.git
+      ref: '1.0v'
 ```
 ## our custom version
 ```
+  chrono:
+    git:
+      url: https://github.com/SibirixScrum/dart-chrono.git
+      ref: '1.0s'
 ```
 ## parsing
 ```dart
