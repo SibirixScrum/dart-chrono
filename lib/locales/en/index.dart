@@ -1,5 +1,7 @@
 import 'package:chrono/chrono.dart';
 import 'package:chrono/locales/en/configuration.dart';
+import 'package:chrono/locales/en/configuration.dart';
+import 'package:chrono/locales/en/configuration.dart';
 import 'package:chrono/types.dart';
 
 /**
@@ -18,8 +20,8 @@ final GB = Chrono (ENDefaultConfiguration.createConfiguration(false, true));
  * A shortcut for en.casual.parse()
  */
 List <ParsedResult> parse(String text,
-    {DateTime? referenceDate, ParsingOption? option}) {
- return casual.parse(text, referenceDate:referenceDate, option:option);
+    [ DateTime? ref, ParsingOption? option ]) {
+ return casual.parse(text, ref, option);
 }
 /**
  * A shortcut for en.casual.parseDate()

@@ -1,8 +1,9 @@
 import 'package:chrono/locales/en/index.dart' as en;
 import 'package:chrono/results.dart';
+import 'package:chrono/results.dart';
+import 'package:chrono/results.dart';
 import 'package:chrono/types.dart';
 import "package:flutter_test/flutter_test.dart";
-
 import '../test_util.dart';
  void main() {
   test("Test - 'This' expressions", () {
@@ -264,57 +265,55 @@ import '../test_util.dart';
   test("Test - Relative date components' certainty and imply timezone", () {
    final refDate = DateTime.parse ("2020-11-29T13:24:13+0900");
    {
-      const text = "now";
-      final result =
-          en.casual.parse(text, referenceDate: refDate)[0] as ParsingResult;
-      expect(result.text, text);
-      result.start.imply(Component.timezoneOffset, 60);
-      expectToBeDate(result.start, DateTime.parse("2020-11-29T13:24:13+0900"));
-      expectToBeDate(result.start, DateTime.parse("2020-11-29T05:24:13+0100"));
-    }
-    {
-      const text = "tomorrow at 5pm";
-      final result =
-          en.casual.parse(text, referenceDate: refDate)[0] as ParsingResult;
-      expect(result.text, text);
-      result.start.imply(Component.timezoneOffset, 60);
-      expectToBeDate(result.start, DateTime.parse("2020-12-01T01:00:00+0900"));
-      expectToBeDate(result.start, DateTime.parse("2020-11-30T17:00:00+0100"));
-    }
-    {
-      const text = "in 10 minutes";
-      final result =
-          en.casual.parse(text, referenceDate: refDate)[0] as ParsingResult;
-      expect(result.text, text);
-      result.start.imply(Component.timezoneOffset, 60);
-      expectToBeDate(result.start, DateTime.parse("2020-11-29T13:34:13+0900"));
-      expectToBeDate(result.start, DateTime.parse("2020-11-29T05:34:13+0100"));
-    }
-    {
-      const text = "in 10 minutes";
-      final result =
-          en.casual.parse(text, referenceDate: ParsingReference(refDate, 60))[0]
-              as ParsingResult;
-      expect(result.text, text);
-      result.start.imply(Component.timezoneOffset, 60);
-      expectToBeDate(result.start, DateTime.parse("2020-11-29T13:34:13+0900"));
-      expectToBeDate(result.start, DateTime.parse("2020-11-29T05:34:13+0100"));
-    }
-    {
-      const text = "in 10 minutes";
-      final result = en.casual.parse(text,
-          referenceDate: ParsingReference(refDate, 540))[0] as ParsingResult;
-      expect(result.text, text);
-      result.start.imply(Component.timezoneOffset, 60);
-      expectToBeDate(result.start, DateTime.parse("2020-11-29T13:34:13+0900"));
-      expectToBeDate(result.start, DateTime.parse("2020-11-29T05:34:13+0100"));
-    }
-    {
-      const text = "in 20 minutes";
-      final result = en.casual.parse(text,
-          referenceDate: ParsingReference(refDate, null))[0] as ParsingResult;
-      expect(result.text, text);
-      expect(result.start.isCertain(Component.timezoneOffset), false);
-    }
+    const text = "now";
+    final result =en.casual.parse(text,refDate)[0] as ParsingResult;
+    expect(result.text, text);
+    result.start.imply(Component.timezoneOffset, 60);
+    expectToBeDate(result.start,
+        DateTime.parse("2020-11-29T13:24:13+0900"));
+    expectToBeDate(result.start,DateTime.parse("2020-11-29T05:24:13+0100"));
+   }
+   {
+    const text = "tomorrow at 5pm";
+    final result =en.casual.parse(text,refDate)[0] as ParsingResult;
+    expect(result.text, text);
+    result.start.imply(Component.timezoneOffset, 60);
+    expectToBeDate(result.start,
+        DateTime.parse("2020-12-01T01:00:00+0900"));
+    expectToBeDate(result.start,DateTime.parse("2020-11-30T17:00:00+0100"));
+   }
+   {
+    const text = "in 10 minutes";
+    final result =en.casual.parse(text,refDate)[0] as ParsingResult;
+    expect(result.text, text);
+    result.start.imply(Component.timezoneOffset, 60);
+    expectToBeDate(result.start,
+        DateTime.parse("2020-11-29T13:34:13+0900"));
+    expectToBeDate(result.start,DateTime.parse("2020-11-29T05:34:13+0100"));
+   }
+   {
+    const text = "in 10 minutes";
+    final result =en.casual.parse(text,ParsingReferenceDummy(refDate,60))[0] as ParsingResult;
+    expect(result.text, text);
+    result.start.imply(Component.timezoneOffset, 60);
+    expectToBeDate(result.start,
+        DateTime.parse("2020-11-29T13:34:13+0900"));
+    expectToBeDate(result.start,DateTime.parse("2020-11-29T05:34:13+0100"));
+   }
+   {
+    const text = "in 10 minutes";
+    final result =en.casual.parse(text,ParsingReferenceDummy(refDate,540))[0] as ParsingResult;
+    expect(result.text, text);
+    result.start.imply(Component.timezoneOffset, 60);
+    expectToBeDate(result.start,
+        DateTime.parse("2020-11-29T13:34:13+0900"));
+    expectToBeDate(result.start,DateTime.parse("2020-11-29T05:34:13+0100"));
+   }
+   {
+    const text = "in 20 minutes";
+    final result =en.casual.parse(text,ParsingReferenceDummy(refDate,null))[0]  as ParsingResult;
+    expect(result.text, text);
+    expect(result.start.isCertain(Component.timezoneOffset), false);
+   }
   });
  }
