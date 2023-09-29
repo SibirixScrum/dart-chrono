@@ -11,6 +11,7 @@ class UnlikelyFormatFilter extends Filter {
     /* super call moved to initializer */;
   }
 
+  @override
   bool isValid(context, ParsingResult result) {
     if (RegExp(r'^\d*(\.\d*)?$').exec(result.text) != null) {
       context.debug(() {
@@ -20,18 +21,18 @@ class UnlikelyFormatFilter extends Filter {
     }
     if (!result.start.isValidDate()) {
       context.debug(() {
-        print('''Removing invalid result: ${result} (${result.start})''');
+        print('''Removing invalid result: $result (${result.start})''');
       });
       return false;
     }
     if (result.end != null && !result.end!.isValidDate()) {
       context.debug(() {
-        print('''Removing invalid result: ${result} (${result.end})''');
+        print('''Removing invalid result: $result (${result.end})''');
       });
       return false;
     }
-    if (this.strictMode) {
-      return this.isStrictModeValid(context, result);
+    if (strictMode) {
+      return isStrictModeValid(context, result);
     }
     return true;
   }
@@ -40,7 +41,7 @@ class UnlikelyFormatFilter extends Filter {
     if (result.start.isOnlyWeekdayComponent()) {
       context.debug(() {
         print(
-            '''(Strict) Removing weekday only component: ${result} (${result.end})''');
+            '''(Strict) Removing weekday only component: $result (${result.end})''');
       });
       return false;
     }
@@ -49,7 +50,7 @@ class UnlikelyFormatFilter extends Filter {
             !result.start.isCertain(Component.minute))) {
       context.debug(() {
         print(
-            '''(Strict) Removing uncertain time component: ${result} (${result.end})''');
+            '''(Strict) Removing uncertain time component: $result (${result.end})''');
       });
       return false;
     }

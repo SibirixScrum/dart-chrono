@@ -7,7 +7,7 @@ import "../../results.dart" show ParsingResult;
 import "../../timezone.dart" show toTimezoneOffset;
 import "../../types.dart" show Component, TimezoneAbbrMap;
 
-final TIMEZONE_NAME_PATTERN = new RegExp(
+final TIMEZONE_NAME_PATTERN = RegExp(
     "^\\s*,?\\s*\\(?([A-Z]{2,4})\\)?(?=\\W|\$)",
     caseSensitive: false);
 
@@ -42,7 +42,7 @@ class ExtractTimezoneAbbrRefiner implements Refiner {
         return;
       }
       print(
-          '''Extracting timezone: '${timezoneAbbr}' into: ${extractedTimezoneOffset} for: ${result.start}''');
+          '''Extracting timezone: '$timezoneAbbr' into: $extractedTimezoneOffset for: ${result.start}''');
       final currentTimezoneOffset = result.start.get(Component.timezoneOffset);
       if (currentTimezoneOffset != null &&
           extractedTimezoneOffset != currentTimezoneOffset) {

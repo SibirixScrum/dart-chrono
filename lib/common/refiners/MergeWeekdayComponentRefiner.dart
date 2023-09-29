@@ -37,27 +37,6 @@ class MergeWeekdayComponentRefiner extends MergingRefiner {
             !currentResult.start.isCertain(Component.hour) &&
             nextResult.start.isCertain(Component.day);
     return weekdayThenNormalDate &&
-        (new RegExp(r'^,?\s*$').exec(textBetween)?.matches.isNotEmpty ?? false);
+        (RegExp(r'^,?\s*$').exec(textBetween)?.matches.isNotEmpty ?? false);
   }
-// ParsingResult mergeResults(String textBetween, ParsingResult currentResult,
-//     ParsingResult nextResult) {
-//   final newResult = nextResult.clone();
-//   newResult.index = currentResult.index;
-//   newResult.text = currentResult.text + textBetween + newResult.text;
-//   newResult.start.assign("weekday", currentResult.start.get("weekday"));
-//   if (newResult.end) {
-//     newResult.end.assign("weekday", currentResult.start.get("weekday"));
-//   }
-//   return newResult;
-// }
-//
-// bool shouldMergeResults(String textBetween, ParsingResult currentResult,
-//     ParsingResult nextResult) {
-//   final weekdayThenNormalDate =
-//       currentResult.start.isOnlyWeekdayComponent() &&
-//           !currentResult.start.isCertain("hour") &&
-//           nextResult.start.isCertain("day");
-//   return weekdayThenNormalDate &&
-//       textBetween.match(new RegExp(r'^,?\s*$')) != null;
-// }
 }

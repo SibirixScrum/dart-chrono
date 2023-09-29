@@ -38,9 +38,9 @@ class SlashDateFormatParser implements Parser {
   late int groupNumberDay;
 
   SlashDateFormatParser(bool littleEndian) {
-    this.groupNumberMonth =
+    groupNumberMonth =
         littleEndian ? SECOND_NUMBERS_GROUP : FIRST_NUMBERS_GROUP;
-    this.groupNumberDay =
+    groupNumberDay =
         littleEndian ? FIRST_NUMBERS_GROUP : SECOND_NUMBERS_GROUP;
   }
 
@@ -49,6 +49,7 @@ class SlashDateFormatParser implements Parser {
     return PATTERN;
   }
 
+  @override
   ParsingResult? extract(ParsingContext context, RegExpMatchArray match) {
     // Because of how pattern is executed on remaining text in `chrono.ts`, the character before the match could
 
@@ -83,8 +84,8 @@ class SlashDateFormatParser implements Parser {
       return null;
     }
     final result = context.createParsingResult(index, text);
-    var month = parseIntTs(match.matches[this.groupNumberMonth]!);
-    var day = parseIntTs(match.matches[this.groupNumberDay]!);
+    var month = parseIntTs(match.matches[groupNumberMonth]!);
+    var day = parseIntTs(match.matches[groupNumberDay]!);
     if (month < 1 || month > 12) {
       if (month > 12) {
         if (day >= 1 && day <= 12 && month <= 31) {

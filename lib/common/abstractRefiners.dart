@@ -37,15 +37,14 @@ abstract class MergingRefiner implements Refiner {
       nextResult = results[i];
       final textBetween = context.text
           .substringTs(curResult.index + curResult.text.length, nextResult.index);
-      if (!this
-          .shouldMergeResults(textBetween, curResult, nextResult, context)) {
+      if (!shouldMergeResults(textBetween, curResult, nextResult, context)) {
         mergedResults.add(curResult);
         curResult = nextResult;
       } else {
         final left = curResult;
         final right = nextResult;
         final mergedResult =
-            this.mergeResults(textBetween, left, right, context);
+            mergeResults(textBetween, left, right, context);
         context.debug(() {
           print(
               '''MergingRefiner merged ${left} and ${right} into ${mergedResult}''');

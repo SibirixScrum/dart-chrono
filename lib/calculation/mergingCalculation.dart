@@ -9,16 +9,16 @@ ParsingResult mergeDateTimeResult(
   final beginTime = timeResult.start;
   result.start = mergeDateTimeComponent(beginDate, beginTime);
   if (dateResult.end != null || timeResult.end != null) {
-    final endDate = dateResult.end == null ? dateResult.start : dateResult.end;
-    final endTime = timeResult.end == null ? timeResult.start : timeResult.end;
-    final endDateTime = mergeDateTimeComponent(endDate!, endTime!);
+    final endDate = dateResult.end ?? dateResult.start;
+    final endTime = timeResult.end ?? timeResult.start;
+    final endDateTime = mergeDateTimeComponent(endDate, endTime);
     if (dateResult.end == null &&
         endDateTime.date().millisecondsSinceEpoch <
             result.start.date().millisecondsSinceEpoch) {
       // For example,  "Tuesday 9pm - 1am" the ending should actually be 1am on the next day.
 
       // We need to add to ending by another day.
-      final nextDayJs = endDateTime.date().add(Duration(days: 1));
+      final nextDayJs = endDateTime.date().add(const Duration(days: 1));
       if (endDateTime.isCertain(Component.day)) {
         assignSimilarDate(endDateTime, nextDayJs);
       } else {

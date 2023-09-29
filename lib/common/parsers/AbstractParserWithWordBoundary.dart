@@ -12,30 +12,31 @@ abstract class AbstractParserWithWordBoundaryChecking implements Parser {
   dynamic /* ParsingComponents | ParsingResult | dynamic | null */ innerExtract(
       ParsingContext context, RegExpMatchArray match);
 
-  RegExp? cachedInnerPattern = null;
+  RegExp? cachedInnerPattern;
 
-  RegExp? cachedPattern = null;
+  RegExp? cachedPattern;
 
   String patternLeftBoundary() {
     return '''(\\W|^)''';
   }
 
+  @override
   RegExp pattern(ParsingContext context) {
     final innerPattern = this.innerPattern(context);
-    if (innerPattern == this.cachedInnerPattern) {
-      return this
-          .cachedPattern!; //todo поставил просто так !, разобраться после теста
+    if (innerPattern == cachedInnerPattern) {
+      return cachedPattern!; //todo поставил просто так !, разобраться после теста
     }
-    this.cachedPattern = new RegExp(
-        '''${this.patternLeftBoundary()}${innerPattern.pattern}''',
+    cachedPattern = RegExp(
+        '''${patternLeftBoundary()}${innerPattern.pattern}''',
         multiLine: innerPattern.isMultiLine,
         caseSensitive: innerPattern.isCaseSensitive,
         dotAll: innerPattern.isDotAll,
         unicode: innerPattern.isUnicode);
-    this.cachedInnerPattern = innerPattern;
-    return this.cachedPattern!;
+    cachedInnerPattern = innerPattern;
+    return cachedPattern!;
   }
 
+  @override
   extract(ParsingContext context, RegExpMatchArray match) {
     final header = match[1];
     match.index = match.index + header.length;
@@ -43,6 +44,6 @@ abstract class AbstractParserWithWordBoundaryChecking implements Parser {
     for (var i = 2; i < match.matches.length; i++) {
       match.matches[i - 1] = match.matches[i];
     }
-    return this.innerExtract(context, match);
+    return innerExtract(context, match);
   }
 }

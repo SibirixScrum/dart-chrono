@@ -116,13 +116,13 @@ class Chrono {
   DateTime? parseDate(String text,
       [dynamic /* ParsingReference | Date */ referenceDate,
       ParsingOption? option]) {
-    final results = parse(text, referenceDate, option);
-    return results.length > 0 ? results[0].start.date() : null;
+    final results = parse(text, referenceDate: referenceDate, option: option);
+    return results.isNotEmpty ? results[0].start.date() : null;
   }
 
   List<ParsedResult> parse(String text,
-      [dynamic /* ParsingReference | Date */ referenceDate,
-      ParsingOption? option]) {
+      {dynamic /* ParsingReference | Date */ referenceDate,
+      ParsingOption? option}) {
     final context = ParsingContext(text, referenceDate, option);
     List<ParsingResult> results = [];
     for (var parser in parsers) {
