@@ -24,17 +24,9 @@ english, russian
 
 ## vanilla version(same answers as original lib)
 ```
-  chrono:
-    git:
-      url: git@gitlab.dev.sibirix.ru:singularity/chrono.git
-      ref: master
 ```
 ## our custom version
 ```
-  chrono:
-    git:
-      url: git@gitlab.dev.sibirix.ru:singularity/chrono.git
-      ref: singularity-chrono
 ```
 ## parsing
 ```dart
