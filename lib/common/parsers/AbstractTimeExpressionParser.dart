@@ -255,7 +255,7 @@ abstract class AbstractTimeExpressionParser implements Parser {
         if (hour != 12) hour += 12;
       }
       if (!result.start.isCertain(Component.meridiem)) {
-        if (meridiem == Meridiem.AM) {
+        if (meridiem == Meridiem.AM.index) {
           result.start.imply(Component.meridiem, Meridiem.AM.index);
           if (result.start.get(Component.hour) == 12) {
             result.start.assign(Component.hour, 0);
