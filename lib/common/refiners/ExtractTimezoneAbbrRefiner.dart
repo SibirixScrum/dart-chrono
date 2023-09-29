@@ -39,8 +39,6 @@ class ExtractTimezoneAbbrRefiner implements Refiner {
       if (extractedTimezoneOffset == null) {
         return;
       }
-      print(
-          '''Extracting timezone: '$timezoneAbbr' into: $extractedTimezoneOffset for: ${result.start}''');
       final currentTimezoneOffset = result.start.get(Component.timezoneOffset);
       if (currentTimezoneOffset != null &&
           extractedTimezoneOffset != currentTimezoneOffset) {

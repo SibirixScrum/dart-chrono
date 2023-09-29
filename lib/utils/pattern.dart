@@ -14,8 +14,6 @@ List<String> extractTerms(DictionaryLike dictionary) {
   } else if (dictionary is Map) {
     keys = List.from(dictionary.keys);
   } else if (dictionary is dynamic) {
-    //todo объект с ключами?
-    print("мапу сломало:  ${dictionary.runtimeType}");
     // keys = Object.keys(dictionary);
     keys = dictionary.keys;
   }

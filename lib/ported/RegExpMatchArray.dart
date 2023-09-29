@@ -4,9 +4,7 @@ class RegExpMatchArray {
   var index = 0;
   final String input;
 
-  RegExpMatchArray(List<String?> matches, this.input, this.index) {
-    this.matches = matches /*+ List.generate(6, (index) => null)*/;
-  }
+  RegExpMatchArray(this.matches, this.input, this.index);
 
   String operator [](int index) {
     return matches.length > index ? (matches[index] ?? "") : "";
@@ -15,29 +13,20 @@ class RegExpMatchArray {
 
 extension RegExpUtil on RegExp {
   RegExpMatchArray? exec(String str) {
-    // if(!this.hasMatch(str)){
-    //   return null;
-    // }
-
     final matches = allMatches(str);
 
     if (matches.isEmpty) {
       return null;
     }
     final index = matches.first.start;
-    // print(matches.map((e) => e.groups(groupIndices)));
     return RegExpMatchArray(
-        matches.first.groups(List.generate(matches.first.groupCount+1, (index) => index))
-            // .map((e) => e[0])
-         /*   .expand((element) => element.groups(
-                List.generate(element.groupCount + 1, (index) => index)))
-            .toList()*/,
+        matches.first.groups(List.generate(matches.first.groupCount+1, (index) => index)),
         str,
         index);
   }
 }
 
-extension RegExpUtil2 on String {
+extension StringMatch on String {
   bool match(RegExp exp) {
     return exp.hasMatch(this);
   }
