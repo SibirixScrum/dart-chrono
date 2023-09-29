@@ -41,8 +41,8 @@ final strict = Chrono(createConfiguration(true));
 /**
  * A shortcut for ru.casual.parse()
  */
-List<ParsedResult> parse(String text, [DateTime? ref, ParsingOption? option]) {
-  return casual.parse(text, ref, option);
+List<ParsedResult> parse(String text, {DateTime? referenceDate, ParsingOption? option}) {
+  return casual.parse(text,  referenceDate:referenceDate, option:option);
 }
 
 /**
