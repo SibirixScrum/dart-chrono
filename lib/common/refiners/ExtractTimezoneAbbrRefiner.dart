@@ -30,9 +30,7 @@ class ExtractTimezoneAbbrRefiner implements Refiner {
         return;
       }
       final timezoneAbbr = match.matches[1]?.toUpperCase();
-      final refDate = result.start.date() ??
-          result.refDate ??
-          DateTime.now(); //todo откуда нулл может быть?
+      final refDate = result.start.date();
       final Map<String, dynamic> tzOverrides = {};
       tzOverrides.addAll(timezoneOverrides);
       tzOverrides.addAll(this.timezoneOverrides);
@@ -41,8 +39,6 @@ class ExtractTimezoneAbbrRefiner implements Refiner {
       if (extractedTimezoneOffset == null) {
         return;
       }
-      print(
-          '''Extracting timezone: '$timezoneAbbr' into: $extractedTimezoneOffset for: ${result.start}''');
       final currentTimezoneOffset = result.start.get(Component.timezoneOffset);
       if (currentTimezoneOffset != null &&
           extractedTimezoneOffset != currentTimezoneOffset) {
