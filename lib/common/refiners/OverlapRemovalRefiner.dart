@@ -5,6 +5,7 @@ import "../../chrono.dart" show ParsingContext, Refiner;
 import "../../results.dart" show ParsingResult;
 
 class OverlapRemovalRefiner implements Refiner {
+  @override
   List<ParsingResult> refine(
       ParsingContext context, List<ParsingResult> results) {
     if (results.length < 2) {
@@ -25,9 +26,7 @@ class OverlapRemovalRefiner implements Refiner {
       }
     }
     // The last one
-    if (prevResult != null) {
-      filteredResults.add(prevResult);
-    }
+    filteredResults.add(prevResult);
     return filteredResults;
   }
 }

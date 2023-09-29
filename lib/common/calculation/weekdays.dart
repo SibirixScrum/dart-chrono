@@ -14,7 +14,7 @@ ParsingComponents createParsingComponentsAtWeekday(
     [dynamic /* | | */ modifier]) {
   final refDate = reference.getDateWithAdjustedTimezone();
   final daysToWeekday = getDaysToWeekday(refDate, weekday, modifier);
-  var components = new ParsingComponents(reference, null);
+  var components = ParsingComponents(reference, null);
   components = addImpliedTimeUnits(components, {"day": daysToWeekday.toInt()});
   components.assign(Component.weekday, weekday.index);
   return components;

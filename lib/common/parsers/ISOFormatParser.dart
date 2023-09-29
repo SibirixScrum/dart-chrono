@@ -20,18 +20,8 @@ import "AbstractParserWithWordBoundary.dart"
 // - TZD = (Z or +hh:mm or -hh:mm)
 
 // prettier-ignore
-final PATTERN = new RegExp(
-    "([0-9]{2,4})\\-([0-9]{1,2})\\-([0-9]{1,2})" +
-        "(?:T" +
-        "([0-9]{1,2}):([0-9]{1,2})" +
-        "(?:" +
-        ":([0-9]{1,2})(?:\\.(\\d{1,4}))?" +
-        ")?" +
-        "(?:" +
-        "Z|([+-]\\d{2}):?(\\d{2})?" +
-        ")?" +
-        ")?" +
-        "(?=\\W|\$)",
+final PATTERN = RegExp(
+    "([0-9]{2,4})\\-([0-9]{1,2})\\-([0-9]{1,2})(?:T([0-9]{1,2}):([0-9]{1,2})(?::([0-9]{1,2})(?:\\.(\\d{1,4}))?)?(?:Z|([+-]\\d{2}):?(\\d{2})?)?)?(?=\\W|\$)",
     caseSensitive: false);
 const YEAR_NUMBER_GROUP = 1;
 const MONTH_NUMBER_GROUP = 2;
@@ -53,6 +43,7 @@ class ISOFormatParser extends AbstractParserWithWordBoundaryChecking {
   //   return PATTERN;
   // }
 
+  @override
   innerExtract(ParsingContext context, RegExpMatchArray match) {
     final Map<Component, num> components = {};
     int year = parseIntTs(match[YEAR_NUMBER_GROUP]);

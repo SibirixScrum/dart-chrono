@@ -14,14 +14,14 @@ import "../constants.dart" show YEAR_PATTERN, parseYear;
 final PATTERN = RegExp(
     '''(${matchAnyPattern(MONTH_DICTIONARY)})''' +
         "(?:-|/|\\s*,?\\s*)" +
-        '''(${ORDINAL_NUMBER_PATTERN})(?!\\s*(?:am|pm))\\s*''' +
+        '''($ORDINAL_NUMBER_PATTERN)(?!\\s*(?:am|pm))\\s*''' +
         "(?:" +
         "(?:to|\\-)\\s*" +
-        '''(${ORDINAL_NUMBER_PATTERN})\\s*''' +
+        '''($ORDINAL_NUMBER_PATTERN)\\s*''' +
         ")?" +
         "(?:" +
         "(?:-|/|\\s*,?\\s*)" +
-        '''(${YEAR_PATTERN})''' +
+        '''($YEAR_PATTERN)''' +
         ")?" +
         "(?=\\W|\$)(?!\\:\\d)",
     caseSensitive: false);

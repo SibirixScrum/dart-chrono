@@ -10,20 +10,21 @@ import "../../results.dart" show ParsingResult;
 import "../../utils/dayjs.dart" show implySimilarDate;
 
 class ForwardDateRefiner implements Refiner {
+  @override
   List<ParsingResult> refine(
       ParsingContext context, List<ParsingResult> results) {
     if (context.option?.forwardDate != true) {
       return results;
     }
-    results.forEach((result) {
+    for (var result in results) {
       var refMoment = context.refDate;
       if (result.start.isOnlyTime() && refMoment.isAfter(result.start.date())) {
-        refMoment = refMoment.add(Duration(days: 1));
+        refMoment = refMoment.add(const Duration(days: 1));
         implySimilarDate(result.start, refMoment);
         if (result.end != null && result.end!.isOnlyTime()) {
           implySimilarDate(result.end!, refMoment);
           if (result.start.date().isAfter(result.end!.date())) {
-            refMoment = refMoment.add(Duration(days: 1));
+            refMoment = refMoment.add(const Duration(days: 1));
             implySimilarDate(result.end!, refMoment);
           }
         }
@@ -35,7 +36,7 @@ class ForwardDateRefiner implements Refiner {
           // refMoment = refMoment.subtract(Duration(days: result.start.get(Component.weekday)!.toInt() - 1));
           final difference =
               refMoment.weekday % 7 - result.start.get(Component.weekday)!.toInt();
-          refMoment = refMoment.add(Duration(days: 7));
+          refMoment = refMoment.add(const Duration(days: 7));
           refMoment = refMoment.add(Duration(days: -difference));
           // refMoment = refMoment.add(Duration(
           //     days: difference > 0 ? 7 - difference : 7 + difference.abs()));
@@ -58,7 +59,7 @@ class ForwardDateRefiner implements Refiner {
           if (refMoment.weekday > result.end!.get(Component.weekday)!.toInt()) {
             final difference =
                 refMoment.weekday % 7 - result.end!.get(Component.weekday)!.toInt();
-            refMoment = refMoment.add(Duration(days: 7));
+            refMoment = refMoment.add(const Duration(days: 7));
             refMoment = refMoment.add(Duration(days: -difference));
           } else {
             final difference =
@@ -95,7 +96,7 @@ class ForwardDateRefiner implements Refiner {
           }
         }
       }
-    });
+    }
     return results;
   }
 }

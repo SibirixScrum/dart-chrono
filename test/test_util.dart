@@ -51,8 +51,9 @@ testSingleCase(Chrono chrono, String text,
     //     }
     //   }
     // }
-    final results = chrono.parse(text, refDateOrCheckResult,
-        optionOrCheckResult as ParsingOption?);
+    final results = chrono.parse(text,
+        referenceDate: refDateOrCheckResult,
+        option: optionOrCheckResult as ParsingOption?);
     expectToBeSingleOnText(results, text);
     if (checkResult != null) {
       checkResult(results[0], text);
@@ -75,7 +76,7 @@ testUnexpectedResult(Chrono chrono, String text,
   final debugHandler = new BufferedDebugHandler();
   options?.debug = debugHandler;
   try {
-    final results = chrono.parse(text, refDate, options);
+    final results = chrono.parse(text, referenceDate: refDate, option: options);
     expect(results.length, 0, reason: "result must be empty");
   } catch (e, e_stack) {
     debugHandler.executeBufferedBlocks();

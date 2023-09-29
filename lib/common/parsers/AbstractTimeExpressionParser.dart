@@ -10,21 +10,8 @@ import "../../types.dart" show Component, Meridiem;
 // prettier-ignore
 primaryTimePattern(String leftBoundary, String primaryPrefix,
     String primarySuffix, String flags) {
-  return new RegExp(
-      '''${leftBoundary}''' +
-          '''${primaryPrefix}''' +
-          '''(\\d{1,4})''' +
-          '''(?:''' +
-          '''(?:\\.|:|：)''' +
-          '''(\\d{1,2})''' +
-          '''(?:''' +
-          '''(?::|：)''' +
-          '''(\\d{2})''' +
-          '''(?:\\.(\\d{1,6}))?''' +
-          ''')?''' +
-          ''')?''' +
-          '''(?:\\s*(a\\.m\\.|p\\.m\\.|am?|pm?))?''' +
-          '''${primarySuffix}''',
+  return RegExp(
+      '''$leftBoundary$primaryPrefix(\\d{1,4})(?:(?:\\.|:|：)(\\d{1,2})(?:(?::|：)(\\d{2})(?:\\.(\\d{1,6}))?)?)?(?:\\s*(a\\.m\\.|p\\.m\\.|am?|pm?))?$primarySuffix''',
       caseSensitive: !flags.contains("i"),
       unicode: flags.contains('u'),
       dotAll: flags.contains('d'),
@@ -33,19 +20,8 @@ primaryTimePattern(String leftBoundary, String primaryPrefix,
 
 // prettier-ignore
 followingTimePatten(String followingPhase, String followingSuffix) {
-  return new RegExp(
-      '''^(${followingPhase})''' +
-          '''(\\d{1,4})''' +
-          '''(?:''' +
-          '''(?:\\.|\\:|\\：)''' +
-          '''(\\d{1,2})''' +
-          '''(?:''' +
-          '''(?:\\.|\\:|\\：)''' +
-          '''(\\d{1,2})(?:\\.(\\d{1,6}))?''' +
-          ''')?''' +
-          ''')?''' +
-          '''(?:\\s*(a\\.m\\.|p\\.m\\.|am?|pm?))?''' +
-          '''${followingSuffix}''',
+  return RegExp(
+      '''^($followingPhase)(\\d{1,4})(?:(?:\\.|\\:|\\：)(\\d{1,2})(?:(?:\\.|\\:|\\：)(\\d{1,2})(?:\\.(\\d{1,6}))?)?)?(?:\\s*(a\\.m\\.|p\\.m\\.|am?|pm?))?$followingSuffix''',
       caseSensitive: false);
 }
 
@@ -62,9 +38,7 @@ abstract class AbstractTimeExpressionParser implements Parser {
 
   late bool strictMode;
 
-  AbstractTimeExpressionParser([strictMode = false]) {
-    this.strictMode = strictMode;
-  }
+  AbstractTimeExpressionParser([this.strictMode = false]);
 
   String patternFlags() {
     return "i";
@@ -83,14 +57,14 @@ abstract class AbstractTimeExpressionParser implements Parser {
   }
 
   RegExp pattern(ParsingContext context) {
-    return this.getPrimaryTimePatternThroughCache();
+    return getPrimaryTimePatternThroughCache();
   }
 
   ParsingResult? extract(ParsingContext context, RegExpMatchArray match) {
     if (!match[AM_PM_HOUR_GROUP].toLowerCase().contains("m")) {
       match.matches[AM_PM_HOUR_GROUP] = null;
     }
-    final startComponents = this.extractPrimaryTimeComponents(context, match);
+    final startComponents = extractPrimaryTimeComponents(context, match);
     if (startComponents == null) {
       match.index += match[0].length;
       return null; //todo dummy ParsingResult instead of null
@@ -100,7 +74,7 @@ abstract class AbstractTimeExpressionParser implements Parser {
     final result = context.createParsingResult(index, text, startComponents);
     match.index += match[0].length;
     final remainingText = context.text.substringTs(match.index);
-    final followingPattern = this.getFollowingTimePatternThroughCache();
+    final followingPattern = getFollowingTimePatternThroughCache();
     final followingMatch = followingPattern.exec(remainingText);
     // Pattern "456-12", "2022-12" should not be time without proper context
     if (RegExp(r'^\d{3,4}').firstMatch(text) != null &&
@@ -111,14 +85,14 @@ abstract class AbstractTimeExpressionParser implements Parser {
     if (followingMatch == null ||
         // Pattern "YY.YY -XXXX" is more like timezone offset
         followingMatch[0].match(RegExp(r'^\s*([+-])\s*\d{3,4}$'))) {
-      return this.checkAndReturnWithoutFollowingPattern(result);
+      return checkAndReturnWithoutFollowingPattern(result);
     }
     result.end =
-        this.extractFollowingTimeComponents(context, followingMatch, result);
+        extractFollowingTimeComponents(context, followingMatch, result);
     if (result.end != null) {
       result.text += followingMatch[0];
     }
-    return this.checkAndReturnWithFollowingPattern(result);
+    return checkAndReturnWithFollowingPattern(result);
   }
 
   ParsingComponents? extractPrimaryTimeComponents(
@@ -126,14 +100,14 @@ abstract class AbstractTimeExpressionParser implements Parser {
       [strict = false]) {
     final components = context.createParsingComponents();
     var minute = 0;
-    int? meridiem = null;
+    int? meridiem;
     // ----- Hours
     var hour = int.tryParse(match[HOUR_GROUP]);
     if (hour == null) {
       return null;
     }
     if (hour > 100) {
-      if (this.strictMode || match[MINUTE_GROUP].isNotEmpty) {
+      if (strictMode || match[MINUTE_GROUP].isNotEmpty) {
         return null;
       }
       minute = hour % 100;
@@ -253,7 +227,7 @@ abstract class AbstractTimeExpressionParser implements Parser {
         if (hour != 12) hour += 12;
       }
       if (!result.start.isCertain(Component.meridiem)) {
-        if (meridiem == Meridiem.AM) {
+        if (meridiem == Meridiem.AM.index) {
           result.start.imply(Component.meridiem, Meridiem.AM.index);
           if (result.start.get(Component.hour) == 12) {
             result.start.assign(Component.hour, 0);
@@ -262,7 +236,7 @@ abstract class AbstractTimeExpressionParser implements Parser {
           result.start.imply(Component.meridiem, Meridiem.PM.index);
           if (result.start.get(Component.hour) != 12) {
             result.start.assign(Component.hour,
-                result.start.get(Component.hour)! + 12); //todo added !
+                result.start.get(Component.hour)! + 12);
           }
         }
       }
@@ -300,15 +274,15 @@ abstract class AbstractTimeExpressionParser implements Parser {
 
   checkAndReturnWithoutFollowingPattern(ParsingResult result) {
     // Single digit (e.g "1") should not be counted as time expression (without proper context)
-    if (result.text.match(new RegExp(r'^\d$'))) {
+    if (result.text.match(RegExp(r'^\d$'))) {
       return null;
     }
     // Three or more digit (e.g. "203", "2014") should not be counted as time expression (without proper context)
-    if (result.text.match(new RegExp(r'^\d\d\d+$'))) {
+    if (result.text.match(RegExp(r'^\d\d\d+$'))) {
       return null;
     }
     // Instead of "am/pm", it ends with "a" or "p" (e.g "1a", "123p"), this seems unlikely
-    if (result.text.match(new RegExp(r'\d[apAP]$'))) {
+    if (result.text.match(RegExp(r'\d[apAP]$'))) {
       return null;
     }
     // If it ends only with numbers or dots
@@ -317,12 +291,12 @@ abstract class AbstractTimeExpressionParser implements Parser {
     if (endingWithNumbers != null && endingWithNumbers.matches.isNotEmpty) {
       final String endingNumbers = endingWithNumbers[1];
       // In strict mode (e.g. "at 1" or "at 1.2"), this should not be accepted
-      if (this.strictMode) {
+      if (strictMode) {
         return null;
       }
       // If it ends only with dot single digit, e.g. "at 1.2"
       if (endingNumbers.contains(".") &&
-          (new RegExp(r'\d(\.\d{2})+$').exec(endingNumbers)?.matches.isEmpty ??
+          (RegExp(r'\d(\.\d{2})+$').exec(endingNumbers)?.matches.isEmpty ??
               true)) {
         //todo added isEmpty instead of !
         return null;
@@ -338,23 +312,23 @@ abstract class AbstractTimeExpressionParser implements Parser {
   }
 
   checkAndReturnWithFollowingPattern(ParsingResult result) {
-    if (result.text.match(new RegExp(r'^\d+-\d+$'))) {
+    if (result.text.match(RegExp(r'^\d+-\d+$'))) {
       return null;
     }
     // If it ends only with numbers or dots
     final endingWithNumbers =
         RegExp(r'[^\d:.](\d[\d.]+)\s*-\s*(\d[\d.]+)$').exec(result.text);
-    result.text.match(new RegExp(r'[^\d:.](\d[\d.]+)\s*-\s*(\d[\d.]+)$'));
+    result.text.match(RegExp(r'[^\d:.](\d[\d.]+)\s*-\s*(\d[\d.]+)$'));
     if (endingWithNumbers != null) {
       // In strict mode (e.g. "at 1-3" or "at 1.2 - 2.3"), this should not be accepted
-      if (this.strictMode) {
+      if (strictMode) {
         return null;
       }
       final String startingNumbers = endingWithNumbers[1];
       final String endingNumbers = endingWithNumbers[2];
       // If it ends only with dot single digit, e.g. "at 1.2"
       if (endingNumbers.contains(".") &&
-          (new RegExp(r'\d(\.\d{2})+$').exec(endingNumbers)?.matches.isEmpty ??
+          (RegExp(r'\d(\.\d{2})+$').exec(endingNumbers)?.matches.isEmpty ??
               true)) {
         return null;
       }
@@ -370,42 +344,42 @@ abstract class AbstractTimeExpressionParser implements Parser {
     return result;
   }
 
-  var cachedPrimaryPrefix = null;
-  var cachedPrimarySuffix = null;
-  var cachedPrimaryTimePattern = null;
+  var cachedPrimaryPrefix;
+  var cachedPrimarySuffix;
+  var cachedPrimaryTimePattern;
 
   getPrimaryTimePatternThroughCache() {
     final primaryPrefix = this.primaryPrefix();
     final primarySuffix = this.primarySuffix();
-    if (this.cachedPrimaryPrefix == primaryPrefix &&
-        this.cachedPrimarySuffix == primarySuffix) {
-      return this.cachedPrimaryTimePattern;
+    if (cachedPrimaryPrefix == primaryPrefix &&
+        cachedPrimarySuffix == primarySuffix) {
+      return cachedPrimaryTimePattern;
     }
-    this.cachedPrimaryTimePattern = primaryTimePattern(
-        this.primaryPatternLeftBoundary(),
+    cachedPrimaryTimePattern = primaryTimePattern(
+        primaryPatternLeftBoundary(),
         primaryPrefix,
         primarySuffix,
-        this.patternFlags());
-    this.cachedPrimaryPrefix = primaryPrefix;
-    this.cachedPrimarySuffix = primarySuffix;
-    return this.cachedPrimaryTimePattern;
+        patternFlags());
+    cachedPrimaryPrefix = primaryPrefix;
+    cachedPrimarySuffix = primarySuffix;
+    return cachedPrimaryTimePattern;
   }
 
-  var cachedFollowingPhase = null;
-  var cachedFollowingSuffix = null;
-  var cachedFollowingTimePatten = null;
+  var cachedFollowingPhase;
+  var cachedFollowingSuffix;
+  var cachedFollowingTimePatten;
 
   RegExp getFollowingTimePatternThroughCache() {
     final followingPhase = this.followingPhase();
     final followingSuffix = this.followingSuffix();
-    if (this.cachedFollowingPhase == followingPhase &&
-        this.cachedFollowingSuffix == followingSuffix) {
-      return this.cachedFollowingTimePatten;
+    if (cachedFollowingPhase == followingPhase &&
+        cachedFollowingSuffix == followingSuffix) {
+      return cachedFollowingTimePatten;
     }
-    this.cachedFollowingTimePatten =
+    cachedFollowingTimePatten =
         followingTimePatten(followingPhase, followingSuffix);
-    this.cachedFollowingPhase = followingPhase;
-    this.cachedFollowingSuffix = followingSuffix;
-    return this.cachedFollowingTimePatten;
+    cachedFollowingPhase = followingPhase;
+    cachedFollowingSuffix = followingSuffix;
+    return cachedFollowingTimePatten;
   }
 }

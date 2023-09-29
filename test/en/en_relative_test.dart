@@ -266,7 +266,7 @@ import '../test_util.dart';
    final refDate = DateTime.parse ("2020-11-29T13:24:13+0900");
    {
     const text = "now";
-    final result =en.casual.parse(text,refDate)[0] as ParsingResult;
+    final result =en.casual.parse(text,referenceDate:refDate)[0] as ParsingResult;
     expect(result.text, text);
     result.start.imply(Component.timezoneOffset, 60);
     expectToBeDate(result.start,
@@ -275,7 +275,7 @@ import '../test_util.dart';
    }
    {
     const text = "tomorrow at 5pm";
-    final result =en.casual.parse(text,refDate)[0] as ParsingResult;
+    final result =en.casual.parse(text,referenceDate:refDate)[0] as ParsingResult;
     expect(result.text, text);
     result.start.imply(Component.timezoneOffset, 60);
     expectToBeDate(result.start,
@@ -284,7 +284,7 @@ import '../test_util.dart';
    }
    {
     const text = "in 10 minutes";
-    final result =en.casual.parse(text,refDate)[0] as ParsingResult;
+    final result =en.casual.parse(text,referenceDate:refDate)[0] as ParsingResult;
     expect(result.text, text);
     result.start.imply(Component.timezoneOffset, 60);
     expectToBeDate(result.start,
@@ -293,7 +293,7 @@ import '../test_util.dart';
    }
    {
     const text = "in 10 minutes";
-    final result =en.casual.parse(text,ParsingReferenceDummy(refDate,60))[0] as ParsingResult;
+    final result =en.casual.parse(text,referenceDate:ParsingReference(refDate,60))[0] as ParsingResult;
     expect(result.text, text);
     result.start.imply(Component.timezoneOffset, 60);
     expectToBeDate(result.start,
@@ -302,7 +302,7 @@ import '../test_util.dart';
    }
    {
     const text = "in 10 minutes";
-    final result =en.casual.parse(text,ParsingReferenceDummy(refDate,540))[0] as ParsingResult;
+    final result =en.casual.parse(text,referenceDate:ParsingReference(refDate,540))[0] as ParsingResult;
     expect(result.text, text);
     result.start.imply(Component.timezoneOffset, 60);
     expectToBeDate(result.start,
@@ -311,7 +311,7 @@ import '../test_util.dart';
    }
    {
     const text = "in 20 minutes";
-    final result =en.casual.parse(text,ParsingReferenceDummy(refDate,null))[0]  as ParsingResult;
+    final result =en.casual.parse(text,referenceDate:ParsingReference(refDate,null))[0]  as ParsingResult;
     expect(result.text, text);
     expect(result.start.isCertain(Component.timezoneOffset), false);
    }

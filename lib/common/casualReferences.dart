@@ -12,7 +12,7 @@ import "../utils/dayjs.dart"
 
 ParsingComponents now(ReferenceWithTimezone reference) {
   final targetDate = reference.instant;
-  final component = new ParsingComponents(reference, {});
+  final component = ParsingComponents(reference, {});
   assignSimilarDate(component, targetDate);
   assignSimilarTime(component, targetDate);
   if (reference.timezoneOffset != null) {
@@ -24,7 +24,7 @@ ParsingComponents now(ReferenceWithTimezone reference) {
 
 ParsingComponents today(ReferenceWithTimezone reference) {
   final targetDate = reference.instant;
-  final component = new ParsingComponents(reference, {});
+  final component = ParsingComponents(reference, {});
   assignSimilarDate(component, targetDate);
   implySimilarTime(component, targetDate);
   return component;
@@ -50,7 +50,7 @@ ParsingComponents tomorrow(ReferenceWithTimezone reference) {
 
 ParsingComponents theDayAfter(ReferenceWithTimezone reference, num nDays) {
   var targetDate = reference.instant;
-  final component = new ParsingComponents(reference, {});
+  final component = ParsingComponents(reference, {});
   targetDate = targetDate.add(Duration(days: nDays.toInt()));
   assignSimilarDate(component, targetDate);
   implySimilarTime(component, targetDate);
@@ -59,7 +59,7 @@ ParsingComponents theDayAfter(ReferenceWithTimezone reference, num nDays) {
 
 ParsingComponents tonight(ReferenceWithTimezone reference, [implyHour = 22]) {
   final targetDate = reference.instant;
-  final component = new ParsingComponents(reference, {});
+  final component = ParsingComponents(reference, {});
   component.imply(Component.hour, implyHour);
   component.imply(Component.meridiem, Meridiem.PM.index);
   assignSimilarDate(component, targetDate);
@@ -68,7 +68,7 @@ ParsingComponents tonight(ReferenceWithTimezone reference, [implyHour = 22]) {
 
 ParsingComponents lastNight(ReferenceWithTimezone reference, [implyHour = 0]) {
   var targetDate = reference.instant;
-  final component = new ParsingComponents(reference, {});
+  final component = ParsingComponents(reference, {});
   if (targetDate.hour < 6) {
     targetDate = targetDate.subtract(Duration(days: 1));
   }
@@ -79,7 +79,7 @@ ParsingComponents lastNight(ReferenceWithTimezone reference, [implyHour = 0]) {
 
 
 ParsingComponents evening(ReferenceWithTimezone reference, [implyHour = eveningHour]) {
-  final component = new ParsingComponents(reference, {});
+  final component = ParsingComponents(reference, {});
   component.imply(Component.meridiem, Meridiem.PM.index);
   component.imply(Component.hour, implyHour);
   component.assign(Component.casualReference, CasualReference.evening.index);
@@ -89,7 +89,7 @@ ParsingComponents evening(ReferenceWithTimezone reference, [implyHour = eveningH
 ParsingComponents yesterdayEvening(ReferenceWithTimezone reference,
     [implyHour = eveningHour]) {
   var targetDate = reference.instant;
-  final component = new ParsingComponents(reference, {});
+  final component = ParsingComponents(reference, {});
   targetDate = targetDate.subtract(Duration(days: 1));
   assignSimilarDate(component, targetDate);
   component.imply(Component.hour, implyHour);
@@ -99,7 +99,7 @@ ParsingComponents yesterdayEvening(ReferenceWithTimezone reference,
 }
 
 ParsingComponents midnight(ReferenceWithTimezone reference) {
-  final component = new ParsingComponents(reference, {});
+  final component = ParsingComponents(reference, {});
   final targetDate = reference.instant;
   if (targetDate.hour > 2) {
     // Unless it's very early morning (0~2AM), we assume the midnight is the coming midnight.
@@ -116,7 +116,7 @@ ParsingComponents midnight(ReferenceWithTimezone reference) {
 }
 
 ParsingComponents morning(ReferenceWithTimezone reference, [implyHour = morningHour]) {
-  final component = new ParsingComponents(reference, {});
+  final component = ParsingComponents(reference, {});
   component.imply(Component.meridiem, Meridiem.AM.index);
   component.imply(Component.hour, implyHour);
   component.imply(Component.minute, 0);
@@ -126,7 +126,7 @@ ParsingComponents morning(ReferenceWithTimezone reference, [implyHour = morningH
   return component;
 }
 ParsingComponents atNight(ReferenceWithTimezone reference, [implyHour = 0]) {
-  final component = new ParsingComponents(reference, {});
+  final component = ParsingComponents(reference, {});
   component.imply(Component.meridiem, Meridiem.AM.index);
   component.imply(Component.hour, implyHour);
   component.imply(Component.minute, 0);
@@ -138,7 +138,7 @@ ParsingComponents atNight(ReferenceWithTimezone reference, [implyHour = 0]) {
 
 
 ParsingComponents afternoon(ReferenceWithTimezone reference, [implyHour = 15]) {
-  final component = new ParsingComponents(reference, {});
+  final component = ParsingComponents(reference, {});
   component.imply(Component.meridiem, Meridiem.PM.index);
   component.imply(Component.hour, implyHour);
   component.imply(Component.minute, 0);
@@ -149,7 +149,7 @@ ParsingComponents afternoon(ReferenceWithTimezone reference, [implyHour = 15]) {
 }
 
 ParsingComponents noon(ReferenceWithTimezone reference) {
-  final component = new ParsingComponents(reference, {});
+  final component = ParsingComponents(reference, {});
   component.imply(Component.meridiem, Meridiem.AM.index);
   component.imply(Component.hour, 12);
   component.imply(Component.minute, 0);

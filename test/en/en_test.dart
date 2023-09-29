@@ -123,7 +123,7 @@ void main() {
             "Apple announced on the same day that they had no plans for a public service, but were encouraging " +
             "\"well-wishers\" to send their remembrance messages to an email address created to receive such messages.[240] " +
             "Sunday, October 16, 2011";
-    final results = en.casual.parse(text, DateTime(2012, 7, 10));
+    final results = en.casual.parse(text, referenceDate: DateTime(2012, 7, 10));
     expect(results.length, 2);
     {
       final result = results[0];
@@ -145,7 +145,7 @@ void main() {
   test("Test - Parse multiple date results", () {
     const text =
         "I will see you at 2:30. If not I will see you somewhere between 3:30-4:30pm";
-    final results = en.casual.parse(text, DateTime(2020, 7 , 6));
+    final results = en.casual.parse(text, referenceDate: DateTime(2020, 7, 6));
     expect(results.length, 2);
     {
       final result = results[0];
