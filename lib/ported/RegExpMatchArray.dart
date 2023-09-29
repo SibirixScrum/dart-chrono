@@ -13,7 +13,6 @@ class RegExpMatchArray {
 
 extension RegExpUtil on RegExp {
   RegExpMatchArray? exec(String str) {
-
     final matches = allMatches(str);
 
     if (matches.isEmpty) {
@@ -21,11 +20,7 @@ extension RegExpUtil on RegExp {
     }
     final index = matches.first.start;
     return RegExpMatchArray(
-        matches
-            .toList()
-            .expand((element) => element.groups(
-                List.generate(element.groupCount + 1, (index) => index)))
-            .toList(),
+        matches.first.groups(List.generate(matches.first.groupCount+1, (index) => index)),
         str,
         index);
   }
